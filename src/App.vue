@@ -19,7 +19,7 @@ const showHeader = computed(() => route.name === 'home')
 <template>
   <header v-if="showHeader" class="app-header">
     <h1>📚 前端学习</h1>
-    <div class="sub">{{ dateText }} · HTML5 / CSS3 / JS / ES6 / Vue3</div>
+    <div class="sub">{{ dateText }} · 前端校招全套课程</div>
   </header>
   <router-view v-slot="{ Component }">
     <component :is="Component" :key="route.fullPath" />
