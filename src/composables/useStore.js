@@ -24,8 +24,21 @@ function load() {
 
 const state = reactive(load())
 
+/** 进度保存监听器（供同步模块注册，数据变动后自动备份） */
+const saveListeners = []
+export function onProgressSaved(fn) {
+  saveListeners.push(fn)
+}
+
 function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ lessons: state.lessons, daily: state.daily }))
+  saveListeners.forEach((fn) => {
+    try {
+      fn()
+    } catch (e) {
+      console.warn('自动同步失败', e)
+    }
+  })
 }
 
 function touchDaily(type, id) {

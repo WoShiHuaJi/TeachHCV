@@ -52,6 +52,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '空格表示后代选择器，无论嵌套多深都会被选中；只选直接子元素要用 > 。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于 CSS 的引入方式？（多选）',
+        options: ['行内样式', '内部样式表', '外部样式表', '脚本样式表'],
+        answer: [0, 1, 2],
+        explanation: 'CSS 有行内样式、内部样式表和外部样式表三种引入方式，不存在“脚本样式表”。'
       }
     ]
   },
@@ -108,6 +115,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'auto 会把剩余水平空间平分到左右两边，从而实现水平居中。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于盒模型的组成部分？（多选）',
+        options: ['content（内容）', 'padding（内边距）', 'border（边框）', 'float（浮动）'],
+        answer: [0, 1, 2],
+        explanation: '盒模型从内到外由 content、padding、border、margin 四部分组成，float 不属于盒模型。'
       }
     ]
   },
@@ -164,6 +178,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '这是重置链接样式的最常见写法，之后通常配合 hover 再添加交互效果。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于常用的文本样式属性？（多选）',
+        options: ['font-size', 'line-height', 'text-align', 'grid-template-columns'],
+        answer: [0, 1, 2],
+        explanation: 'font-size、line-height、text-align 都是文本样式属性；grid-template-columns 是 Grid 布局属性。'
       }
     ]
   },
@@ -225,6 +246,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '默认 flex-wrap 是 nowrap，项目会挤压在一行；需要换行要显式设置 wrap。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 justify-content 的合法取值？（多选）',
+        options: ['flex-start', 'center', 'space-between', 'wrap'],
+        answer: [0, 1, 2],
+        explanation: 'flex-start、center、space-between 都是 justify-content 的取值；wrap 是 flex-wrap 的取值。'
       }
     ]
   },
@@ -286,6 +314,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'gap 是 row-gap 和 column-gap 的简写，一个值时行列间距相同。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是定义 Grid 列的合法写法？（多选）',
+        options: ['grid-template-columns: 200px 1fr 1fr', 'grid-template-columns: repeat(3, 1fr)', 'grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))', 'grid-template-columns: flex 1'],
+        answer: [0, 1, 2],
+        explanation: '前三种都是本课讲过的列定义写法；flex 1 不是 grid-template-columns 的合法值。'
       }
     ]
   },
@@ -352,6 +387,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'animation 引用的是 @keyframes 定义的动画名称，没有关键帧就没有动画内容。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些关于过渡与动画的说法是正确的？（多选）',
+        options: ['transition 要写在元素的初始状态上', 'transform 做动画性能好，不会引起重新排版', 'animation 设置 infinite 可无限循环', 'transition 只能写在 :hover 状态上'],
+        answer: [0, 1, 2],
+        explanation: 'transition 写在初始状态上才能保证移入移出都有过渡；transform 不触发重排；infinite 表示无限循环。'
       }
     ]
   }

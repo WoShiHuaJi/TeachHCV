@@ -52,6 +52,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'let 声明的变量可以多次赋值，与 const 不同。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 JavaScript 的基本数据类型？（多选）',
+        options: ['string', 'number', 'array', 'boolean'],
+        answer: [0, 1, 3],
+        explanation: 'array 是对象不是基本类型，string/number/boolean 都是基本类型。'
       }
     ]
   },
@@ -108,6 +115,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '0、空字符串、null、undefined 都是假值，在条件判断中会被视为 false。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些值在 if 条件中会被视为 false？（多选）',
+        options: ['0', '空字符串 ""', 'undefined', '字符串 "0"'],
+        answer: [0, 1, 2],
+        explanation: '0、空字符串、null、undefined 都是假值；非空字符串 "0" 是真值。'
       }
     ]
   },
@@ -164,6 +178,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '函数默认返回值是 undefined，除非显式使用 return。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是箭头函数的特点？（多选）',
+        options: ['写法比 function 更简洁', '函数体只有一句 return 时可省略花括号和 return', '必须用 function 关键字定义', '适合作为回调函数使用'],
+        answer: [0, 1, 3],
+        explanation: '箭头函数用 => 定义，写法简洁，可省略花括号和 return，常用作回调。'
       }
     ]
   },
@@ -220,6 +241,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: 'push 在末尾添加元素，在开头添加应该用 unshift。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些数组方法不会修改原数组？（多选）',
+        options: ['map', 'filter', 'push', 'find'],
+        answer: [0, 1, 3],
+        explanation: 'map、filter、find 都返回新结果而不改原数组，push 会直接修改原数组。'
       }
     ]
   },
@@ -276,6 +304,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: 'Object.keys 返回的是属性名数组 ["a", "b"]，值要用 Object.values。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于对象与 JSON 的说法哪些是正确的？（多选）',
+        options: ['JSON 的属性名必须用双引号', 'JSON 中可以包含函数', 'JSON.stringify 把对象转成 JSON 字符串', 'JSON.parse 把 JSON 字符串还原成对象'],
+        answer: [0, 2, 3],
+        explanation: 'JSON 不能包含函数；stringify 和 parse 分别负责对象与 JSON 字符串的互转。'
       }
     ]
   },
@@ -332,6 +367,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'textContent 对应元素的纯文本内容，修改它页面文字会即时更新。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于常见的 DOM 操作？（多选）',
+        options: ['用 querySelector 获取元素', '用 appendChild 把新元素插入页面', '用 addEventListener 监听点击事件', '用 JSON.parse 修改元素文字'],
+        answer: [0, 1, 2],
+        explanation: 'JSON.parse 用于解析 JSON 字符串，与 DOM 操作无关；其余三个都是常见 DOM 操作。'
       }
     ]
   }

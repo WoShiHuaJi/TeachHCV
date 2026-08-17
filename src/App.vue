@@ -3,6 +3,9 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import BottomNav from './components/BottomNav.vue'
 import { todayStr } from './utils/date'
+import { initAutoSync } from './composables/useSync'
+
+initAutoSync()
 
 const route = useRoute()
 const dateText = computed(() => {

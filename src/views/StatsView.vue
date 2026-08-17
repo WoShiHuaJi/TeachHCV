@@ -1,10 +1,12 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useStore } from '../composables/useStore'
+import { useSync } from '../composables/useSync'
 import { allLessons, modules } from '../data'
 import { formatCN } from '../utils/date'
 
 const store = useStore()
+const sync = useSync()
 const s = computed(() => store.stats(allLessons))
 const week = computed(() => store.last7Days())
 const maxCount = computed(() => Math.max(1, ...week.value.map((d) => d.count)))
@@ -14,6 +16,28 @@ function moduleProgress(m) {
   return { learned, total: m.lessons.length, pct: Math.round((learned / m.lessons.length) * 100) }
 }
 
+/* ===== 数据同步 ===== */
+const tokenInput = ref(sync.token.value)
+const showTokenHelp = ref(false)
+
+function saveToken() {
+  sync.saveToken(tokenInput.value)
+  tokenInput.value = sync.token.value
+}
+
+function removeToken() {
+  sync.clearToken()
+  tokenInput.value = ''
+  sync.message.value = ''
+}
+
+function confirmRestore() {
+  if (window.confirm('从云端恢复会覆盖当前设备的学习进度，确定继续吗？')) {
+    sync.restoreNow()
+  }
+}
+
+/* ===== 重置 ===== */
 const confirmReset = ref(false)
 function doReset() {
   store.resetAll()
@@ -64,6 +88,51 @@ function doReset() {
       <div class="progress">
         <i :style="{ width: moduleProgress(m).pct + '%', background: m.color }"></i>
       </div>
+    </div>
+
+    <div class="section-title">☁️ 数据同步（跨设备）</div>
+    <div class="card">
+      <template v-if="!sync.token.value">
+        <p class="muted" style="margin-bottom: 10px">
+          学习进度默认只保存在本设备。填写 GitHub Token 后，可将进度备份到你的私有 Gist，实现手机、电脑间同步。
+        </p>
+        <input
+          v-model="tokenInput"
+          type="password"
+          placeholder="粘贴 GitHub Token（ghp_ 开头）"
+          style="width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; margin-bottom: 10px"
+        />
+        <button class="btn btn-primary" :disabled="!tokenInput.trim()" @click="saveToken">保存 Token</button>
+        <button class="btn btn-ghost" @click="showTokenHelp = !showTokenHelp">
+          {{ showTokenHelp ? '收起帮助' : '❓ 如何获取 Token？' }}
+        </button>
+        <div v-if="showTokenHelp" class="explain ok" style="margin-top: 10px">
+          1. 打开 GitHub → 头像 → Settings → Developer settings → Personal access tokens → Tokens (classic)<br />
+          2. 点 Generate new token (classic)<br />
+          3. 只勾选 <b>gist</b> 一个权限，生成并复制 Token 粘贴到上面<br />
+          <span class="muted">Token 只存在你自己设备的浏览器里，请妥善保管。</span>
+        </div>
+      </template>
+      <template v-else>
+        <p style="margin-bottom: 6px">
+          ✅ 已绑定 Token
+          <span class="muted">（{{ sync.token.value.slice(0, 7) }}…）</span>
+        </p>
+        <p v-if="sync.lastSyncAt.value" class="muted" style="margin-bottom: 10px">上次同步：{{ sync.lastSyncAt.value }}</p>
+        <button class="btn btn-primary" :disabled="sync.syncing.value" @click="sync.backupNow()">
+          {{ sync.syncing.value ? '同步中…' : '⬆️ 立即备份到云端' }}
+        </button>
+        <button class="btn btn-outline" :disabled="sync.syncing.value" @click="confirmRestore">⬇️ 从云端恢复</button>
+        <button
+          class="btn btn-ghost"
+          @click="sync.setAutoSync(!sync.autoSync.value)"
+        >
+          自动备份：{{ sync.autoSync.value ? '已开启 ✅（学习后自动上传）' : '已关闭' }}
+        </button>
+        <button class="btn btn-ghost" @click="removeToken">解除绑定</button>
+        <p v-if="sync.message.value" style="margin-top: 8px; font-size: 14px">{{ sync.message.value }}</p>
+        <p class="muted" style="margin-top: 8px">💡 新设备使用：填同样的 Token → 点「从云端恢复」即可。</p>
+      </template>
     </div>
 
     <div class="section-title">⚙️ 设置</div>

@@ -45,6 +45,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。let 存在暂时性死区，声明前访问会直接报错，而不是得到 undefined。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 ES6 新增的声明方式的特点？（多选）',
+        options: ['let 有块级作用域', 'const 声明后不可重新赋值', 'var 有块级作用域', 'let 不存在变量提升'],
+        answer: [0, 1],
+        explanation: 'var 是函数作用域且有变量提升；let/const 是块级作用域。'
       }
     ]
   },
@@ -101,6 +108,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。箭头函数的 this 继承自外层作用域，不会指向调用它的对象，所以不适合作为对象方法。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于箭头函数的说法，哪些是正确的？（多选）',
+        options: ['箭头函数没有自己的 this，继承外层作用域的 this', '只有一个参数时可以省略小括号', '箭头函数的 this 取决于调用方式', '函数体只有一句返回语句时可省略花括号和 return'],
+        answer: [0, 1, 3],
+        explanation: '箭头函数的 this 来自外层作用域而非调用方式；单参数可省略括号，单句返回可省略花括号和 return。'
       }
     ]
   },
@@ -157,6 +171,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。剩余参数必须放在参数列表的最后一个位置，用于收集剩余的所有实参。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于解构赋值和展开运算符的说法，哪些是正确的？（多选）',
+        options: ['数组解构按位置对应', '对象解构按属性名对应', '[...arr] 是深拷贝，嵌套对象互不影响', '剩余参数必须放在参数列表的最后位置'],
+        answer: [0, 1, 3],
+        explanation: '展开做的是浅拷贝，嵌套对象仍共享引用；其余三项均正确。'
       }
     ]
   },
@@ -213,6 +234,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。Promise.all 是「全部成功才算成功」，任一失败整体进入 rejected 状态。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于 Promise 和 async/await 的说法，哪些是正确的？（多选）',
+        options: ['Promise 有 pending、fulfilled、rejected 三种状态', 'await 只能在 async 函数中使用', 'Promise.all 中任一失败则整体失败', 'async 函数返回的不是 Promise'],
+        answer: [0, 1, 2],
+        explanation: 'async 函数本身总是返回一个 Promise，所以第四项错误；其余三项均正确。'
       }
     ]
   },
@@ -269,6 +297,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。class 只是语法糖，底层仍然是基于原型的继承。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于 class 和 ES6 模块化的说法，哪些是正确的？（多选）',
+        options: ['每个模块只能有一个默认导出', '子类 constructor 中必须先调用 super() 才能使用 this', 'class 完全抛弃了 JavaScript 的原型机制', '导入命名导出时必须用花括号且名称一致'],
+        answer: [0, 1, 3],
+        explanation: 'class 是基于原型的语法糖，并未抛弃原型机制；其余三项均正确。'
       }
     ]
   },
@@ -325,6 +360,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。可选链遇到 null 或 undefined 会短路，返回 undefined，不会抛出错误。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于 Set、Map 和新语法的说法，哪些是正确的？（多选）',
+        options: ['Set 中的值不会重复，可用于数组去重', 'Map 的键可以是任意类型', '0 ?? 10 的结果是 10', '可选链遇到 null 或 undefined 会短路返回 undefined'],
+        answer: [0, 1, 3],
+        explanation: '?? 只在左边为 null 或 undefined 时返回右边的值，0 不满足，所以 0 ?? 10 的结果是 0；其余三项均正确。'
       }
     ]
   }

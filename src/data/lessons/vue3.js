@@ -51,6 +51,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '双大括号是 Vue 的插值语法，用于输出数据，且数据变化时页面自动更新。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是创建和使用 Vue3 应用的正确方式？（多选）',
+        options: ['调用 Vue.createApp 创建应用实例', '调用 mount 方法把应用挂载到页面', '使用 Vite 创建工程化项目', '通过 CDN 引入时也必须先执行 npm install'],
+        answer: [0, 1, 2],
+        explanation: 'CDN 方式直接在 HTML 中引入脚本即可体验，无需安装任何依赖。'
       }
     ]
   },
@@ -107,6 +114,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '@ 是 v-on 的语法糖，两者完全等价，实际开发中几乎都用 @。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 v-model 支持的修饰符？（多选）',
+        options: ['.trim', '.number', '.lazy', '.stop'],
+        answer: [0, 1, 2],
+        explanation: '.stop 是事件修饰符（用于 v-on），不是 v-model 的修饰符。'
       }
     ]
   },
@@ -162,6 +176,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '模板中 ref 会自动解包，直接写 {{ count }} 即可，不需要 .value。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 ref 和 reactive，下列说法正确的有？（多选）',
+        options: ['script 中通过 .value 读写 ref 数据', '模板中 ref 会自动解包', '直接解构 reactive 对象会丢失响应式', 'reactive 可以包装数字和字符串'],
+        answer: [0, 1, 2],
+        explanation: 'reactive 只能用于对象类型（含数组），包装简单值请使用 ref。'
       }
     ]
   },
@@ -217,6 +238,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '说反了：computed 用于同步地派生新值，watch 用于执行副作用如异步请求。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些场景适合使用 watch？（多选）',
+        options: ['数据变化后发送网络请求', '数据变化后写入 localStorage', '监听数据并在回调中拿到新值和旧值', '计算一个需要缓存的派生值'],
+        answer: [0, 1, 2],
+        explanation: '需要缓存的派生值应该用 computed；watch 用于变化后执行副作用。'
       }
     ]
   },
@@ -273,6 +301,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'script setup 的顶层绑定会自动暴露给模板，无需手动 return。'
+      },
+      {
+        type: 'multiple',
+        question: '关于父子组件通信，下列说法正确的有？（多选）',
+        options: ['父组件通过 props 向子组件传递数据', '子组件通过 emit 触发自定义事件向父组件传消息', '子组件不应直接修改 prop 的值', 'emit 用于父组件向子组件传递数据'],
+        answer: [0, 1, 2],
+        explanation: 'emit 的方向是子传父；父传子使用的是 props。'
       }
     ]
   },
@@ -329,6 +364,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '每次调用组合式函数都会执行一遍函数体，创建各自独立的 ref 状态，互不干扰。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是组合式 API 中的生命周期钩子？（多选）',
+        options: ['onMounted', 'onUnmounted', 'onUpdated', 'onClicked'],
+        answer: [0, 1, 2],
+        explanation: 'onClicked 不是生命周期钩子，点击事件用 @click 监听。'
       }
     ]
   }

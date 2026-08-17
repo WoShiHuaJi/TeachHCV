@@ -52,6 +52,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。span 是行内元素，只占内容所需的宽度，不会自动换行；div 才是块级元素。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 HTML5 的语义化标签？（多选）',
+        options: ['<header>', '<div>', '<article>', '<span>'],
+        answer: [0, 2],
+        explanation: 'header 和 article 是语义化标签，div 和 span 无语义。'
       }
     ]
   },
@@ -108,6 +115,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。b 只改变外观，strong 还表示内容重要，对搜索引擎和屏幕阅读器更友好。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些标签带有语义，推荐用于文本强调？（多选）',
+        options: ['<strong>', '<b>', '<em>', '<i>'],
+        answer: [0, 2],
+        explanation: 'strong 表示重要内容、em 表示强调语气，都带语义；b 和 i 只改变外观，没有语义。'
       }
     ]
   },
@@ -164,6 +178,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。为避免打扰用户，浏览器通常要求视频 muted 静音后才允许自动播放。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 video 标签支持的属性？（多选）',
+        options: ['controls', 'poster', 'loop', 'href'],
+        answer: [0, 1, 2],
+        explanation: 'controls 显示控制条、poster 设置封面图、loop 循环播放都是 video 的属性；href 是 a 标签的属性。'
       }
     ]
   },
@@ -220,6 +241,13 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。提交表单时浏览器会自动检查 email 类型输入框的内容格式，不合格会提示。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 HTML5 新增的 input 输入类型？（多选）',
+        options: ['email', 'date', 'range', 'address'],
+        answer: [0, 1, 2],
+        explanation: 'email 校验邮箱、date 弹出日期选择器、range 变成滑块，都是 HTML5 新类型；address 不是合法的 input 类型。'
       }
     ]
   },
@@ -276,6 +304,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。table 只应用于展示真正的表格数据，页面布局应使用 CSS（如 Flexbox、Grid）。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些标签是构成 HTML 表格的常用标签？（多选）',
+        options: ['<tr>', '<th>', '<td>', '<li>'],
+        answer: [0, 1, 2],
+        explanation: 'tr 表示行、th 表示表头单元格、td 表示普通单元格；li 是列表项，属于 ul/ol 列表。'
       }
     ]
   },
@@ -338,6 +373,13 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。localStorage 的数据会长期保存，除非代码或用户手动清除；sessionStorage 才是会话结束就清除。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于 HTML5 提供的新能力？（多选）',
+        options: ['localStorage 本地存储', 'Canvas 画布', 'Geolocation 地理位置', 'marquee 跑马灯'],
+        answer: [0, 1, 2],
+        explanation: 'localStorage、Canvas、Geolocation 都是 HTML5 新特性；marquee 是早期的非标准标签，已被淘汰。'
       }
     ]
   }
