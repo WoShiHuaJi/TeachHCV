@@ -103,13 +103,6 @@ export default [
         explanation: '正确。模板字符串用反引号包裹，支持多行文本和 ${表达式} 插值。'
       },
       {
-        type: 'judge',
-        question: '箭头函数非常适合作为对象的方法使用，因为它的 this 总是指向该对象。',
-        options: ['正确', '错误'],
-        answer: 1,
-        explanation: '错误。箭头函数的 this 继承自外层作用域，不会指向调用它的对象，所以不适合作为对象方法。'
-      },
-      {
         type: 'multiple',
         question: '以下关于箭头函数的说法，哪些是正确的？（多选）',
         options: ['箭头函数没有自己的 this，继承外层作用域的 this', '只有一个参数时可以省略小括号', '箭头函数的 this 取决于调用方式', '函数体只有一句返回语句时可省略花括号和 return'],
@@ -164,13 +157,6 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。数组解构按位置匹配，对象解构按属性名匹配。'
-      },
-      {
-        type: 'judge',
-        question: '剩余参数 ...args 可以出现在函数参数列表的任意位置。',
-        options: ['正确', '错误'],
-        answer: 1,
-        explanation: '错误。剩余参数必须放在参数列表的最后一个位置，用于收集剩余的所有实参。'
       },
       {
         type: 'multiple',
@@ -229,13 +215,6 @@ export default [
         explanation: '错误。await 只能在用 async 声明的函数内部使用。'
       },
       {
-        type: 'judge',
-        question: 'Promise.all 中只要有一个 Promise 失败，整个 Promise.all 就会立即失败。',
-        options: ['正确', '错误'],
-        answer: 0,
-        explanation: '正确。Promise.all 是「全部成功才算成功」，任一失败整体进入 rejected 状态。'
-      },
-      {
         type: 'multiple',
         question: '以下关于 Promise 和 async/await 的说法，哪些是正确的？（多选）',
         options: ['Promise 有 pending、fulfilled、rejected 三种状态', 'await 只能在 async 函数中使用', 'Promise.all 中任一失败则整体失败', 'async 函数返回的不是 Promise'],
@@ -290,13 +269,6 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。子类构造函数中必须先调用 super()，之后才能访问 this。'
-      },
-      {
-        type: 'judge',
-        question: 'class 定义的类完全抛弃了 JavaScript 的原型机制。',
-        options: ['正确', '错误'],
-        answer: 1,
-        explanation: '错误。class 只是语法糖，底层仍然是基于原型的继承。'
       },
       {
         type: 'multiple',
@@ -355,18 +327,347 @@ export default [
         explanation: '错误。Map 的键可以是任意类型，包括数字、对象甚至函数，这是它区别于普通对象的重要特性。'
       },
       {
-        type: 'judge',
-        question: '使用可选链 obj?.a?.b 时，如果 obj 是 undefined，表达式会返回 undefined 而不会报错。',
-        options: ['正确', '错误'],
-        answer: 0,
-        explanation: '正确。可选链遇到 null 或 undefined 会短路，返回 undefined，不会抛出错误。'
-      },
-      {
         type: 'multiple',
         question: '以下关于 Set、Map 和新语法的说法，哪些是正确的？（多选）',
         options: ['Set 中的值不会重复，可用于数组去重', 'Map 的键可以是任意类型', '0 ?? 10 的结果是 10', '可选链遇到 null 或 undefined 会短路返回 undefined'],
         answer: [0, 1, 3],
         explanation: '?? 只在左边为 null 或 undefined 时返回右边的值，0 不满足，所以 0 ?? 10 的结果是 0；其余三项均正确。'
+      }
+    ]
+  },
+  {
+    id: 'es6-07',
+    title: '数组新增方法',
+    summary: 'find、includes、flat 等好用方法',
+    minutes: 12,
+    sections: [
+      {
+        heading: '查找元素：find、findIndex 与 includes',
+        text: '以前查找数组元素要写循环或用 indexOf，不够直观。ES6 之后数组有了更语义化的查找方法。\nfind 返回第一个满足条件的元素本身，找不到返回 undefined；findIndex 用法相同，但返回的是下标，找不到返回 -1。includes 用来判断数组是否包含某个值，直接返回布尔值，比 indexOf(x) !== -1 的写法清晰得多，还能正确处理 NaN。',
+        code: 'const arr = [5, 12, 8, 130];\nconsole.log(arr.find(n => n > 10)); // 12\nconsole.log(arr.findIndex(n => n > 10)); // 1\nconsole.log(arr.includes(8)); // true\nconsole.log([NaN].includes(NaN)); // true',
+        lang: 'js'
+      },
+      {
+        heading: '拍平数组：flat 与 flatMap',
+        text: '处理嵌套数组时，flat 可以把多维数组「拍平」成一维。默认只拍平一层，传入数字可以指定深度，传 Infinity 则无论多深都拍平。\nflatMap 相当于先 map 再 flat 一层，适合「每个元素映射成数组再合并」的场景，比如把一句话数组拆成单词数组。这两个方法让嵌套数据的处理不再需要手写递归。',
+        code: 'const arr = [1, [2, [3, 4]]];\nconsole.log(arr.flat()); // [1, 2, [3, 4]]\nconsole.log(arr.flat(Infinity)); // [1, 2, 3, 4]\n\nconst words = ["hello world"].flatMap(s => s.split(" "));\nconsole.log(words); // ["hello", "world"]',
+        lang: 'js'
+      },
+      {
+        heading: '创建数组：Array.from 与 Array.of',
+        text: 'Array.from 可以把「类数组对象」（如 arguments、NodeList）或可迭代对象（如 Set、字符串）转换成真正的数组，第二个参数还能像 map 一样对每个元素做处理。\nArray.of 则用于把一组值组成数组，解决了 new Array(3) 会创建长度为 3 的空数组而不是 [3] 的怪异问题。掌握它们后，数组的创建和转换会更加顺手、不易出错。',
+        code: 'console.log(Array.from("abc")); // ["a", "b", "c"]\nconsole.log(Array.from([1, 2, 3], n => n * 2)); // [2, 4, 6]\n\nconsole.log(new Array(3)); // [空, 空, 空]\nconsole.log(Array.of(3)); // [3]',
+        lang: 'js'
+      }
+    ],
+    quiz: [
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst arr = [3, 7, 9];\nconsole.log(arr.find(n => n > 5));',
+        options: ['7', '[7, 9]', '1', 'true'],
+        answer: 0,
+        explanation: 'find 返回第一个满足条件的元素本身，7 是第一个大于 5 的元素。'
+      },
+      {
+        type: 'single',
+        question: '要把 [1, [2, [3]]] 彻底拍平成一维数组，正确写法是？',
+        options: ['arr.flat()', 'arr.flat(0)', 'arr.flat(Infinity)', 'arr.flatMap()'],
+        answer: 2,
+        explanation: 'flat 默认只拍平一层，传 Infinity 可以拍平任意深度的嵌套数组。'
+      },
+      {
+        type: 'judge',
+        question: 'includes 方法可以正确判断数组中是否包含 NaN。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。indexOf 找不到 NaN，但 includes 使用了更合理的比较算法，[NaN].includes(NaN) 返回 true。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于数组新增方法的说法，哪些是正确的？（多选）',
+        options: ['find 返回第一个满足条件的元素', 'findIndex 找不到元素时返回 -1', 'includes 只能用于字符串，不能用于数组', 'Array.from 可以把类数组对象转成真正的数组'],
+        answer: [0, 1, 3],
+        explanation: 'includes 是数组和字符串都可用的方法；其余三项均正确。'
+      }
+    ]
+  },
+  {
+    id: 'es6-08',
+    title: '对象新增语法与方法',
+    summary: '更简洁的对象写法与静态方法',
+    minutes: 12,
+    sections: [
+      {
+        heading: '更简洁的对象字面量',
+        text: 'ES6 让对象字面量的书写更加简洁。当属性名和变量名相同时，可以省略冒号和值，直接写变量名；定义方法时可以省略 function 关键字。\n此外还支持「计算属性名」：用方括号包裹一个表达式作为属性名，属性名可以在运行时动态确定。这些简写让代码更短，配合解构赋值使用时尤其方便，是日常开发中出现频率极高的语法。',
+        code: 'const name = "小明";\nconst key = "age";\nconst user = {\n  name,        // 属性简写\n  [key]: 18,   // 计算属性名\n  sayHi() {    // 方法简写\n    console.log("你好");\n  }\n};\nconsole.log(user.age); // 18',
+        lang: 'js'
+      },
+      {
+        heading: '合并对象：Object.assign',
+        text: 'Object.assign 用于把一个或多个源对象的属性复制到目标对象，第一个参数是目标对象，后面是源对象，返回目标对象。\n同名属性时后面的源对象会覆盖前面的。常见用法有两个：一是合并配置项，给默认值补充用户配置；二是把第一个参数写成空对象来复制对象。注意它做的是浅拷贝，嵌套对象仍然共享引用，深拷贝需要另想办法。',
+        code: 'const defaults = { theme: "light", size: 14 };\nconst custom = { size: 16 };\nconst config = Object.assign({}, defaults, custom);\nconsole.log(config); // { theme: "light", size: 16 }',
+        lang: 'js'
+      },
+      {
+        heading: '遍历对象：keys、values、entries',
+        text: '以前遍历对象常用 for...in，但它会连原型链上的属性一起遍历。ES 新增的静态方法更直观：Object.keys 返回所有键组成的数组，Object.values 返回所有值组成的数组，Object.entries 返回键值对数组。\n拿到数组后就可以使用 forEach、map 等数组方法处理对象数据了。还有 Object.fromEntries 做反向操作，把键值对数组转回对象，常与 entries 配合用来过滤或修改对象的属性。',
+        code: 'const user = { name: "小明", age: 18 };\nconsole.log(Object.keys(user)); // ["name", "age"]\nconsole.log(Object.values(user)); // ["小明", 18]\n\nObject.entries(user).forEach(([k, v]) => {\n  console.log(k + ": " + v);\n});',
+        lang: 'js'
+      }
+    ],
+    quiz: [
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst name = "小红";\nconst user = { name };\nconsole.log(user.name);',
+        options: ['报错', 'undefined', '小红', 'name'],
+        answer: 2,
+        explanation: '属性简写等价于 { name: name }，所以 user.name 的值为 小红。'
+      },
+      {
+        type: 'single',
+        question: '执行 Object.assign({}, { a: 1 }, { a: 2, b: 3 }) 的结果是？',
+        options: ['{ a: 1, b: 3 }', '{ a: 2, b: 3 }', '{ a: 1, a: 2, b: 3 }', '报错：属性重复'],
+        answer: 1,
+        explanation: '同名属性时后面的源对象会覆盖前面的，所以 a 最终为 2，结果为 { a: 2, b: 3 }。'
+      },
+      {
+        type: 'judge',
+        question: 'Object.assign 是深拷贝，修改拷贝结果的嵌套对象不会影响原对象。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Object.assign 只做浅拷贝，嵌套对象仍然共享引用，修改会互相影响。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于对象新语法与方法的说法，哪些是正确的？（多选）',
+        options: ['属性名与变量名相同时可省略冒号和值', 'Object.entries 返回键值对组成的数组', 'Object.assign 的第一个参数是目标对象', '对象中不能用表达式作为属性名'],
+        answer: [0, 1, 2],
+        explanation: '用方括号包裹表达式即可作为计算属性名，所以第四项错误；其余三项均正确。'
+      }
+    ]
+  },
+  {
+    id: 'es6-09',
+    title: 'Symbol 类型详解',
+    summary: '独一无二的第七种原始类型',
+    minutes: 12,
+    sections: [
+      {
+        heading: '什么是 Symbol',
+        text: 'Symbol 是 ES6 新增的第七种原始数据类型，通过 Symbol() 函数创建。它最大的特点是：每次创建的 Symbol 值都是独一无二的，即使传入相同的描述文字也不相等。注意不能用 new 调用。\n创建时可以传一个字符串作为描述，方便调试时辨认，但描述不影响唯一性。用 typeof 检测会得到 symbol。Symbol 的出现主要是为了解决对象属性名冲突的问题。',
+        code: 'const s1 = Symbol("id");\nconst s2 = Symbol("id");\nconsole.log(s1 === s2); // false，永远不相等\nconsole.log(typeof s1); // symbol\n\n// 需要共享 Symbol 时用 Symbol.for\nconsole.log(Symbol.for("a") === Symbol.for("a")); // true',
+        lang: 'js'
+      },
+      {
+        heading: 'Symbol 作为对象属性键',
+        text: '对象的属性键除了字符串，还可以是 Symbol。由于 Symbol 独一无二，用它做属性键绝不会与别人定义的属性重名，非常适合给第三方对象「悄悄」添加属性而不破坏原有结构。\nSymbol 属性有一个隐蔽特性：它不会出现在 for...in 循环和 Object.keys 的结果中，需要用 Object.getOwnPropertySymbols 专门获取。这个特性常用来模拟对象的「私有」属性。',
+        code: 'const id = Symbol("id");\nconst user = { name: "小明", [id]: 1001 };\n\nconsole.log(user[id]); // 1001\nconsole.log(Object.keys(user)); // ["name"]\nconsole.log(Object.getOwnPropertySymbols(user).length); // 1',
+        lang: 'js'
+      },
+      {
+        heading: '内置的 Symbol 值',
+        text: 'JavaScript 内置了一些特殊的 Symbol 值，称为「众所周知的 Symbol」，它们是语言内部行为的钩子。\n最著名的是 Symbol.iterator：对象只要实现了这个属性，就可以被 for...of 遍历，数组、字符串、Map、Set 都内置了它。其他如 Symbol.toPrimitive 可以自定义对象转原始值的规则，Symbol.hasInstance 可以自定义 instanceof 的行为。了解它们有助于理解语言的底层机制。',
+        code: 'const arr = [1, 2, 3];\nconst it = arr[Symbol.iterator]();\nconsole.log(it.next()); // { value: 1, done: false }\n\n// 实现 Symbol.iterator 让对象可以被 for...of 遍历\nconst range = {\n  [Symbol.iterator]() {\n    let n = 0;\n    return {\n      next() {\n        return n < 3 ? { value: n++, done: false } : { value: undefined, done: true };\n      }\n    };\n  }\n};',
+        lang: 'js'
+      }
+    ],
+    quiz: [
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconsole.log(Symbol("a") === Symbol("a"));',
+        options: ['true', 'false', '报错', 'undefined'],
+        answer: 1,
+        explanation: '每次调用 Symbol() 都会创建一个独一无二的值，描述相同也不相等，所以结果是 false。'
+      },
+      {
+        type: 'single',
+        question: '要获取对象上所有的 Symbol 属性，应该使用哪个方法？',
+        options: ['Object.keys', 'for...in 循环', 'Object.getOwnPropertySymbols', 'Object.values'],
+        answer: 2,
+        explanation: 'Symbol 属性不会被 for...in 和 Object.keys 枚举，需要用 Object.getOwnPropertySymbols 获取。'
+      },
+      {
+        type: 'judge',
+        question: '创建 Symbol 时必须使用 new Symbol() 的写法。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Symbol 是原始类型，直接调用 Symbol() 即可，使用 new 反而会报错。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于 Symbol 的说法，哪些是正确的？（多选）',
+        options: ['每个 Symbol 值都是独一无二的', 'Symbol 可以作为对象的属性键', 'Symbol 属性会出现在 Object.keys 的结果中', 'typeof Symbol() 的结果是 symbol'],
+        answer: [0, 1, 3],
+        explanation: 'Symbol 属性不会出现在 Object.keys 中，需要专门的方法获取；其余三项均正确。'
+      }
+    ]
+  },
+  {
+    id: 'es6-10',
+    title: '迭代器与 for...of',
+    summary: '统一的遍历协议与遍历语法',
+    minutes: 12,
+    sections: [
+      {
+        heading: '迭代器协议',
+        text: '迭代器是一个带有 next 方法的对象，每次调用 next 都返回 { value, done } 形式的结果：value 是当前值，done 表示是否遍历结束。\n一个对象只要实现了 Symbol.iterator 方法，调用后能返回迭代器，它就是「可迭代对象」。数组、字符串、Map、Set 都内置实现了这个协议。这套统一的协议是 for...of、展开运算符、解构赋值能够工作的底层基础。',
+        code: 'const arr = ["a", "b"];\nconst it = arr[Symbol.iterator]();\nconsole.log(it.next()); // { value: "a", done: false }\nconsole.log(it.next()); // { value: "b", done: false }\nconsole.log(it.next()); // { value: undefined, done: true }',
+        lang: 'js'
+      },
+      {
+        heading: 'for...of 循环',
+        text: 'for...of 是 ES6 新增的遍历语法，专门用于遍历可迭代对象，每次循环直接拿到元素的值，代码比传统的 for 循环简洁很多。\n循环中可以使用 break、continue 和 return 控制流程。由于字符串也是可迭代对象，for...of 还能正确遍历字符串的每个字符。凡是能用展开运算符的地方，基本都能用 for...of 遍历。',
+        code: 'const arr = [10, 20, 30];\nfor (const n of arr) {\n  console.log(n); // 依次输出 10、20、30\n}\n\nfor (const ch of "你好") {\n  console.log(ch); // 依次输出 你、好\n}',
+        lang: 'js'
+      },
+      {
+        heading: 'for...of 与 for...in 的区别',
+        text: '这两个语法容易混淆，记住一句话：for...of 遍历的是「值」，for...in 遍历的是「键」。\nfor...in 是为遍历对象属性设计的，拿到的是字符串类型的键名，还会遍历原型链上的可枚举属性；用在数组上拿到的是下标字符串，容易出错。遍历数组、Map、Set 请用 for...of，遍历普通对象的键才用 for...in。此外 Map 和 Set 直接 for...of 就能拿到键值对或成员，非常方便。',
+        code: 'const arr = ["a", "b"];\nfor (const i in arr) console.log(i); // "0", "1"（下标字符串）\nfor (const v of arr) console.log(v); // "a", "b"（值）\n\nconst map = new Map([["k", "v"]]);\nfor (const [key, value] of map) {\n  console.log(key, value); // k v\n}',
+        lang: 'js'
+      }
+    ],
+    quiz: [
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst it = [7][Symbol.iterator]();\nconsole.log(it.next().value);',
+        options: ['7', '0', 'undefined', '{ value: 7, done: false }'],
+        answer: 0,
+        explanation: '第一次调用 next 返回 { value: 7, done: false }，取其中的 value 得到 7。'
+      },
+      {
+        type: 'single',
+        question: '遍历数组时想直接拿到每个元素的值，应该使用？',
+        options: ['for...in', 'for...of', 'Object.keys', 'typeof'],
+        answer: 1,
+        explanation: 'for...of 遍历可迭代对象并直接给出元素的值；for...in 拿到的是下标字符串。'
+      },
+      {
+        type: 'judge',
+        question: 'for...in 遍历数组时，拿到的是数组元素的值。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。for...in 拿到的是键（数组下标的字符串形式），for...of 拿到的才是值。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些数据可以直接使用 for...of 遍历？（多选）',
+        options: ['数组', '字符串', 'Map', '普通对象 {}'],
+        answer: [0, 1, 2],
+        explanation: '普通对象没有实现 Symbol.iterator，不能直接 for...of；数组、字符串、Map 都是可迭代对象。'
+      }
+    ]
+  },
+  {
+    id: 'es6-11',
+    title: 'Proxy 与 Reflect 简介',
+    summary: '拦截与自定义对象的基本操作',
+    minutes: 15,
+    sections: [
+      {
+        heading: 'Proxy 的基本用法',
+        text: 'Proxy 可以在目标对象外面包一层「代理」，拦截对这个对象的各种操作。创建时传入两个参数：目标对象和一个处理器对象，处理器里定义各种「陷阱」方法来拦截操作。\n最常用的是 get 陷阱（读取属性时触发）和 set 陷阱（设置属性时触发）。在陷阱里可以加入自己的逻辑，比如属性不存在时返回默认值、赋值前做类型校验等。之后对代理对象的操作都会先经过这些陷阱。',
+        code: 'const user = { name: "小明" };\nconst proxy = new Proxy(user, {\n  get(target, key) {\n    return key in target ? target[key] : "属性不存在";\n  }\n});\nconsole.log(proxy.name); // 小明\nconsole.log(proxy.age);  // 属性不存在',
+        lang: 'js'
+      },
+      {
+        heading: 'Proxy 的实际应用',
+        text: 'Proxy 的强大之处在于它让对象的基本操作变得可以编程。典型应用有：数据校验，在 set 陷阱里拒绝非法赋值；实现响应式，在属性被修改时自动通知界面更新——Vue 3 的响应式系统就是基于 Proxy 实现的；还有实现负下标数组、只读对象等。\n相比以前的 Object.defineProperty，Proxy 能拦截的操作种类更多，还能监听新增属性和数组变化，功能更完整。',
+        code: 'const ageProxy = new Proxy({ age: 18 }, {\n  set(target, key, value) {\n    if (key === "age" && typeof value !== "number") {\n      throw new Error("年龄必须是数字");\n    }\n    target[key] = value;\n    return true;\n  }\n});\nageProxy.age = "abc"; // 报错：年龄必须是数字',
+        lang: 'js'
+      },
+      {
+        heading: 'Reflect 简介',
+        text: 'Reflect 是 ES6 新增的一个内置对象，它把对象的常用操作（如读取属性、设置属性、删除属性）统一收拢为函数形式，与 Proxy 的陷阱方法一一对应。\n在 Proxy 陷阱中，推荐用 Reflect 来完成默认行为，而不是直接操作目标对象，这样行为更规范、返回值也更合理。比如 Reflect.get(target, key) 等价于读取 target[key]，Reflect.set 设置属性并返回是否成功。把 Proxy 和 Reflect 搭配使用是最标准的写法。',
+        code: 'const obj = { x: 1 };\nconsole.log(Reflect.get(obj, "x")); // 1\nReflect.set(obj, "y", 2);\nconsole.log(obj.y); // 2\nReflect.deleteProperty(obj, "x");\nconsole.log("x" in obj); // false',
+        lang: 'js'
+      }
+    ],
+    quiz: [
+      {
+        type: 'single',
+        question: '创建 Proxy 时，第二个参数是什么？',
+        options: ['目标对象', '处理器对象（定义陷阱方法）', '一个数组', '一个字符串'],
+        answer: 1,
+        explanation: 'new Proxy(target, handler) 中第一个参数是目标对象，第二个参数是定义各种陷阱的处理器对象。'
+      },
+      {
+        type: 'single',
+        question: '在 Proxy 中拦截「读取属性」操作的陷阱方法是？',
+        options: ['read', 'get', 'set', 'has'],
+        answer: 1,
+        explanation: 'get 陷阱在读取属性时触发，set 陷阱在设置属性时触发。'
+      },
+      {
+        type: 'judge',
+        question: 'Vue 3 的响应式系统是基于 Proxy 实现的。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Vue 3 使用 Proxy 拦截属性的读写，从而实现更完整的响应式追踪。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于 Proxy 和 Reflect 的说法，哪些是正确的？（多选）',
+        options: ['Proxy 可以拦截属性的读取和设置', 'Reflect 的方法与 Proxy 陷阱一一对应', '在陷阱中推荐用 Reflect 完成默认行为', 'Proxy 只能拦截 get 一种操作'],
+        answer: [0, 1, 2],
+        explanation: 'Proxy 能拦截 get、set、has、deleteProperty 等十多种操作，所以第四项错误；其余三项均正确。'
+      }
+    ]
+  },
+  {
+    id: 'es6-12',
+    title: 'Generator 生成器入门',
+    summary: '可以暂停和恢复的函数',
+    minutes: 15,
+    sections: [
+      {
+        heading: '认识 Generator',
+        text: 'Generator 是一种特殊的函数，定义时在 function 后面加星号（function*）。普通函数一旦调用就会从头执行到尾，而 Generator 函数可以「中途暂停」，之后还能从暂停处继续执行。\n调用 Generator 函数并不会立即执行函数体，而是返回一个迭代器对象。每次调用迭代器的 next 方法，函数才执行到下一个 yield 表达式并暂停，yield 后面的值会作为结果返回。这种「惰性执行」的特性非常适合处理序列数据。',
+        code: 'function* gen() {\n  yield 1;\n  yield 2;\n  yield 3;\n}\nconst it = gen();\nconsole.log(it.next()); // { value: 1, done: false }\nconsole.log(it.next()); // { value: 2, done: false }\nconsole.log(it.next()); // { value: 3, done: false }\nconsole.log(it.next()); // { value: undefined, done: true }',
+        lang: 'js'
+      },
+      {
+        heading: 'next 方法与传值',
+        text: '迭代器的 next 方法不仅能推进执行，还可以向 Generator 内部传值：next(x) 传入的值会成为上一个 yield 表达式的返回值，从而实现函数内外双向通信。\nGenerator 函数执行到 return 或自然结束时，迭代结束，done 变为 true，return 的值是最后一次的 value。由于 Generator 返回的是迭代器，它也可以直接用 for...of 遍历，循环会自动取出每个 yield 的值。',
+        code: 'function* chat() {\n  const name = yield "你叫什么？";\n  yield "你好，" + name;\n}\nconst it = chat();\nconsole.log(it.next().value); // 你叫什么？\nconsole.log(it.next("小明").value); // 你好，小明\n\nfor (const n of (function*() { yield 1; yield 2; })()) {\n  console.log(n); // 1、2\n}',
+        lang: 'js'
+      },
+      {
+        heading: 'Generator 的应用场景',
+        text: 'Generator 最常见的用途是生成序列，比如无穷数列：因为值是调用时才计算的，不用一次性把无限多个数存进内存。\n另一个用途是让对象变得可迭代：给对象实现一个 Generator 形式的 Symbol.iterator 方法，就能用 for...of 遍历它。此外，Generator「暂停-恢复」的能力曾被广泛用于处理异步流程，虽然如今大多被 async/await 取代，但理解它有助于掌握迭代器的底层原理，许多库（如 redux-saga）仍在使用。',
+        code: 'function* infinite() {\n  let n = 1;\n  while (true) {\n    yield n++;\n  }\n}\nconst it = infinite();\nconsole.log(it.next().value); // 1\nconsole.log(it.next().value); // 2\nconsole.log(it.next().value); // 3（可以一直取下去）',
+        lang: 'js'
+      }
+    ],
+    quiz: [
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nfunction* gen() {\n  yield 10;\n}\nconst it = gen();\nconsole.log(it.next().value);',
+        options: ['undefined', '10', '报错', 'gen 函数本身'],
+        answer: 1,
+        explanation: '第一次调用 next 执行到第一个 yield 并暂停，返回 { value: 10, done: false }，value 为 10。'
+      },
+      {
+        type: 'single',
+        question: '调用 Generator 函数后，函数体会立即执行吗？',
+        options: ['会，和普通函数一样', '不会，返回迭代器，调用 next 才执行', '会，但只执行一半', '取决于有没有 yield'],
+        answer: 1,
+        explanation: '调用 Generator 函数只返回一个迭代器对象，函数体要等第一次 next 调用才开始执行。'
+      },
+      {
+        type: 'judge',
+        question: 'Generator 函数返回的迭代器可以直接用 for...of 遍历。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Generator 返回的对象是可迭代对象，for...of 会自动依次取出每个 yield 的值。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于 Generator 的说法，哪些是正确的？（多选）',
+        options: ['定义时在 function 后加星号', 'yield 可以暂停函数执行', 'next 方法可以向函数内部传值', 'Generator 不能生成无穷序列'],
+        answer: [0, 1, 2],
+        explanation: 'Generator 是惰性求值的，非常适合生成无穷序列，所以第四项错误；其余三项均正确。'
       }
     ]
   }
