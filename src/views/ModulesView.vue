@@ -17,12 +17,11 @@ function progress(m) {
       v-for="m in modules"
       :key="m.id"
       :to="`/modules/${m.id}`"
-      class="card"
-      style="display: block; text-decoration: none; color: inherit"
+      class="card module-card"
     >
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px">
+      <div class="flex" style="margin-bottom: 10px">
         <span style="font-size: 28px">{{ m.icon }}</span>
-        <div style="flex: 1">
+        <div class="grow">
           <b style="font-size: 16px">{{ m.name }}</b>
           <div class="muted">{{ m.desc }}</div>
         </div>

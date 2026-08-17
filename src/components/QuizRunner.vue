@@ -97,13 +97,13 @@ function optionClass(i) {
 
 <template>
   <div>
-    <div class="muted" style="margin-bottom: 10px">
+    <div class="quiz-meta muted">
       第 {{ idx + 1 }} / {{ order.length }} 题
-      <span class="tag" style="margin-left: 6px">{{ typeLabel }}</span>
-      <span v-if="isMulti" class="muted">（选对全部才得分）</span>
+      <span class="tag">{{ typeLabel }}</span>
+      <span v-if="isMulti">（选对全部才得分）</span>
     </div>
     <div class="card">
-      <div style="font-size: 16px; font-weight: 600; margin-bottom: 14px">{{ current.question }}</div>
+      <div class="quiz-question">{{ current.question }}</div>
       <button
         v-for="(opt, i) in current.options"
         :key="i"

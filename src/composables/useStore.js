@@ -9,6 +9,9 @@ export const REVIEW_INTERVALS = [1, 2, 4, 7, 15, 30, 60]
 /** 测试通过线：正确率 >= 60% 视为学会 */
 export const PASS_RATE = 0.6
 
+/** 每日复习上限：逾期复习分批消化，避免断签后一天堆积过多 */
+export const DAILY_REVIEW_LIMIT = 10
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -176,6 +179,32 @@ export function useStore() {
       .map((l) => l.id)
   }
 
+  /** 今日复习安排：逾期过多时分批，每天最多 DAILY_REVIEW_LIMIT 道 */
+  function todayReviews(allLessons) {
+    const all = dueReviewIds(allLessons)
+    return { list: all.slice(0, DAILY_REVIEW_LIMIT), total: all.length, limit: DAILY_REVIEW_LIMIT }
+  }
+
+  /** 某天是否已打卡（当天有任何学习/复习活动即视为打卡） */
+  function isCheckedIn(dateStr) {
+    const rec = state.daily[dateStr]
+    return !!(rec && (rec.learned.length > 0 || rec.reviewed.length > 0))
+  }
+
+  /** 断签天数：从昨天往前连续没学习的天数（从未学过或昨天学了都返回 0） */
+  function gapDays() {
+    const activeDates = Object.keys(state.daily).filter(isCheckedIn).sort()
+    if (!activeDates.length) return 0
+    const first = activeDates[0]
+    let n = 0
+    let cursor = addDays(todayStr(), -1)
+    while (cursor >= first && !isCheckedIn(cursor)) {
+      n += 1
+      cursor = addDays(cursor, -1)
+    }
+    return n
+  }
+
   /** 未来待复习安排，按日期升序 */
   function upcomingReviews(allLessons) {
     const t = todayStr()
@@ -257,6 +286,9 @@ export function useStore() {
     wrongCount,
     weakSpots,
     dueReviewIds,
+    todayReviews,
+    isCheckedIn,
+    gapDays,
     upcomingReviews,
     streakDays,
     stats,

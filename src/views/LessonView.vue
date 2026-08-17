@@ -21,24 +21,22 @@ function paragraphs(text) {
 
 <template>
   <div class="page" v-if="lesson">
-    <div style="margin: 4px 0 12px">
+    <div class="lesson-head">
       <span class="tag" :style="{ background: lesson.moduleColor + '1a', color: lesson.moduleColor }">
         {{ lesson.moduleName }}
       </span>
-      <h2 style="font-size: 20px; margin: 8px 0 4px">{{ lesson.title }}</h2>
+      <h2>{{ lesson.title }}</h2>
       <p class="muted">约 {{ lesson.minutes }} 分钟 · 学完需通过 {{ lesson.quiz.length }} 道测试题</p>
     </div>
 
-    <div v-for="(sec, i) in lesson.sections" :key="i" class="card">
-      <h3 style="font-size: 16px; margin-bottom: 8px">{{ sec.heading }}</h3>
-      <p v-for="(p, j) in paragraphs(sec.text)" :key="j" style="font-size: 15px; margin-bottom: 6px">
-        {{ p }}
-      </p>
+    <div v-for="(sec, i) in lesson.sections" :key="i" class="card reading">
+      <h3>{{ sec.heading }}</h3>
+      <p v-for="(p, j) in paragraphs(sec.text)" :key="j">{{ p }}</p>
       <pre v-if="sec.code" class="code"><code>{{ sec.code }}</code></pre>
     </div>
 
     <!-- 已学信息 -->
-    <div v-if="rec" class="card" style="background: var(--primary-light)">
+    <div v-if="rec" class="notice notice-info">
       <b>📅 复习计划（艾宾浩斯曲线：{{ REVIEW_INTERVALS.join('/') }} 天）</b>
       <p class="muted" style="margin-top: 6px">
         已完成 {{ rec.reviewHistory.length }} 次复习 ·

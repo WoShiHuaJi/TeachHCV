@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useStore } from '../composables/useStore'
 import { useSync } from '../composables/useSync'
 import { allLessons, modules } from '../data'
-import { formatCN } from '../utils/date'
+import { formatCN, todayStr } from '../utils/date'
 
 const store = useStore()
 const sync = useSync()
@@ -13,6 +13,33 @@ const maxCount = computed(() => Math.max(1, ...week.value.map((d) => d.count)))
 
 /** 薄弱分析：错题×2 + 复习失败×3，取前 5 */
 const weakSpots = computed(() => store.weakSpots(allLessons).slice(0, 5))
+
+/** 本月打卡日历 */
+const calendar = computed(() => {
+  const now = new Date()
+  const y = now.getFullYear()
+  const m = now.getMonth()
+  const daysInMonth = new Date(y, m + 1, 0).getDate()
+  const firstWeekday = new Date(y, m, 1).getDay()
+  const today = todayStr()
+  const activeDates = Object.keys(store.state.daily).filter((d) => store.isCheckedIn(d)).sort()
+  const firstActive = activeDates[0] || today
+  const cells = []
+  for (let i = 0; i < firstWeekday; i++) cells.push(null)
+  let doneCount = 0
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+    let status
+    if (ds > today) status = 'future'
+    else if (store.isCheckedIn(ds)) {
+      status = 'done'
+      doneCount += 1
+    } else if (ds >= firstActive) status = 'miss'
+    else status = 'future'
+    cells.push({ day: d, status })
+  }
+  return { cells, doneCount, label: `${y}年${m + 1}月` }
+})
 
 function moduleProgress(m) {
   const learned = m.lessons.filter((l) => store.isLearned(l.id)).length
@@ -71,6 +98,21 @@ function doReset() {
       </div>
     </div>
 
+    <div class="section-title">📅 打卡日历（{{ calendar.label }}）</div>
+    <div class="card">
+      <div class="cal">
+        <div v-for="w in ['日', '一', '二', '三', '四', '五', '六']" :key="w" class="hd">{{ w }}</div>
+        <div v-for="(c, i) in calendar.cells" :key="i" class="cell" :class="c ? c.status : 'future'">
+          <template v-if="c">{{ c.status === 'done' ? '✓' : c.day }}</template>
+        </div>
+      </div>
+      <p class="muted" style="text-align: center; margin-top: 10px">
+        本月打卡 {{ calendar.doneCount }} 天 ·
+        <span style="color: #166534">绿=已打卡</span> ·
+        <span style="color: #b91c1c">红=缺卡</span> · 灰=未开始
+      </p>
+    </div>
+
     <div class="section-title">📈 近 7 天学习量</div>
     <div class="card">
       <div class="bar-chart">
@@ -94,15 +136,15 @@ function doReset() {
     </div>
 
     <div class="section-title">🧠 薄弱分析</div>
-    <div v-if="weakSpots.length" class="card" style="padding: 8px 16px">
-      <p class="muted" style="padding: 8px 0 4px">按 错题×2 + 复习失败×3 排序，优先补前面的：</p>
+    <div v-if="weakSpots.length" class="card" style="padding: 4px 16px">
+      <p class="muted" style="padding: 10px 0 4px">按 错题×2 + 复习失败×3 排序，优先补前面的：</p>
       <router-link
         v-for="(w, i) in weakSpots"
         :key="w.lesson.id"
         :to="w.wrong > 0 ? `/wrongbook/${w.lesson.id}` : `/lesson/${w.lesson.id}`"
-        style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit"
+        class="row-item"
       >
-        <span style="font-size: 14px">{{ i + 1 }}. {{ w.lesson.title }}</span>
+        <span>{{ i + 1 }}. {{ w.lesson.title }}</span>
         <span class="muted">
           {{ w.wrong ? `错题${w.wrong}` : '' }}{{ w.wrong && w.fails ? ' · ' : '' }}{{ w.fails ? `失败${w.fails}次` : '' }}
         </span>
@@ -120,7 +162,7 @@ function doReset() {
           v-model="tokenInput"
           type="password"
           placeholder="粘贴 GitHub Token（ghp_ 开头）"
-          style="width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; margin-bottom: 10px"
+          class="input"
         />
         <button class="btn btn-primary" :disabled="!tokenInput.trim()" @click="saveToken">保存 Token</button>
         <button class="btn btn-ghost" @click="showTokenHelp = !showTokenHelp">

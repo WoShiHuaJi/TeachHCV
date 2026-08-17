@@ -50,9 +50,9 @@ const runnerKey = ref(0)
 
     <QuizRunner v-if="!finished" :key="runnerKey" :questions="lesson.quiz" @finish="onFinish" />
 
-    <div v-else class="card" style="text-align: center; padding: 28px 16px">
-      <div style="font-size: 44px">{{ result.pass ? '🎉' : '💪' }}</div>
-      <h3 style="font-size: 18px; margin: 8px 0">
+    <div v-else class="card result-card">
+      <div class="emoji">{{ result.pass ? '🎉' : '💪' }}</div>
+      <h3>
         {{ result.pass ? (isReview ? '复习通过！' : '测试通过，已加入复习计划！') : '还差一点点' }}
       </h3>
       <p class="muted">
@@ -65,7 +65,7 @@ const runnerKey = ref(0)
       <p v-if="!result.pass" class="muted" style="margin-top: 6px">
         {{ isReview ? '该课将重新安排到明天复习' : '建议回到课程再看一遍，然后重新测试' }}
       </p>
-      <div style="margin-top: 18px">
+      <div class="actions">
         <button v-if="!result.pass" class="btn btn-primary" @click="retry">重新测试</button>
         <router-link
           v-if="!result.pass && !isReview"

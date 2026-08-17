@@ -51,14 +51,12 @@ const remaining = computed(() => store.state.wrong[lesson.value.id]?.indices.len
       @finish="onFinish"
     />
 
-    <div v-else-if="result" class="card" style="text-align: center; padding: 28px 16px">
-      <div style="font-size: 44px">{{ remaining === 0 ? '🎉' : '💪' }}</div>
-      <h3 style="font-size: 18px; margin: 8px 0">
-        {{ remaining === 0 ? '本课错题全部清零！' : '继续加油' }}
-      </h3>
+    <div v-else-if="result" class="card result-card">
+      <div class="emoji">{{ remaining === 0 ? '🎉' : '💪' }}</div>
+      <h3>{{ remaining === 0 ? '本课错题全部清零！' : '继续加油' }}</h3>
       <p class="muted">答对 {{ result.correct }} / {{ result.total }} 题，移出错题本 {{ result.cleared }} 道</p>
       <p v-if="remaining > 0" class="muted" style="margin-top: 6px">还剩 {{ remaining }} 道错题</p>
-      <div style="margin-top: 18px">
+      <div class="actions">
         <button v-if="remaining > 0" class="btn btn-primary" @click="startPractice">继续重练剩余错题</button>
         <router-link to="/wrongbook" class="btn btn-outline">返回错题本</router-link>
         <router-link :to="`/lesson/${lesson.id}`" class="btn btn-ghost">回看课程内容</router-link>
