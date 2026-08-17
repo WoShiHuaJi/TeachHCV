@@ -11,6 +11,9 @@ const s = computed(() => store.stats(allLessons))
 const week = computed(() => store.last7Days())
 const maxCount = computed(() => Math.max(1, ...week.value.map((d) => d.count)))
 
+/** 薄弱分析：错题×2 + 复习失败×3，取前 5 */
+const weakSpots = computed(() => store.weakSpots(allLessons).slice(0, 5))
+
 function moduleProgress(m) {
   const learned = m.lessons.filter((l) => store.isLearned(l.id)).length
   return { learned, total: m.lessons.length, pct: Math.round((learned / m.lessons.length) * 100) }
@@ -89,6 +92,23 @@ function doReset() {
         <i :style="{ width: moduleProgress(m).pct + '%', background: m.color }"></i>
       </div>
     </div>
+
+    <div class="section-title">🧠 薄弱分析</div>
+    <div v-if="weakSpots.length" class="card" style="padding: 8px 16px">
+      <p class="muted" style="padding: 8px 0 4px">按 错题×2 + 复习失败×3 排序，优先补前面的：</p>
+      <router-link
+        v-for="(w, i) in weakSpots"
+        :key="w.lesson.id"
+        :to="w.wrong > 0 ? `/wrongbook/${w.lesson.id}` : `/lesson/${w.lesson.id}`"
+        style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit"
+      >
+        <span style="font-size: 14px">{{ i + 1 }}. {{ w.lesson.title }}</span>
+        <span class="muted">
+          {{ w.wrong ? `错题${w.wrong}` : '' }}{{ w.wrong && w.fails ? ' · ' : '' }}{{ w.fails ? `失败${w.fails}次` : '' }}
+        </span>
+      </router-link>
+    </div>
+    <div v-else class="card empty">还没有错题记录，去做几套测试吧</div>
 
     <div class="section-title">☁️ 数据同步（跨设备）</div>
     <div class="card">

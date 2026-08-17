@@ -14,6 +14,9 @@ const dueReviews = computed(() => store.dueReviewIds(allLessons).map((id) => get
 /** 推荐新课：按全局顺序找出前 2 门未学的课 */
 const nextLessons = computed(() => allLessons.filter((l) => !store.isLearned(l.id)).slice(0, 2))
 
+/** 薄弱知识点（错题×2 + 复习失败×3），取前 3 */
+const weakSpots = computed(() => store.weakSpots(allLessons).slice(0, 3))
+
 const allDone = computed(() => dueReviews.value.length === 0 && nextLessons.value.length === 0)
 
 function moduleProgress(m) {
@@ -88,6 +91,29 @@ function overdueDays(lesson) {
     <div v-if="allDone" class="card empty" style="font-size: 15px">
       今天的任务全部完成，明天见！
     </div>
+
+    <!-- 薄弱巩固：根据错题和复习失败记录智能推荐 -->
+    <template v-if="weakSpots.length">
+      <div class="section-title">💪 需要加强</div>
+      <router-link
+        v-for="w in weakSpots"
+        :key="w.lesson.id"
+        :to="w.wrong > 0 ? `/wrongbook/${w.lesson.id}` : `/lesson/${w.lesson.id}`"
+        class="lesson-item"
+      >
+        <span class="dot" :style="{ background: 'var(--warning)' }"></span>
+        <div class="info">
+          <div class="title">{{ w.lesson.title }}</div>
+          <div class="sub">
+            {{ w.lesson.moduleName }} ·
+            <template v-if="w.wrong">错题 {{ w.wrong }} 道</template>
+            <template v-if="w.wrong && w.fails"> · </template>
+            <template v-if="w.fails">复习失败 {{ w.fails }} 次</template>
+          </div>
+        </div>
+        <span class="arrow">›</span>
+      </router-link>
+    </template>
 
     <!-- 模块进度 -->
     <div class="section-title">🗂 学习进度</div>

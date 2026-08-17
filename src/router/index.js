@@ -8,6 +8,8 @@ const routes = [
   { path: '/quiz/:id', name: 'quiz', component: () => import('../views/QuizView.vue'), meta: { title: '学习测试' } },
   { path: '/review', name: 'review', component: () => import('../views/ReviewView.vue'), meta: { title: '复习中心' } },
   { path: '/review/:id', name: 'review-quiz', component: () => import('../views/QuizView.vue'), meta: { title: '复习测试' } },
+  { path: '/wrongbook', name: 'wrongbook', component: () => import('../views/WrongBookView.vue'), meta: { title: '错题本' } },
+  { path: '/wrongbook/:id', name: 'wrong-practice', component: () => import('../views/WrongPracticeView.vue'), meta: { title: '错题重练' } },
   { path: '/stats', name: 'stats', component: () => import('../views/StatsView.vue'), meta: { title: '学习统计' } },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]

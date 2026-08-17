@@ -18,11 +18,11 @@ const result = ref({ correct: 0, total: 0, pass: false })
 
 if (!lesson.value) router.replace('/')
 
-function onFinish({ correct, total }) {
+function onFinish({ correct, total, wrong }) {
   const pass = isReview.value
-    ? store.recordReview(lesson.value.id, correct, total)
-    : store.recordLearn(lesson.value.id, correct, total)
-  result.value = { correct, total, pass }
+    ? store.recordReview(lesson.value.id, correct, total, wrong)
+    : store.recordLearn(lesson.value.id, correct, total, wrong)
+  result.value = { correct, total, pass, wrongCount: wrong ? wrong.length : 0 }
   finished.value = true
 }
 
@@ -58,6 +58,9 @@ const runnerKey = ref(0)
       <p class="muted">
         答对 {{ result.correct }} / {{ result.total }} 题
         <template v-if="!result.pass">（正确率需达到 {{ PASS_RATE * 100 }}%）</template>
+      </p>
+      <p v-if="result.wrongCount > 0" class="muted" style="margin-top: 6px">
+        📌 {{ result.wrongCount }} 道错题已收入「错题本」<template v-if="result.wrongCount >= 2">，本课复习间隔已自动减半</template>
       </p>
       <p v-if="!result.pass" class="muted" style="margin-top: 6px">
         {{ isReview ? '该课将重新安排到明天复习' : '建议回到课程再看一遍，然后重新测试' }}

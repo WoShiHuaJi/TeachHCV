@@ -14,12 +14,12 @@ function load() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const data = JSON.parse(raw)
-      return { lessons: data.lessons || {}, daily: data.daily || {} }
+      return { lessons: data.lessons || {}, daily: data.daily || {}, wrong: data.wrong || {} }
     }
   } catch (e) {
     console.warn('进度数据读取失败，已重置', e)
   }
-  return { lessons: {}, daily: {} }
+  return { lessons: {}, daily: {}, wrong: {} }
 }
 
 const state = reactive(load())
@@ -31,7 +31,10 @@ export function onProgressSaved(fn) {
 }
 
 function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ lessons: state.lessons, daily: state.daily }))
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ lessons: state.lessons, daily: state.daily, wrong: state.wrong })
+  )
   saveListeners.forEach((fn) => {
     try {
       fn()
@@ -58,19 +61,70 @@ export function useStore() {
   }
 
   /**
-   * 记录新课测试结果。通过才标记为已学并安排首次复习。
+   * 复习间隔：某次测验错题 >= 2 道时进入「密集模式」，间隔减半，
+   * 让掌握不牢的知识更快再次出现（侧重调整）。
+   */
+  function stageInterval(stage, dense) {
+    const iv = REVIEW_INTERVALS[Math.min(stage, REVIEW_INTERVALS.length - 1)]
+    return dense ? Math.max(1, Math.round(iv / 2)) : iv
+  }
+
+  /** 记录错题（含「不知道」），indices 为该课 quiz 数组的原始下标 */
+  function addWrong(lessonId, indices) {
+    if (!indices || !indices.length) return
+    const cur = state.wrong[lessonId] || { indices: [], lastDate: '' }
+    cur.indices = [...new Set([...cur.indices, ...indices])].sort((a, b) => a - b)
+    cur.lastDate = todayStr()
+    state.wrong[lessonId] = cur
+  }
+
+  /** 错题重练后移除已答对的题 */
+  function clearWrong(lessonId, indices) {
+    const cur = state.wrong[lessonId]
+    if (!cur) return
+    cur.indices = cur.indices.filter((i) => !indices.includes(i))
+    if (!cur.indices.length) delete state.wrong[lessonId]
+    save()
+  }
+
+  function wrongCount() {
+    return Object.values(state.wrong).reduce((s, w) => s + w.indices.length, 0)
+  }
+
+  /**
+   * 薄弱分析：错题数 ×2 + 复习失败次数 ×3 得出薄弱分，降序。
+   * 供首页「需要加强」和统计页「薄弱分析」使用。
+   */
+  function weakSpots(allLessons) {
+    return allLessons
+      .map((l) => {
+        const rec = state.lessons[l.id]
+        const wrong = state.wrong[l.id]?.indices.length || 0
+        const fails = rec ? rec.reviewHistory.filter((h) => !h.pass).length : 0
+        return { lesson: l, wrong, fails, learned: !!rec, score: wrong * 2 + fails * 3 }
+      })
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+  }
+
+  /**
+   * 记录新课测试结果。通过才标记为已学并安排首次复习；无论是否通过都会记录错题。
    * @returns 是否通过
    */
-  function recordLearn(id, correct, total) {
+  function recordLearn(id, correct, total, wrongIndices = []) {
     const pass = correct / total >= PASS_RATE
-    if (!pass) return false
+    addWrong(id, wrongIndices)
+    if (!pass) {
+      save()
+      return false
+    }
     const t = todayStr()
     const prev = state.lessons[id]
     state.lessons[id] = {
       learnedAt: prev?.learnedAt || t,
       bestScore: Math.max(prev?.bestScore || 0, correct / total),
       reviewStage: 0,
-      nextReviewDate: addDays(t, REVIEW_INTERVALS[0]),
+      nextReviewDate: addDays(t, stageInterval(0, wrongIndices.length >= 2)),
       mastered: false,
       reviewHistory: prev?.reviewHistory || []
     }
@@ -83,13 +137,15 @@ export function useStore() {
    * 记录复习测试结果。
    * 通过：进入下一复习阶段；完成全部 7 个阶段后标记为「已掌握」。
    * 未通过：回到第一阶段，明天重新复习。
+   * 错题 >= 2 道时进入密集模式（间隔减半）。
    * @returns 是否通过
    */
-  function recordReview(id, correct, total) {
+  function recordReview(id, correct, total, wrongIndices = []) {
     const rec = state.lessons[id]
     if (!rec) return false
     const pass = correct / total >= PASS_RATE
     const t = todayStr()
+    addWrong(id, wrongIndices)
     rec.reviewHistory.push({ date: t, score: correct / total, pass })
     if (pass) {
       rec.reviewStage += 1
@@ -97,7 +153,7 @@ export function useStore() {
         rec.mastered = true
         rec.nextReviewDate = null
       } else {
-        rec.nextReviewDate = addDays(t, REVIEW_INTERVALS[rec.reviewStage])
+        rec.nextReviewDate = addDays(t, stageInterval(rec.reviewStage, wrongIndices.length >= 2))
       }
     } else {
       rec.reviewStage = 0
@@ -186,6 +242,7 @@ export function useStore() {
   function resetAll() {
     state.lessons = {}
     state.daily = {}
+    state.wrong = {}
     save()
   }
 
@@ -195,6 +252,10 @@ export function useStore() {
     isLearned,
     recordLearn,
     recordReview,
+    addWrong,
+    clearWrong,
+    wrongCount,
+    weakSpots,
     dueReviewIds,
     upcomingReviews,
     streakDays,

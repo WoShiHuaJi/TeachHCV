@@ -16,15 +16,20 @@ function shuffleArr(arr) {
   return a
 }
 
-const list = props.shuffle ? shuffleArr(props.questions) : props.questions
+/** 答题顺序（存题目在 questions 中的原始下标），错题上报用原始下标 */
+const order = props.questions.map((_, i) => i)
+if (props.shuffle) shuffleArr(order)
+
 const idx = ref(0)
 const selected = ref([]) // 已选下标数组，单选/判断时长度恒为 1
 const answered = ref(false)
 const isCurrentCorrect = ref(false)
+const gaveUp = ref(false) // 本题点了「不知道」
 const correctCount = ref(0)
+const wrongList = [] // 答错/不会的题的原始下标
 
-const current = computed(() => list[idx.value])
-const isLast = computed(() => idx.value === list.length - 1)
+const current = computed(() => props.questions[order[idx.value]])
+const isLast = computed(() => idx.value === order.length - 1)
 const isMulti = computed(() => current.value.type === 'multiple')
 const answerArr = computed(() =>
   Array.isArray(current.value.answer) ? current.value.answer : [current.value.answer]
@@ -54,17 +59,31 @@ function submit() {
     selected.value.length === answerArr.value.length &&
     selected.value.every((i) => answerArr.value.includes(i))
   isCurrentCorrect.value = ok
-  if (ok) correctCount.value += 1
+  if (ok) {
+    correctCount.value += 1
+  } else {
+    wrongList.push(order[idx.value])
+  }
+}
+
+/** 「不知道」：诚实标记为不会，按答错处理并展示解析 */
+function giveUp() {
+  if (answered.value) return
+  answered.value = true
+  gaveUp.value = true
+  isCurrentCorrect.value = false
+  wrongList.push(order[idx.value])
 }
 
 function next() {
   if (isLast.value) {
-    emit('finish', { correct: correctCount.value, total: list.length })
+    emit('finish', { correct: correctCount.value, total: order.length, wrong: [...wrongList] })
   } else {
     idx.value += 1
     selected.value = []
     answered.value = false
     isCurrentCorrect.value = false
+    gaveUp.value = false
   }
 }
 
@@ -79,7 +98,7 @@ function optionClass(i) {
 <template>
   <div>
     <div class="muted" style="margin-bottom: 10px">
-      第 {{ idx + 1 }} / {{ list.length }} 题
+      第 {{ idx + 1 }} / {{ order.length }} 题
       <span class="tag" style="margin-left: 6px">{{ typeLabel }}</span>
       <span v-if="isMulti" class="muted">（选对全部才得分）</span>
     </div>
@@ -96,13 +115,14 @@ function optionClass(i) {
         {{ current.type === 'judge' ? '' : 'ABCDEFGH'[i] + '. ' }}{{ opt }}
       </button>
       <div v-if="answered" class="explain" :class="isCurrentCorrect ? 'ok' : 'no'">
-        <b>{{ isCurrentCorrect ? '✅ 回答正确' : '❌ 回答错误' }}</b>
+        <b>{{ gaveUp ? '🤷 已标记为不会（计入错题）' : isCurrentCorrect ? '✅ 回答正确' : '❌ 回答错误' }}</b>
         <div style="margin-top: 4px">{{ current.explanation }}</div>
       </div>
     </div>
-    <button v-if="!answered" class="btn btn-primary" :disabled="selected.length === 0" @click="submit">
-      确认答案
-    </button>
+    <template v-if="!answered">
+      <button class="btn btn-primary" :disabled="selected.length === 0" @click="submit">确认答案</button>
+      <button class="btn btn-ghost" @click="giveUp">🤷 不知道（看解析，计入错题）</button>
+    </template>
     <button v-else class="btn btn-primary" @click="next">
       {{ isLast ? '查看结果' : '下一题' }}
     </button>
