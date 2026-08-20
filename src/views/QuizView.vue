@@ -13,6 +13,10 @@ const store = useStore()
 const isReview = computed(() => route.name === 'review-quiz')
 const lesson = computed(() => getLesson(route.params.id))
 
+/** 每次测验从题库随机抽取的题数 */
+const QUIZ_COUNT = 4
+const quizCount = computed(() => Math.min(QUIZ_COUNT, lesson.value?.quiz.length || QUIZ_COUNT))
+
 const finished = ref(false)
 const result = ref({ correct: 0, total: 0, pass: false })
 
@@ -44,11 +48,11 @@ const runnerKey = ref(0)
       {{ isReview ? '🔁 复习测试' : '✍️ 学习测试' }}：{{ lesson.title }}
     </div>
     <p class="muted" style="margin-bottom: 14px">
-      答对 {{ Math.ceil(lesson.quiz.length * PASS_RATE) }}/{{ lesson.quiz.length }} 题即通过
+      题库 {{ lesson.quiz.length }} 题，本次随机抽 {{ quizCount }} 题，答对 {{ Math.ceil(quizCount * PASS_RATE) }} 题即通过
       <template v-if="!isReview">，通过后进入复习计划</template>
     </p>
 
-    <QuizRunner v-if="!finished" :key="runnerKey" :questions="lesson.quiz" @finish="onFinish" />
+    <QuizRunner v-if="!finished" :key="runnerKey" :questions="lesson.quiz" :sample="QUIZ_COUNT" @finish="onFinish" />
 
     <div v-else class="card result-card">
       <div class="emoji">{{ result.pass ? '🎉' : '💪' }}</div>

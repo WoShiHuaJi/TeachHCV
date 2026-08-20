@@ -3,7 +3,9 @@ import { ref, computed } from 'vue'
 
 const props = defineProps({
   questions: { type: Array, required: true },
-  shuffle: { type: Boolean, default: true }
+  shuffle: { type: Boolean, default: true },
+  /** 从题库中随机抽取的题数（不传则用全部题目） */
+  sample: { type: Number, default: 0 }
 })
 const emit = defineEmits(['finish'])
 
@@ -16,9 +18,14 @@ function shuffleArr(arr) {
   return a
 }
 
-/** 答题顺序（存题目在 questions 中的原始下标），错题上报用原始下标 */
-const order = props.questions.map((_, i) => i)
-if (props.shuffle) shuffleArr(order)
+/**
+ * 答题顺序（存题目在 questions 题库中的原始下标）。
+ * 开启 sample 时先打乱再截取，保证每次测验/重测抽到的题不同；
+ * 错题上报始终用题库原始下标，保证错题本数据一致。
+ */
+let order = props.questions.map((_, i) => i)
+if (props.shuffle || props.sample) shuffleArr(order)
+if (props.sample > 0 && props.sample < order.length) order = order.slice(0, props.sample)
 
 const idx = ref(0)
 const selected = ref([]) // 已选下标数组，单选/判断时长度恒为 1

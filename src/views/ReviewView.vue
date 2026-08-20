@@ -24,7 +24,7 @@ const mastered = computed(() => allLessons.filter((l) => store.lessonState(l.id)
           <div class="title">{{ l.title }}</div>
           <div class="sub">
             {{ l.moduleName }} · 第 {{ store.lessonState(l.id).reviewStage + 1 }} 次复习 ·
-            {{ l.quiz.length }} 道题
+            随机抽题
           </div>
         </div>
         <span class="arrow">›</span>

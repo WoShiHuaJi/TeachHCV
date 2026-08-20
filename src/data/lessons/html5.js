@@ -52,6 +52,48 @@ export default [
         options: ['<header>', '<div>', '<article>', '<span>'],
         answer: [0, 2],
         explanation: 'header 和 article 是语义化标签，div 和 span 无语义。'
+      },
+      {
+        type: 'single',
+        question: '用户在页面上真正能看到的内容应该写在哪个标签里？',
+        options: ['<head>', '<body>', '<title>', '<meta>'],
+        answer: 1,
+        explanation: 'body 里放用户看到的内容，head 里放标题、编码等元信息，用户看不到。'
+      },
+      {
+        type: 'single',
+        question: '以下哪个是行内元素？',
+        options: ['<p>', '<div>', '<span>', '<section>'],
+        answer: 2,
+        explanation: 'span 是行内元素，只占内容所需宽度；p、div、section 都是块级元素。'
+      },
+      {
+        type: 'judge',
+        question: 'aside 标签通常用于表示页面的侧边栏内容。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。aside 是语义化标签，表示与主体内容相关的侧边栏。'
+      },
+      {
+        type: 'judge',
+        question: '块级元素只占内容所需的宽度，不会独占一行。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。块级元素独占一行、可设置宽高；只占内容宽度的是行内元素。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于块级元素？（多选）',
+        options: ['<h1>', '<p>', '<span>', '<div>'],
+        answer: [0, 1, 3],
+        explanation: 'h1、p、div 都是块级元素，独占一行；span 是行内元素。'
+      },
+      {
+        type: 'multiple',
+        question: '使用语义化标签的好处有哪些？（多选）',
+        options: ['搜索引擎更好理解页面', '屏幕阅读器更容易解析', '代码更好维护', '让页面加载速度翻倍'],
+        answer: [0, 1, 2],
+        explanation: '语义化标签让浏览器、搜索引擎和屏幕阅读器都能看懂结构，代码也更易维护，但与加载速度无直接关系。'
       }
     ]
   },
@@ -108,6 +150,48 @@ export default [
         options: ['<strong>', '<b>', '<em>', '<i>'],
         answer: [0, 2],
         explanation: 'strong 表示重要内容、em 表示强调语气，都带语义；b 和 i 只改变外观，没有语义。'
+      },
+      {
+        type: 'single',
+        question: '哪个标签表示一个段落？',
+        options: ['<para>', '<p>', '<text>', '<br>'],
+        answer: 1,
+        explanation: 'p 是段落标签，段落之间会自动留出空隙；br 只是换行。'
+      },
+      {
+        type: 'single',
+        question: 'a 标签的 href="#top" 表示什么？',
+        options: ['链接到外部网站', '跳转到本页 id 为 top 的位置', '在新窗口打开', '下载一个文件'],
+        answer: 1,
+        explanation: 'href 以 # 开头表示页内锚点跳转，会滚动到 id 为 top 的元素处。'
+      },
+      {
+        type: 'judge',
+        question: 'br 标签用于强制换行，且不需要结束标签。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。br 是自闭合标签，作用是在文本中强制换行。'
+      },
+      {
+        type: 'judge',
+        question: '链接文字只写“点这里”是很好的做法，对用户体验和搜索引擎都友好。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。链接文字应写清楚去向，“点这里”无法让用户和搜索引擎理解链接目的。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些标签可用于修饰文本内容？（多选）',
+        options: ['<code>', '<mark>', '<hr>', '<video>'],
+        answer: [0, 1, 2],
+        explanation: 'code 表示代码片段、mark 表示高亮、hr 画水平线分隔内容；video 是视频播放标签。'
+      },
+      {
+        type: 'multiple',
+        question: '关于标题标签的使用，以下说法正确的有？（多选）',
+        options: ['标题应按层级顺序使用', '一个页面通常只用一个 h1', '可以随意跳级使用标题', 'h6 比 h1 更大更重要'],
+        answer: [0, 1],
+        explanation: '标题要按层级使用、不跳级，一个页面一般一个 h1；h1 最大最重要，h6 最小。'
       }
     ]
   },
@@ -164,6 +248,48 @@ export default [
         options: ['controls', 'poster', 'loop', 'href'],
         answer: [0, 1, 2],
         explanation: 'controls 显示控制条、poster 设置封面图、loop 循环播放都是 video 的属性；href 是 a 标签的属性。'
+      },
+      {
+        type: 'single',
+        question: 'img 标签中指定图片地址的属性是？',
+        options: ['href', 'src', 'link', 'url'],
+        answer: 1,
+        explanation: 'src 指定图片地址；href 是 a 标签用来指定链接地址的属性。'
+      },
+      {
+        type: 'single',
+        question: 'video 标签的 poster 属性作用是？',
+        options: ['设置视频未播放时的封面图', '让视频自动播放', '让视频循环播放', '让视频静音'],
+        answer: 0,
+        explanation: 'poster 设置视频播放前显示的封面图，自动播放、循环、静音分别由 autoplay、loop、muted 控制。'
+      },
+      {
+        type: 'judge',
+        question: 'img 是自闭合标签，没有对应的结束标签。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。img 不需要成对出现，直接写 <img src="..." alt="..."> 即可。'
+      },
+      {
+        type: 'judge',
+        question: 'audio 标签中放多个 source 时，浏览器会同时播放所有格式。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。浏览器只会自动选择第一个能播放的格式，其余作为备用。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 audio 和 video 标签，以下说法正确的有？（多选）',
+        options: ['加 controls 可显示控制条', '可用多个 source 提供不同格式', '不支持时显示标签内的提示文字', '必须依赖 Flash 插件才能播放'],
+        answer: [0, 1, 2],
+        explanation: 'HTML5 原生播放音视频无需插件；controls 显示控制条、多 source 做格式兼容、标签内文字在不支持时提示。'
+      },
+      {
+        type: 'multiple',
+        question: '想让视频静音循环自动播放，需要组合哪些属性？（多选）',
+        options: ['autoplay', 'loop', 'muted', 'poster'],
+        answer: [0, 1, 2],
+        explanation: 'autoplay 自动播放、loop 循环、muted 静音（多数浏览器要求静音才允许自动播放）；poster 只是封面图。'
       }
     ]
   },
@@ -220,6 +346,48 @@ export default [
         options: ['email', 'date', 'range', 'address'],
         answer: [0, 1, 2],
         explanation: 'email 校验邮箱、date 弹出日期选择器、range 变成滑块，都是 HTML5 新类型；address 不是合法的 input 类型。'
+      },
+      {
+        type: 'single',
+        question: 'label 标签的 for 属性应该与输入框的哪个属性对应？',
+        options: ['name', 'id', 'value', 'class'],
+        answer: 1,
+        explanation: 'label 的 for 等于输入框的 id，点击 label 即可聚焦对应输入框。'
+      },
+      {
+        type: 'single',
+        question: '想让输入的内容显示为圆点以隐藏密码，应该用哪种 type？',
+        options: ['text', 'hidden', 'password', 'secret'],
+        answer: 2,
+        explanation: 'type="password" 会把输入内容显示为圆点，保护密码不被旁人看到。'
+      },
+      {
+        type: 'judge',
+        question: '下拉选择框由 select 和 option 标签组合而成。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。select 定义下拉框，内部的每个 option 是一个可选项。'
+      },
+      {
+        type: 'judge',
+        question: 'form 的 method 属性只能是 get，不能使用 post。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。method 常用 get 和 post 两种方式，登录等场景通常使用 post。'
+      },
+      {
+        type: 'multiple',
+        question: '关于表单提交，以下说法正确的有？（多选）',
+        options: ['action 指定提交地址', 'method 指定提交方式', 'button type="submit" 可提交表单', 'src 指定表单提交地址'],
+        answer: [0, 1, 2],
+        explanation: 'action 和 method 分别指定提交地址与方式，提交按钮触发表单提交；src 不是 form 的属性。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些 input 类型会让浏览器自动校验或提供专用输入控件？（多选）',
+        options: ['email', 'number', 'date', 'text'],
+        answer: [0, 1, 2],
+        explanation: 'email 校验格式、number 限制数字并可配 min/max、date 弹出日期选择器；text 只是普通文本框，不做格式校验。'
       }
     ]
   },
@@ -276,6 +444,48 @@ export default [
         options: ['<tr>', '<th>', '<td>', '<li>'],
         answer: [0, 1, 2],
         explanation: 'tr 表示行、th 表示表头单元格、td 表示普通单元格；li 是列表项，属于 ul/ol 列表。'
+      },
+      {
+        type: 'single',
+        question: '想让一个单元格横向跨两列，应该使用哪个属性？',
+        options: ['rowspan', 'colspan', 'merge', 'span'],
+        answer: 1,
+        explanation: 'colspan 控制横向跨列，rowspan 控制纵向跨行。'
+      },
+      {
+        type: 'single',
+        question: '描述列表 dl 中，dt 标签表示什么？',
+        options: ['解释内容', '术语', '列表序号', '表格行'],
+        answer: 1,
+        explanation: 'dt 表示术语，dd 表示对该术语的解释，二者配合 dl 组成描述列表。'
+      },
+      {
+        type: 'judge',
+        question: 'ul 和 ol 的直接子元素都必须是 li。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。列表项必须放在 li 里，嵌套子列表也要写在某个 li 内部。'
+      },
+      {
+        type: 'judge',
+        question: '单元格使用 colspan 合并后，被占位置的单元格仍然要保留。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。合并后要删掉被占位置的单元格，否则表格会错位。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 HTML 列表，以下说法正确的有？（多选）',
+        options: ['ul 默认以圆点标记', 'ol 自动带编号', '列表可以互相嵌套', 'dl 的直接子元素是 li'],
+        answer: [0, 1, 2],
+        explanation: 'ul 用圆点、ol 带编号、列表可嵌套；dl 的子元素是 dt 和 dd，不是 li。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些标签用于划分表格的结构分区？（多选）',
+        options: ['<thead>', '<tbody>', '<tr>', '<li>'],
+        answer: [0, 1],
+        explanation: 'thead 包裹表头行、tbody 包裹数据行，让表格结构清晰；tr 是行标签，li 属于列表。'
       }
     ]
   },
@@ -338,6 +548,48 @@ export default [
         options: ['localStorage 本地存储', 'Canvas 画布', 'Geolocation 地理位置', 'marquee 跑马灯'],
         answer: [0, 1, 2],
         explanation: 'localStorage、Canvas、Geolocation 都是 HTML5 新特性；marquee 是早期的非标准标签，已被淘汰。'
+      },
+      {
+        type: 'single',
+        question: '从 localStorage 中读取数据应该使用哪个方法？',
+        options: ['setItem', 'getItem', 'removeItem', 'clear'],
+        answer: 1,
+        explanation: 'getItem 按键读取数据，setItem 存数据，removeItem 删某一项，clear 清空全部。'
+      },
+      {
+        type: 'single',
+        question: '使用 Canvas 绘图前，需要先调用哪个方法获取 2D 绘图上下文？',
+        options: ['getContext', 'getCanvas', 'createContext', 'draw2d'],
+        answer: 0,
+        explanation: '调用 canvas 元素的 getContext 方法并传入 2d，才能拿到 2D 绘图上下文。'
+      },
+      {
+        type: 'judge',
+        question: 'localStorage 容量大约只有 5MB，适合保存小数据。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。localStorage 容量有限，适合用户名、主题设置等小数据。'
+      },
+      {
+        type: 'judge',
+        question: 'localStorage 适合用来保存用户密码等敏感信息。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。本地存储中的数据容易被读取，千万不要保存密码等敏感信息。'
+      },
+      {
+        type: 'multiple',
+        question: 'HTML5 拖放过程中会涉及哪些事件？（多选）',
+        options: ['dragstart', 'dragover', 'drop', 'mouseover'],
+        answer: [0, 1, 2],
+        explanation: '被拖元素触发 dragstart，目标区域触发 dragover 和 drop；mouseover 是普通鼠标事件，与拖放无关。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些数据适合用 localStorage 保存？（多选）',
+        options: ['主题设置', '用户名', '登录密码', '一次性会话草稿'],
+        answer: [0, 1],
+        explanation: '主题、用户名等不敏感的小数据适合 localStorage；密码不能存本地；一次性草稿更适合 sessionStorage。'
       }
     ]
   },
@@ -394,6 +646,48 @@ export default [
         options: ['写好 title 标题', '写 description 页面简介', '设置合适的 viewport', '堆砌大量 keywords'],
         answer: [0, 1],
         explanation: 'title 和 description 会直接影响搜索结果的展示；viewport 影响移动端体验；堆砌关键词反而可能被判定作弊。'
+      },
+      {
+        type: 'single',
+        question: '搜索结果摘要中显示的页面简介，通常由哪个 meta 提供？',
+        options: ['keywords', 'description', 'viewport', 'charset'],
+        answer: 1,
+        explanation: 'meta name="description" 的内容会显示在搜索结果的摘要里，建议 80 字以内。'
+      },
+      {
+        type: 'single',
+        question: 'viewport 中 width=device-width 的含义是？',
+        options: ['页面宽度等于设备宽度', '页面固定为 100 像素宽', '禁止用户缩放页面', '字体大小等于设备宽度'],
+        answer: 0,
+        explanation: 'width=device-width 让页面宽度等于设备宽度，是移动端正常显示的基础。'
+      },
+      {
+        type: 'judge',
+        question: 'head 里的内容会直接显示在页面正文中。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。head 放的是元信息，不会直接显示；用户看到的内容都在 body 里。'
+      },
+      {
+        type: 'judge',
+        question: 'keywords 如今权重很低，堆砌大量关键词没有好处。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。关键词权重已很低，堆砌甚至可能被搜索引擎判定作弊。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些信息属于 head 中的元信息？（多选）',
+        options: ['页面标题 title', '字符编码 charset', '页面简介 description', '正文段落 p'],
+        answer: [0, 1, 2],
+        explanation: 'title、charset、description 都是 head 里的元信息；p 是 body 中的正文内容。'
+      },
+      {
+        type: 'multiple',
+        question: '一个标准的移动端 viewport 声明通常包含哪些内容？（多选）',
+        options: ['width=device-width', 'initial-scale=1.0', 'charset=UTF-8', 'name="viewport"'],
+        answer: [0, 1, 3],
+        explanation: 'viewport 声明写作 meta name="viewport"，内容含 width=device-width 和 initial-scale=1.0；charset 是另一个独立的 meta。'
       }
     ]
   },
@@ -450,6 +744,48 @@ export default [
         options: ['required 必填', 'pattern 正则', 'maxlength 限制长度', 'confirm 弹窗确认'],
         answer: [0, 1, 2],
         explanation: 'required、pattern、maxlength 都是浏览器原生验证；confirm 是 JavaScript 的弹窗方法，不属于表单验证属性。'
+      },
+      {
+        type: 'single',
+        question: 'pattern="1[0-9]{10}" 这个正则适合用来校验什么？',
+        options: ['邮箱地址', '手机号码', '出生日期', '颜色取值'],
+        answer: 1,
+        explanation: '该正则匹配 1 开头的 11 位数字，正是手机号的基本格式。'
+      },
+      {
+        type: 'single',
+        question: 'pattern 校验失败时，配合哪个属性可以自定义提示文字？',
+        options: ['alt', 'title', 'placeholder', 'label'],
+        answer: 1,
+        explanation: 'title 属性的内容会作为校验失败时的提示文字，告诉用户正确格式。'
+      },
+      {
+        type: 'judge',
+        question: 'datalist 既允许从候选中选择，也允许用户自由输入。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。datalist 相当于“可输入的下拉框”，选择候选或自由输入都可以。'
+      },
+      {
+        type: 'judge',
+        question: 'HTML5 的表单验证必须借助 JavaScript 才能实现。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。required、min、max、pattern 等属性能让浏览器自动完成基础验证，无需写 JS。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属性可以限制用户在输入框中填写的内容？（多选）',
+        options: ['maxlength', 'min', 'max', 'href'],
+        answer: [0, 1, 2],
+        explanation: 'maxlength 限制字符数，min 和 max 限制数值范围；href 是 a 标签的属性，与输入限制无关。'
+      },
+      {
+        type: 'multiple',
+        question: 'datalist 适合用在以下哪些场景？（多选）',
+        options: ['搜索框输入建议', '城市快速选择', '完全禁止自由输入的场景', '提供常见选项供快速选取'],
+        answer: [0, 1, 3],
+        explanation: 'datalist 提供候选又允许自由输入，适合搜索建议、城市选择等；要完全限制输入应使用 select。'
       }
     ]
   },
@@ -506,6 +842,48 @@ export default [
         options: ['fillRect', 'fillStyle', 'beginPath', 'appendChild'],
         answer: [0, 1, 2],
         explanation: 'fillRect 画矩形、fillStyle 设填充色、beginPath 开始路径，都属于 2D 上下文；appendChild 是 DOM 节点操作方法。'
+      },
+      {
+        type: 'single',
+        question: '要绘制一个实心矩形，应该调用哪个方法？',
+        options: ['strokeRect', 'fillRect', 'drawRect', 'rect'],
+        answer: 1,
+        explanation: 'fillRect 画实心矩形，strokeRect 只画边框，颜色分别由 fillStyle 和 strokeStyle 控制。'
+      },
+      {
+        type: 'single',
+        question: '在 Canvas 中画文字前，用哪个属性设置字号和字体？',
+        options: ['textStyle', 'font', 'fillStyle', 'lineWidth'],
+        answer: 1,
+        explanation: 'font 属性设置字号字体，例如 20px sans-serif，然后用 fillText 绘制文字。'
+      },
+      {
+        type: 'judge',
+        question: '使用路径绘图时，beginPath 表示开始一条新路径。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。beginPath 开启新路径，避免与之前的路径互相影响。'
+      },
+      {
+        type: 'judge',
+        question: 'canvas 标签本身就能自动显示图形，不需要 JavaScript。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。canvas 只是一块空白画布，所有图形都要靠 JavaScript 调用上下文方法绘制。'
+      },
+      {
+        type: 'multiple',
+        question: '用路径画一条折线，正确的流程包含哪些步骤？（多选）',
+        options: ['beginPath 开始路径', 'moveTo 和 lineTo 定义线条', 'stroke 或 fill 完成绘制', 'appendChild 把路径插入页面'],
+        answer: [0, 1, 2],
+        explanation: '路径绘制流程是 beginPath → moveTo/lineTo → stroke/fill；appendChild 是 DOM 操作，与路径无关。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于 Canvas 2D 上下文的样式相关属性？（多选）',
+        options: ['fillStyle', 'strokeStyle', 'color-stop', 'font'],
+        answer: [0, 1, 3],
+        explanation: 'fillStyle 填充色、strokeStyle 描边色、font 字体都是上下文属性；color-stop 不是 Canvas 的属性。'
       }
     ]
   },
@@ -562,6 +940,48 @@ export default [
         options: ['<circle>', '<rect>', '<line>', '<paint>'],
         answer: [0, 1, 2],
         explanation: 'circle 画圆、rect 画矩形、line 画直线，都是 SVG 内置标签；paint 不是 SVG 标签。'
+      },
+      {
+        type: 'single',
+        question: 'svg 标签中用来定义坐标系范围的属性是？',
+        options: ['viewBox', 'view', 'box', 'coords'],
+        answer: 0,
+        explanation: 'viewBox 定义 SVG 的坐标系范围，配合 width、height 实现无损缩放。'
+      },
+      {
+        type: 'single',
+        question: 'SVG 中用来设置描边颜色的属性是？',
+        options: ['fill', 'stroke', 'border', 'outline'],
+        answer: 1,
+        explanation: 'stroke 设置描边色，fill 设置填充色，stroke-width 设置描边粗细。'
+      },
+      {
+        type: 'judge',
+        question: 'SVG 图形无论放大多少倍都能保持清晰。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。SVG 是矢量图，用标签描述图形，任意缩放都不会失真。'
+      },
+      {
+        type: 'judge',
+        question: '制作包含大量图形的游戏动画时，Canvas 通常比 SVG 更合适。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Canvas 基于像素、性能高，适合海量图形的动画；SVG 图形是 DOM 元素，数量大时性能较差。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于 SVG 的外观控制属性？（多选）',
+        options: ['fill', 'stroke', 'stroke-width', 'controls'],
+        answer: [0, 1, 2],
+        explanation: 'fill 填充色、stroke 描边色、stroke-width 描边粗细都控制 SVG 外观；controls 是音视频标签的属性。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些场景适合使用 SVG？（多选）',
+        options: ['图标和 Logo', '可交互的图表', '海量图形的游戏画面', '需要无损缩放的插画'],
+        answer: [0, 1, 3],
+        explanation: 'SVG 清晰、可交互、可用 CSS 控制，适合图标、图表和插画；海量图形求性能应选 Canvas。'
       }
     ]
   },
@@ -618,6 +1038,48 @@ export default [
         options: ['只能存字符串', '容量约 5MB', '关闭浏览器后数据仍在', '适合保存用户密码'],
         answer: [0, 1, 2],
         explanation: 'localStorage 只存字符串、容量约 5MB、长期有效；敏感信息如密码不应保存在本地存储中。'
+      },
+      {
+        type: 'single',
+        question: '删除 localStorage 中某一项数据应该用哪个方法？',
+        options: ['deleteItem', 'removeItem', 'clear', 'unset'],
+        answer: 1,
+        explanation: 'removeItem 按键删除某一项；clear 会清空全部数据。'
+      },
+      {
+        type: 'single',
+        question: '用 setItem 存入数字 100 后，getItem 取到的值是什么？',
+        options: ['数字 100', '字符串 100', 'null', 'undefined'],
+        answer: 1,
+        explanation: 'Web Storage 只存字符串，数字会被自动转成字符串，取出来的是字符串 100。'
+      },
+      {
+        type: 'judge',
+        question: 'localStorage 和 sessionStorage 的 API 用法完全一样。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。两者方法相同，区别只在数据的生命周期：一个长期保存，一个会话结束即清除。'
+      },
+      {
+        type: 'judge',
+        question: 'clear() 方法只会删除最后存入的那一条数据。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。clear() 会清空全部数据，删除单条数据要用 removeItem。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 Web Storage 的常用方法？（多选）',
+        options: ['setItem', 'getItem', 'removeItem', 'pushItem'],
+        answer: [0, 1, 2],
+        explanation: 'setItem 存、getItem 取、removeItem 删，另有 clear 清空全部；pushItem 不存在。'
+      },
+      {
+        type: 'multiple',
+        question: '用 localStorage 存取一个数组，正确的做法包括？（多选）',
+        options: ['存之前用 JSON.stringify 转换', '取出后用 JSON.parse 还原', '读取结果可能为 null，需要判空', '直接存取就能得到数组'],
+        answer: [0, 1, 2],
+        explanation: '数组要先序列化再存，取出时解析还原，并对不存在的键做判空；直接存对象会被转成无用的字符串。'
       }
     ]
   },
@@ -674,6 +1136,48 @@ export default [
         options: ['Geolocation 地理定位', 'Drag and Drop 拖放', 'Notification 通知', 'ActiveX 控件'],
         answer: [0, 1, 2],
         explanation: '地理定位、拖放、通知都是 HTML5 标准 API；ActiveX 是旧版 IE 的专有技术，与 HTML5 无关。'
+      },
+      {
+        type: 'single',
+        question: '在 dragstart 事件中保存要传递的数据，应该调用哪个方法？',
+        options: ['dataTransfer.setData', 'dataTransfer.save', 'localStorage.setItem', 'dataTransfer.push'],
+        answer: 0,
+        explanation: 'dragstart 里用 dataTransfer.setData 存数据，drop 里再用 getData 取出。'
+      },
+      {
+        type: 'single',
+        question: '获取用户地理位置应该使用哪个对象？',
+        options: ['navigator.geolocation', 'window.location', 'document.geo', 'navigator.position'],
+        answer: 0,
+        explanation: 'navigator.geolocation 提供定位能力，调用 getCurrentPosition 获取经纬度。'
+      },
+      {
+        type: 'judge',
+        question: '在 drop 事件中通常也需要调用 preventDefault 阻止默认行为。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。drop 中先 preventDefault，再用 getData 取数据并完成后续操作。'
+      },
+      {
+        type: 'judge',
+        question: '地理定位 API 在任何 HTTP 页面中都能使用，没有任何限制。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。出于隐私考虑，地理定位只在 HTTPS 或 localhost 环境下可用，且需要用户授权。'
+      },
+      {
+        type: 'multiple',
+        question: '利用拖放 API 可以实现以下哪些效果？（多选）',
+        options: ['拖动排序', '拖文件进页面读取', '看板式任务管理', '自动生成网页内容'],
+        answer: [0, 1, 2],
+        explanation: '拖放 API 常用于拖动排序、文件拖入上传、看板管理等交互；它不能自动生成内容。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 dataTransfer，以下说法正确的有？（多选）',
+        options: ['dragstart 里用 setData 存数据', 'drop 里用 getData 取数据', '存取时使用相同的类型标识', '它可以用来操作 localStorage'],
+        answer: [0, 1, 2],
+        explanation: 'dataTransfer 在拖放事件中传递数据，setData 存、getData 按相同类型取；它与 localStorage 无关。'
       }
     ]
   }

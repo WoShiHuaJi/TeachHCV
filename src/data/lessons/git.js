@@ -58,6 +58,48 @@ export default [
         options: ['git status', 'git add', 'git log', 'git commit'],
         answer: [0, 2],
         explanation: 'status 查看当前状态，log 查看提交历史，它们都是只读操作；add 和 commit 会修改仓库。'
+      },
+      {
+        type: 'single',
+        question: '要在当前目录从零开始初始化一个本地仓库，该用哪条命令？',
+        options: ['git init', 'git clone', 'git remote add', 'git status'],
+        answer: 0,
+        explanation: 'git init 会在当前目录初始化本地仓库，生成隐藏的 .git 文件夹；clone 是复制别人已有的仓库。'
+      },
+      {
+        type: 'single',
+        question: '想把当前目录下所有改动一次性放入暂存区，该用哪条命令？',
+        options: ['git add .', 'git commit -m', 'git push', 'git log'],
+        answer: 0,
+        explanation: 'git add . 会把当前目录的所有改动加入暂存区；也可以 git add 文件名 只暂存指定文件。'
+      },
+      {
+        type: 'judge',
+        question: 'git init 后生成的 .git 文件夹是隐藏目录，手动删除它不会影响仓库。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。.git 文件夹里保存着全部历史记录，删掉它等于丢掉整个仓库的历史。'
+      },
+      {
+        type: 'judge',
+        question: '用 git config --list 可以查看当前所有的 Git 配置。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。配置通常只需要做一次，之后随时可以用 git config --list 查看。'
+      },
+      {
+        type: 'multiple',
+        question: 'Git 工作的三个区域包括以下哪些？（多选）',
+        options: ['工作区', '暂存区', '本地仓库', '回收站'],
+        answer: [0, 1, 2],
+        explanation: '三个区域是工作区（编辑文件）、暂存区（准备提交）和本地仓库（已保存的历史）。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于良好的提交习惯？（多选）',
+        options: ['提交说明写清楚这次改了什么', '每完成一个小功能就提交一次', '提交说明随便写无所谓', '攒够几个月的代码再一次性提交'],
+        answer: [0, 1],
+        explanation: '小步提交加清晰的说明，出问题时容易回退，也方便同事理解历史。'
       }
     ]
   },
@@ -114,6 +156,48 @@ export default [
         options: ['编辑文件删除冲突标记', 'git add 冲突文件', 'git push origin main', 'git commit 完成合并'],
         answer: [0, 1, 3],
         explanation: '解决冲突的标准流程是：编辑文件去掉标记、add 暂存、commit 提交。push 是推送到远程，与完成本地合并无关。'
+      },
+      {
+        type: 'single',
+        question: '功能开发完成后，已切回 main 分支，要把 feature-login 分支合并进来，该执行哪条命令？',
+        options: ['git merge feature-login', 'git branch -d feature-login', 'git switch feature-login', 'git fetch feature-login'],
+        answer: 0,
+        explanation: '先 git switch main 切回主分支，再 git merge feature-login 把新功能合并进来。'
+      },
+      {
+        type: 'single',
+        question: '合并完成后，要删除已经没用的功能分支 feature-login，该用哪条命令？',
+        options: ['git branch -d feature-login', 'git switch -d feature-login', 'git merge --delete feature-login', 'git branch -c feature-login'],
+        answer: 0,
+        explanation: 'git branch -d 用于删除已合并的分支，保持仓库整洁。'
+      },
+      {
+        type: 'judge',
+        question: '如果主分支在你开发期间没有新提交，合并时会直接快进（fast-forward），不产生新的合并提交。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。主分支没有新提交时，Git 只是把指针移到功能分支的最新提交，即快进合并。'
+      },
+      {
+        type: 'judge',
+        question: '解决冲突时不用和别人沟通，直接全部保留自己分支的内容就行。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。团队里解决冲突前最好和对方沟通，确认该保留谁的逻辑，避免误删别人的代码。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 git merge 合并，以下说法正确的有？（多选）',
+        options: ['两边都有新提交时会自动创建一个新的合并提交', '主分支没有新提交时会发生快进合并', '合并前需要先切回主分支', '合并后功能分支会被自动删除'],
+        answer: [0, 1, 2],
+        explanation: '合并前先切回主分支；快进或产生合并提交取决于两边提交情况；功能分支需要手动用 git branch -d 删除。'
+      },
+      {
+        type: 'multiple',
+        question: '冲突文件中会出现哪些标记？（多选）',
+        options: ['<<<<<<<', '=======', '>>>>>>>', '+++++++'],
+        answer: [0, 1, 2],
+        explanation: '冲突标记是 <<<<<<<、======= 和 >>>>>>>，解决时要手动编辑并删掉这些标记。'
       }
     ]
   },
@@ -170,6 +254,48 @@ export default [
         options: ['在功能分支上开发', '同事进行 Code Review', '直接强制推送到主分支', '审查通过后合并'],
         answer: [0, 1, 3],
         explanation: 'PR 流程强调在分支上开发、经过审查再合并；直接强推主分支会破坏协作规范，属于禁忌操作。'
+      },
+      {
+        type: 'single',
+        question: '在 GitHub 上建好仓库后，要把本地仓库和它关联起来，该用哪条命令？',
+        options: ['git remote add origin 仓库地址', 'git clone 仓库地址', 'git push origin main', 'git fetch origin'],
+        answer: 0,
+        explanation: 'git remote add origin 地址 用来关联本地与远程仓库，origin 是远程仓库的默认别名。'
+      },
+      {
+        type: 'single',
+        question: 'push 时因为远程已有别人的新提交被拒绝，正确的做法是？',
+        options: ['先 git pull 再重新 push', '直接强制 push 覆盖远程', '删除远程仓库重建', '放弃推送只保留本地'],
+        answer: 0,
+        explanation: '口诀是先拉再推：先 pull 把远程更新合并进来，再 push 就不会被拒绝。'
+      },
+      {
+        type: 'judge',
+        question: 'origin 是远程仓库的默认别名，方便后续 push 和 pull 时引用。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。git remote add origin 地址 中 origin 就是给远程仓库起的默认别名。'
+      },
+      {
+        type: 'judge',
+        question: 'Pull Request 流程中，同事审查代码的环节叫 Code Review，审查通过后才能合并。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Code Review 让每行代码入库前都有人把关，是工程质量的重要保障。'
+      },
+      {
+        type: 'multiple',
+        question: '多人协作时，以下哪些是减少冲突的好习惯？（多选）',
+        options: ['每天开始工作前先 git pull', 'push 之前先 pull', '远程有新提交时强制 push 覆盖', '小步提交并经常同步'],
+        answer: [0, 1, 3],
+        explanation: '先拉再推、勤同步能有效减少冲突；强制 push 覆盖远程会毁掉别人的工作，绝对不能做。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 GitHub 与远程仓库，以下说法正确的有？（多选）',
+        options: ['GitHub 是流行的代码托管平台', '远程仓库方便备份和多人协作', 'GitHub 上的仓库无法保存历史提交', '可以在 GitHub 网页上发起 Pull Request'],
+        answer: [0, 1, 3],
+        explanation: 'GitHub 把仓库放到云端，保存完整历史，支持多人协作和 Pull Request 流程。'
       }
     ]
   }

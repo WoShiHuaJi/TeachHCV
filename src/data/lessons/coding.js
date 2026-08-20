@@ -52,6 +52,48 @@ export default [
         options: ['遇到循环引用会抛错', '可以完整拷贝函数属性', '会丢失 undefined 和 Symbol 类型的属性', 'Date 对象拷贝后仍是 Date 实例'],
         answer: [0, 2],
         explanation: 'JSON 方式遇循环引用直接报错，且 undefined、函数、Symbol 会被丢弃，Date 会变成字符串而不是 Date 实例。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar obj = { a: 1 };\nobj.self = obj;\nvar copy = deepClone(obj);\nconsole.log(copy.self === obj);',
+        options: ['true', 'false', 'undefined', '报错'],
+        answer: 1,
+        explanation: '循环引用被正确处理后 copy.self 指向 copy 本身，而不是原对象 obj，所以比较结果为 false。'
+      },
+      {
+        type: 'single',
+        question: '补全深拷贝遍历属性的第 2 行，应该选哪段？\n1: for (var key in target) {\n2:   __________\n3:     result[key] = deepClone(target[key], cache);\n4:   }\n5: }',
+        options: ['if (target[key] !== null) {', 'if (Object.prototype.hasOwnProperty.call(target, key)) {', 'if (typeof key === "string") {', 'if (key in target) {'],
+        answer: 1,
+        explanation: 'for in 会遍历到原型链上的可枚举属性，必须用 hasOwnProperty 过滤，只拷贝对象自身的属性。'
+      },
+      {
+        type: 'judge',
+        question: 'for in 循环会遍历到原型链上的可枚举属性，所以深拷贝遍历时要用 hasOwnProperty 过滤。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。只拷贝自身属性可以避免把原型上的属性误拷到新对象上，这是深拷贝实现的细节要求。'
+      },
+      {
+        type: 'judge',
+        question: '深拷贝的缓存用普通对象和 WeakMap 效果完全一样，选哪个都无所谓。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。普通对象的键只能是字符串，无法直接以对象做键；WeakMap 的键可以是对象，且不阻碍垃圾回收，是正确选择。'
+      },
+      {
+        type: 'multiple',
+        question: '关于深拷贝中处理循环引用，以下说法正确的有哪些？（多选）',
+        options: ['用 WeakMap 保存“原对象到拷贝结果”的映射', '递归前先查缓存，命中就直接返回缓存结果', '新容器创建后要立即放入缓存，再递归拷贝属性', '遇到循环引用应当直接抛出异常'],
+        answer: [0, 1, 2],
+        explanation: '前三项正是实现的关键步骤；循环引用是合法场景，正确实现应借助缓存正常处理而不是抛错。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar obj = { d: new Date(0) };\nvar copy = JSON.parse(JSON.stringify(obj));\nconsole.log(typeof copy.d);',
+        options: ['"object"', '"string"', '"number"', '"undefined"'],
+        answer: 1,
+        explanation: 'JSON.stringify 会把 Date 转成 ISO 字符串，parse 后不会还原为 Date 实例，typeof copy.d 是 "string"。'
       }
     ]
   },
@@ -108,6 +150,48 @@ export default [
         options: ['context 为 null 时应回退到全局对象（非严格模式）', '用 Symbol 作为临时属性键避免覆盖原有属性', '调用结束后必须 delete 临时属性', '应把函数挂到 this 上再调用，即 this[fn]()'],
         answer: [0, 1, 2],
         explanation: '正确做法：null 回退全局、Symbol 防冲突、用完 delete。函数应挂到 context 上调用，这样 this 才指向 context；挂到 this 上完全错误。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nfunction fn(a, b) {\n  return this.x + a + b;\n}\nvar obj = { x: 1 };\nconsole.log(fn.myApply(obj, [2, 3]));',
+        options: ['3', '6', 'NaN', '报错'],
+        answer: 1,
+        explanation: 'myApply 把 this 绑定到 obj 并把数组 [2, 3] 展开传参，结果为 1 + 2 + 3 = 6。'
+      },
+      {
+        type: 'single',
+        question: '补全 myBind 基础版的第 6 行，应该选哪段？\n1: Function.prototype.myBind = function (context) {\n2:   var fn = this;\n3:   var bindArgs = [].slice.call(arguments, 1);\n4:   return function () {\n5:     var callArgs = [].slice.call(arguments);\n6:     __________\n7:   };\n8: };',
+        options: ['return fn.apply(context, bindArgs.concat(callArgs));', 'return fn.call(context, bindArgs);', 'return context.fn(bindArgs, callArgs);', 'return fn(context, bindArgs, callArgs);'],
+        answer: 0,
+        explanation: 'bind 要把预设参数和调用时参数拼接后一起传给原函数，用 apply 一次性传入数组最方便，即 bindArgs.concat(callArgs)。'
+      },
+      {
+        type: 'judge',
+        question: '在 myCall 的实现中，this 指向被调用的函数本身，所以可以直接把它挂到 context 的临时键上调用。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。myCall 定义在 Function.prototype 上，调用 fn.myCall(obj) 时 this 就是 fn，挂到 obj 上以方法形式调用即可改变 this 指向。'
+      },
+      {
+        type: 'judge',
+        question: '手写 myCall 时 context 传 null 不需要任何处理，直接使用也不会出问题。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。context 为 null 或 undefined 时应回退到全局对象（非严格模式），否则给 null 添加属性会直接报错。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 bind 与 call、apply 的区别，以下说法正确的有哪些？（多选）',
+        options: ['bind 不立即执行，返回一个绑定了 this 的新函数', 'bind 支持预先传入部分参数（柯里化）', 'call 和 apply 都是立即执行，仅传参形式不同', 'bind 绑定的 this 之后还能被 call 覆盖'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；bind 绑定的 this 是永久的，之后再用 call 或 apply 调用绑定函数也无法改变其 this 指向。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar name = "全局";\nvar obj = { name: "对象" };\nfunction show() { return this.name; }\nvar bound = show.myBind(obj);\nconsole.log(bound.myCall(null));',
+        options: ['"全局"', '"对象"', 'undefined', '报错'],
+        answer: 1,
+        explanation: 'myBind 内部固定用 fn.apply(context, ...) 执行，绑定后的函数 this 无法被后续的 call 覆盖，仍输出 "对象"。'
       }
     ]
   },
@@ -164,6 +248,48 @@ export default [
         options: ['状态改变后必须不可逆', 'pending 时 then 的回调应存入数组等待状态改变', 'executor 抛错时应自动 reject', 'then 的回调应该同步立即执行'],
         answer: [0, 1, 2],
         explanation: '前三项都是规范要求；then 的回调必须异步执行（真实 Promise 是微任务），同步执行会导致行为不一致。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出顺序是什么？\nconsole.log("start");\nnew MyPromise(function (resolve) {\n  console.log("executor");\n  resolve(1);\n});\nconsole.log("end");',
+        options: ['start executor end', 'start end executor', 'executor start end', '报错'],
+        answer: 0,
+        explanation: 'executor 在 new 时同步立即执行，所以输出顺序是 start、executor、end。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nnew MyPromise(function (resolve) {\n  resolve(1);\n})\n  .then(function (v) { return v + 1; })\n  .then(function (v) { console.log(v); });',
+        options: ['1', '2', 'undefined', '报错'],
+        answer: 1,
+        explanation: 'then 返回新 Promise，上一个回调的返回值 v + 1 作为新 Promise 的 resolve 值，最终输出 2。'
+      },
+      {
+        type: 'judge',
+        question: '值穿透是指 then 不传 onFulfilled 回调时，value 会原样传给下一个 then 的回调。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。规范要求 onFulfilled 不是函数时直接把 value 透传下去，所以 then() 后面仍能拿到原来的值。'
+      },
+      {
+        type: 'judge',
+        question: '状态变为 fulfilled 之后，再次调用 resolve 可以覆盖之前保存的 value。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。状态一旦从 pending 变为 fulfilled 或 rejected 就不可逆，resolve 内部会判断 state 是否为 pending，后续调用直接无效。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 then 回调要异步执行，以下说法正确的有哪些？（多选）',
+        options: ['规范要求回调在当前同步代码之后执行', '真实 Promise 用微任务，手写时常用 setTimeout 宏任务模拟', '异步执行保证同步 resolve 和异步 resolve 的回调行为一致', '异步执行会导致回调收不到之前同步 resolve 的值'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；pending 时回调会被存入数组，状态改变后统一执行，不会丢失同步 resolve 的值。'
+      },
+      {
+        type: 'single',
+        question: '补全 resolve 函数的第 2 行，应该选哪段？\n1: function resolve(value) {\n2:   __________\n3:     self.state = "fulfilled";\n4:     self.value = value;\n5:     self.onFulfilledList.forEach(function (cb) { cb(); });\n6:   }\n7: }',
+        options: ['if (self.state === "fulfilled") {', 'if (self.state === "pending") {', 'if (self.state !== "pending") {', 'if (value !== undefined) {'],
+        answer: 1,
+        explanation: '只有 pending 状态才允许改变状态，这就是“状态不可逆、resolve 只生效一次”的实现方式。'
       }
     ]
   },
@@ -214,6 +340,48 @@ export default [
         options: ['搜索框输入联想请求', '页面滚动时持续加载更多', '窗口 resize 结束后重新计算布局', '按钮防止重复提交'],
         answer: [0, 2],
         explanation: '输入联想和 resize 都希望“停下来再做”，用防抖；滚动加载需要持续按节奏触发用节流，防重复提交通常用节流或禁用按钮。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar count = 0;\nvar fn = throttle(function () { count++; }, 100);\nfn(); fn(); fn();\nconsole.log(count);',
+        options: ['0', '1', '3', '不确定'],
+        answer: 1,
+        explanation: '时间戳版节流第一次立即执行，后两次距 lastTime 不足 100ms 被忽略，同步输出时 count 为 1。'
+      },
+      {
+        type: 'single',
+        question: '补全防抖实现的第 6 行，应该选哪段？\n1: function debounce(fn, delay) {\n2:   var timer = null;\n3:   return function () {\n4:     var context = this;\n5:     var args = arguments;\n6:     __________\n7:     timer = setTimeout(function () {\n8:       fn.apply(context, args);\n9:     }, delay);\n10:   };\n11: }',
+        options: ['clearTimeout(timer);', 'timer = null;', 'clearInterval(timer);', 'fn.apply(context, args);'],
+        answer: 0,
+        explanation: '防抖的关键是每次触发先清掉上一个定时器再重新计时，只有停止触发后计时器才会真正执行。'
+      },
+      {
+        type: 'judge',
+        question: '节流的时间戳版会在第一次触发时立即执行，而定时器版第一次触发会延迟一个间隔才执行。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。时间戳版 lastTime 初始为 0，第一次比较必然通过立即执行；定时器版要等定时器到点才执行，这是两者的经典区别。'
+      },
+      {
+        type: 'judge',
+        question: '防抖在连续快速触发时，每次触发都重新计时，因此函数会被执行多次。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。每次触发都 clearTimeout 清掉上一个计时器，只有最后一次触发的计时器存活，函数最终只执行一次。'
+      },
+      {
+        type: 'multiple',
+        question: '关于防抖与节流的实现，以下说法正确的有哪些？（多选）',
+        options: ['防抖只执行最后一次触发', '节流按固定频率执行，间隔内的触发被忽略', '两者都用闭包保存内部状态（timer 或 lastTime）', '防抖适合按钮防连点，节流适合搜索联想'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；场景恰好说反了，搜索联想适合防抖，按钮防连点适合节流。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar count = 0;\nvar fn = debounce(function () { count++; }, 100);\nfn();\nsetTimeout(function () { fn(); }, 200);\nsetTimeout(function () { console.log(count); }, 400);',
+        options: ['0', '1', '2', '3'],
+        answer: 2,
+        explanation: '两次触发间隔 200ms 大于 100ms 延迟，第一次的计时器在 100ms 时已执行，第二次又在 300ms 时执行，count 为 2。'
       }
     ]
   },
@@ -264,6 +432,48 @@ export default [
         options: ['depth 默认值为 1', '用 Array.isArray 判断元素是否为数组', '递归时深度应减 1 传入', '只能拍平一层，无法处理深层嵌套'],
         answer: [0, 1, 2],
         explanation: 'myFlat 默认 depth 为 1，用 Array.isArray 判断，递归时 d - 1 控制深度；传足够大的深度（如 Infinity）可以处理任意层嵌套。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log([1, 2, 3].myMap(function (x, i) { return x + i; }));',
+        options: ['[1, 2, 3]', '[1, 3, 5]', '[2, 4, 6]', '[0, 1, 2]'],
+        answer: 1,
+        explanation: '回调收到元素和下标，x + i 分别为 1+0、2+1、3+2，结果是 [1, 3, 5]。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log([1, [2, [3, [4]]]].myFlat(2));',
+        options: ['[1, 2, 3, 4]', '[1, 2, 3, [4]]', '[1, 2, [3, [4]]]', '报错'],
+        answer: 1,
+        explanation: 'depth 为 2 只拍平两层：第二层递归时 d 已为 0 不再展开，[4] 保持嵌套，结果是 [1, 2, 3, [4]]。'
+      },
+      {
+        type: 'judge',
+        question: '手写 myMap 时直接修改原数组的元素再返回原数组，也是可以接受的实现。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。map 的语义是不修改原数组、返回一个新数组，正确实现必须新建空数组逐个 push 回调返回值。'
+      },
+      {
+        type: 'judge',
+        question: 'myFlat 传入 Infinity 作为 depth 时，可以拍平任意深度的嵌套数组。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Infinity 减 1 仍是 Infinity，递归条件 d > 0 恒成立，会一直拍平到没有嵌套数组为止。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是可行的数组去重方案？（多选）',
+        options: ['Array.from(new Set(arr))', 'filter 配合 indexOf 只保留首次出现的元素', 'reduce 配合 includes 逐个收集不重复元素', 'sort 之后直接返回原数组'],
+        answer: [0, 1, 2],
+        explanation: '前三种都是常见去重写法；sort 只排序不去重，且会原地修改数组，直接用它去重是错误的。'
+      },
+      {
+        type: 'single',
+        question: '补全 myReduce 的第 4 行，应该选哪段？\n1: Array.prototype.myReduce = function (fn, initial) {\n2:   var hasInit = initial !== undefined;\n3:   var acc = hasInit ? initial : this[0];\n4:   __________\n5:   for (var i = start; i < this.length; i++) {\n6:     acc = fn(acc, this[i], i, this);\n7:   }\n8:   return acc;\n9: };',
+        options: ['var start = 0;', 'var start = hasInit ? 0 : 1;', 'var start = hasInit ? 1 : 0;', 'var start = 1;'],
+        answer: 1,
+        explanation: '有初始值时从下标 0 开始累加所有元素；无初始值时累加器已是 this[0]，必须从下标 1 开始，避免重复累加第一个元素。'
       }
     ]
   },
@@ -320,6 +530,48 @@ export default [
         options: ['left、right 双指针从两端向中间比较，不等即返回 false', '将字符串反转后与原字符串比较是否相等', '转成数组后用 every 比较每个位置与对称位置', '从中间向两端递归比较每个字符'],
         answer: [0, 1, 2],
         explanation: '双指针、反转比较、every 对称比较都是正确思路；从中间向两端比较方向反了，无法正确判断回文。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log(isPalindrome("abba"));',
+        options: ['true', 'false', 'undefined', '报错'],
+        answer: 0,
+        explanation: '双指针比较 a 与 a、b 与 b 都相等，left 不小于 right 后循环结束，返回 true。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log(fib(6));',
+        options: ['5', '8', '13', '6'],
+        answer: 1,
+        explanation: '数列为 0、1、1、2、3、5、8，第 6 项是 8；迭代版从 i = 2 滚动计算到 i = 6 后返回 b。'
+      },
+      {
+        type: 'judge',
+        question: '冒泡排序每完成一轮外层循环，当前未排序部分的最大值就会被交换到末尾。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。这正是内层只需比较到 length - 1 - i 的原因：末尾 i 个元素已经有序，无需再比。'
+      },
+      {
+        type: 'judge',
+        question: 'twoSum 实现中先存后查（先把当前元素放进哈希表再查找差值），同样能保证结果正确。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。先存后查可能让同一个元素被自己匹配，例如 [3, 3] 目标 6 时 i = 0 就会查到自己，违反不能重复使用同一元素的要求。'
+      },
+      {
+        type: 'multiple',
+        question: '关于斐波那契数列的优化，以下说法正确的有哪些？（多选）',
+        options: ['记忆化递归用缓存消除重复计算', '迭代版时间复杂度 O(n)、空间复杂度 O(1)', '纯递归版存在大量重复子问题，复杂度约 O(2^n)', '迭代版应先令 a = b，再计算 c = a + b'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；更新顺序不能错，必须先算 c = a + b，再令 a = b、b = c，先更新 a 会丢掉旧值导致结果错误。'
+      },
+      {
+        type: 'single',
+        question: '下面哪个冒泡排序实现存在 bug？',
+        options: ['先 slice 拷贝一份再排序，不修改入参数组', '内层循环条件为 j < a.length - 1 - i，跳过已排好的末尾', '交换时不用临时变量，直接 a[j] = a[j + 1]; a[j + 1] = a[j]', '交换时用临时变量暂存 a[j] 再互换'],
+        answer: 2,
+        explanation: '不用临时变量时，a[j] 先被覆盖为 a[j + 1] 的值，随后 a[j + 1] 拿到的已不是原来的 a[j]，交换失败，这是经典 bug。'
       }
     ]
   }

@@ -52,6 +52,48 @@ export default [
         options: ['行内样式', '内部样式表', '外部样式表', '脚本样式表'],
         answer: [0, 1, 2],
         explanation: 'CSS 有行内样式、内部样式表和外部样式表三种引入方式，不存在“脚本样式表”。'
+      },
+      {
+        type: 'single',
+        question: '行内样式是直接写在哪里的？',
+        options: ['标签的 style 属性里', '独立的 .css 文件里', 'style 标签里', 'link 标签里'],
+        answer: 0,
+        explanation: '行内样式写在标签的 style 属性中，优先级最高，但只适合做临时调试。'
+      },
+      {
+        type: 'single',
+        question: '选择器 .box > p 的含义是？',
+        options: ['选中 box 内所有层级的 p', '只选中 box 的直接子元素 p', '选中 box 后面的兄弟 p', '选中所有带 box 类的 p'],
+        answer: 1,
+        explanation: '大于号是子选择器，只匹配直接子元素；空格后代选择器才会匹配所有层级。'
+      },
+      {
+        type: 'judge',
+        question: '两条规则优先级相同时，后书写的规则会覆盖先书写的。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '层叠规则之一：优先级相同时按源码顺序，后写的生效。'
+      },
+      {
+        type: 'judge',
+        question: '通配符选择器 * 只能选中页面中的第一个元素。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '通配符选择器选中所有元素，常用于全局重置 margin 和 padding。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于最基础的四种选择器？（多选）',
+        options: ['标签选择器', '类选择器', 'id 选择器', '动画选择器'],
+        answer: [0, 1, 2],
+        explanation: '基础选择器有标签、类、id 和通配符四种，不存在“动画选择器”。'
+      },
+      {
+        type: 'multiple',
+        question: '关于后代选择器和子选择器，以下说法正确的有？（多选）',
+        options: ['空格表示后代关系', '.box p 选中 box 内所有层级的 p', '.box > p 只选中直接子元素 p', '大于号表示兄弟关系'],
+        answer: [0, 1, 2],
+        explanation: '空格是后代、大于号是子代；兄弟关系另有 + 和 ~ 选择器，本课未涉及。'
       }
     ]
   },
@@ -108,6 +150,48 @@ export default [
         options: ['content（内容）', 'padding（内边距）', 'border（边框）', 'float（浮动）'],
         answer: [0, 1, 2],
         explanation: '盒模型从内到外由 content、padding、border、margin 四部分组成，float 不属于盒模型。'
+      },
+      {
+        type: 'single',
+        question: '块级元素水平居中的经典写法是？',
+        options: ['text-align: center', '设置宽度后 margin: 0 auto', 'float: left', 'padding: 0 auto'],
+        answer: 1,
+        explanation: '定宽块级元素用 margin: 0 auto 让左右外边距自动均分，从而实现水平居中。'
+      },
+      {
+        type: 'single',
+        question: '上面的盒子 margin-bottom 为 20px，下面的盒子 margin-top 为 30px，实际间距是？',
+        options: ['50px', '20px', '30px', '10px'],
+        answer: 2,
+        explanation: '垂直方向的 margin 会合并，取两者中较大的 30px，而不是相加。'
+      },
+      {
+        type: 'judge',
+        question: '标准盒模型（content-box）下，width 只指 content 部分的宽度。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '标准盒模型下 width 和 height 只描述内容区，实际占位还要加上 padding 和 border。'
+      },
+      {
+        type: 'judge',
+        question: 'margin 区域会显示元素自己的背景色。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'margin 是透明的，元素背景只延伸到 padding（border 之内）。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 border-box 盒模型，以下说法正确的有？（多选）',
+        options: ['width 即盒子的总宽度', 'padding 和 border 会向内挤压内容', '实际开发中常全局设置为 border-box', '它是 CSS 的默认盒模型'],
+        answer: [0, 1, 2],
+        explanation: 'border-box 更直观好控制，是业界最佳实践；但默认盒模型是 content-box。'
+      },
+      {
+        type: 'multiple',
+        question: '元素的背景默认会延伸覆盖到盒模型的哪些区域？（多选）',
+        options: ['content', 'padding', 'margin', '其他元素下方'],
+        answer: [0, 1],
+        explanation: '背景从 content 一直延伸到 padding 区域，margin 完全透明。'
       }
     ]
   },
@@ -164,6 +248,48 @@ export default [
         options: ['font-size', 'line-height', 'text-align', 'grid-template-columns'],
         answer: [0, 1, 2],
         explanation: 'font-size、line-height、text-align 都是文本样式属性；grid-template-columns 是 Grid 布局属性。'
+      },
+      {
+        type: 'single',
+        question: '想去掉链接默认的下划线，应该设置？',
+        options: ['text-decoration: none', 'font-style: none', 'border: none', 'underline: off'],
+        answer: 0,
+        explanation: 'text-decoration: none 是去掉链接下划线的标准写法。'
+      },
+      {
+        type: 'single',
+        question: '想让背景图片不平铺重复，应该设置？',
+        options: ['background-repeat: no-repeat', 'background-size: cover', 'background-position: center', 'background-color: transparent'],
+        answer: 0,
+        explanation: 'background-repeat: no-repeat 让背景图只显示一次，常与 size、position 配合使用。'
+      },
+      {
+        type: 'judge',
+        question: '初学者建议把 background 的各属性分开写，便于读懂和调试。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'background 简写虽然短，但顺序不直观，初学阶段分开写更不容易出错。'
+      },
+      {
+        type: 'judge',
+        question: 'font-weight: bold 是用来设置文字字号的。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'font-weight 控制粗细，bold 表示加粗；字号要用 font-size。'
+      },
+      {
+        type: 'multiple',
+        question: '设置背景图片时，常与 background-image 配合使用的属性有？（多选）',
+        options: ['background-repeat', 'background-size', 'background-position', 'animation-duration'],
+        answer: [0, 1, 2],
+        explanation: 'repeat、size、position 是背景图三件套；animation-duration 属于动画属性。'
+      },
+      {
+        type: 'multiple',
+        question: 'color 属性可以使用以下哪些写法？（多选）',
+        options: ['颜色名，如 red', '十六进制，如 #333', 'rgb() 函数', 'url() 函数'],
+        answer: [0, 1, 2],
+        explanation: '颜色名、十六进制和 rgb 都是合法颜色值；url() 用于引入图片，不能表示颜色。'
       }
     ]
   },
@@ -225,6 +351,48 @@ export default [
         options: ['flex-start', 'center', 'space-between', 'wrap'],
         answer: [0, 1, 2],
         explanation: 'flex-start、center、space-between 都是 justify-content 的取值；wrap 是 flex-wrap 的取值。'
+      },
+      {
+        type: 'single',
+        question: '想让 Flex 项目排成一列（垂直方向），应该设置？',
+        options: ['flex-wrap: wrap', 'flex-direction: column', 'align-items: column', 'display: block'],
+        answer: 1,
+        explanation: 'flex-direction: column 把主轴换成垂直方向，项目自上而下排成一列。'
+      },
+      {
+        type: 'single',
+        question: '空间不足时让 Flex 项目自动换行，应该设置？',
+        options: ['flex-wrap: wrap', 'flex-direction: wrap', 'justify-content: wrap', 'overflow: wrap'],
+        answer: 0,
+        explanation: '默认项目挤在一行，flex-wrap: wrap 让放不下时自动换行，常配合卡片列表使用。'
+      },
+      {
+        type: 'judge',
+        question: 'align-items 控制的是项目在主轴上的分布。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'align-items 管交叉轴对齐；主轴分布由 justify-content 控制。'
+      },
+      {
+        type: 'judge',
+        question: '给容器设置 display: flex 后，它的直接子元素自动成为弹性项目。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '成为弹性容器后，直接子元素就是弹性项目，无需额外设置。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 align-items 的合法取值？（多选）',
+        options: ['stretch', 'center', 'flex-end', 'space-between'],
+        answer: [0, 1, 2],
+        explanation: 'stretch、center、flex-end 都是 align-items 的取值；space-between 属于 justify-content。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 space-between 与 space-around，以下说法正确的有？（多选）',
+        options: ['space-between 两端对齐', 'space-between 项目之间间距相等', 'space-around 每个项目两侧间距相等', '两者效果完全相同'],
+        answer: [0, 1, 2],
+        explanation: 'space-between 首尾贴边、中间均分；space-around 每项两侧间距相等，首尾留有半间距。'
       }
     ]
   },
@@ -286,6 +454,48 @@ export default [
         options: ['grid-template-columns: 200px 1fr 1fr', 'grid-template-columns: repeat(3, 1fr)', 'grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))', 'grid-template-columns: flex 1'],
         answer: [0, 1, 2],
         explanation: '前三种都是本课讲过的列定义写法；flex 1 不是 grid-template-columns 的合法值。'
+      },
+      {
+        type: 'single',
+        question: 'grid-column: 1 / -1 的含义是？',
+        options: ['只占第一列', '横跨整行', '从第 1 列到倒数第 2 列', '写法错误'],
+        answer: 1,
+        explanation: '-1 代表最后一条网格线，1 / -1 即从第一条线跨到最后一条，横跨整行。'
+      },
+      {
+        type: 'single',
+        question: '统一设置 Grid 行列之间间距的属性是？',
+        options: ['gap', 'spacing', 'margin-grid', 'border-gap'],
+        answer: 0,
+        explanation: 'gap（旧名 grid-gap）一条属性同时设置行距和列距，不用手动算 margin。'
+      },
+      {
+        type: 'judge',
+        question: 'repeat(3, 1fr) 完全等同于 1fr 1fr 1fr。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'repeat() 是简写，第一个参数是重复次数，第二个参数是重复的内容。'
+      },
+      {
+        type: 'judge',
+        question: 'Grid 中的项目默认就横跨整行，需要手动收回。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'Grid 项目默认只占一个格子，需要用 grid-column 或 grid-row 才能跨格。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 fr 单位，以下说法正确的有？（多选）',
+        options: ['是 Grid 特有的单位', '表示剩余空间的一份', '1fr 2fr 表示按 1:2 分配', '等同于固定像素'],
+        answer: [0, 1, 2],
+        explanation: 'fr 按比例瓜分剩余空间，是弹性尺寸；与 px 这种固定单位完全不同。'
+      },
+      {
+        type: 'multiple',
+        question: '让 Grid 项目跨越多格，可以使用哪些写法？（多选）',
+        options: ['grid-column: 1 / 3', 'grid-column: span 2', 'grid-row', 'flex-grow'],
+        answer: [0, 1, 2],
+        explanation: 'grid-column、grid-row 及 span 关键字都能控制跨格；flex-grow 是 Flex 属性。'
       }
     ]
   },
@@ -352,6 +562,48 @@ export default [
         options: ['transition 要写在元素的初始状态上', 'transform 做动画性能好，不会引起重新排版', 'animation 设置 infinite 可无限循环', 'transition 只能写在 :hover 状态上'],
         answer: [0, 1, 2],
         explanation: 'transition 写在初始状态上才能保证移入移出都有过渡；transform 不触发重排；infinite 表示无限循环。'
+      },
+      {
+        type: 'single',
+        question: '定义多帧动画的关键帧，应该使用哪个规则？',
+        options: ['@keyframes', '@media', '@font-face', '@transition'],
+        answer: 0,
+        explanation: '@keyframes 定义关键帧（from/to 或百分比），再由 animation 属性引用。'
+      },
+      {
+        type: 'single',
+        question: '想让 animation 动画无限循环播放，应该加上哪个关键字？',
+        options: ['loop: true', 'infinite', 'repeat: always', 'for-ever'],
+        answer: 1,
+        explanation: 'animation: spin 1s linear infinite 中的 infinite 即表示无限循环。'
+      },
+      {
+        type: 'judge',
+        question: '简单的状态切换适合用 transition，复杂的循环动画适合用 animation。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这是两者的分工原则：过渡做状态平滑切换，动画做多帧和循环。'
+      },
+      {
+        type: 'judge',
+        question: '“移动优先”是指先用 max-width 写大屏幕样式，再逐级缩小适配。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '移动优先恰恰相反：先写小屏默认样式，再用 min-width 媒体查询逐级增强大屏。'
+      },
+      {
+        type: 'multiple',
+        question: 'transform 可以对元素做哪些变换？（多选）',
+        options: ['位移 translate', '缩放 scale', '旋转 rotate', '改变文档流'],
+        answer: [0, 1, 2],
+        explanation: 'translate、scale、rotate 是 transform 三大基础变换，且不影响文档流。'
+      },
+      {
+        type: 'multiple',
+        question: '哪些技术能在不写媒体查询的情况下帮助布局自适应？（多选）',
+        options: ['Flex 的 flex-wrap', 'Grid 的 auto-fill', 'Grid 的 minmax', 'table 表格布局'],
+        answer: [0, 1, 2],
+        explanation: 'wrap、auto-fill 和 minmax 都能随空间自动调整，媒体查询留给结构大调整。'
       }
     ]
   },
@@ -408,6 +660,48 @@ export default [
         options: ['p::before', 'p::after', 'p:hover', 'p::first-line'],
         answer: [0, 1, 3],
         explanation: '::before、::after、::first-line 都是伪元素；:hover 是伪类，不是伪元素。'
+      },
+      {
+        type: 'single',
+        question: '[href^="https"] 这个属性选择器的含义是？',
+        options: ['href 以 https 开头', 'href 以 https 结尾', 'href 包含 https', 'href 等于 https'],
+        answer: 0,
+        explanation: '^= 表示“以……开头”，$= 表示结尾，*= 表示包含。'
+      },
+      {
+        type: 'single',
+        question: '想选中鼠标悬停状态的元素，应该使用哪个伪类？',
+        options: [':active', ':hover', ':focus', ':checked'],
+        answer: 1,
+        explanation: ':hover 匹配鼠标悬停状态；:focus 是获得焦点，:active 是按下瞬间。'
+      },
+      {
+        type: 'judge',
+        question: '伪类用单冒号开头，伪元素用双冒号开头。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这是两者的书写区别：伪类选状态（单冒号），伪元素造元素（双冒号）。'
+      },
+      {
+        type: 'judge',
+        question: '[class*="btn"] 选中的是 class 以 btn 开头的元素。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '*= 表示“包含”，class 中任意位置含 btn 即匹配；开头要用 ^=。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于伪类？（多选）',
+        options: [':hover', ':focus', ':first-child', '::before'],
+        answer: [0, 1, 2],
+        explanation: ':hover、:focus、:first-child 都是选中状态的伪类；::before 是伪元素。'
+      },
+      {
+        type: 'multiple',
+        question: '关于伪元素，以下说法正确的有？（多选）',
+        options: ['::before 在元素内容最前面插入', '::after 在元素内容最后面插入', '必须配合 content 属性才生效', '会向 HTML 中插入真实的标签'],
+        answer: [0, 1, 2],
+        explanation: '伪元素是渲染时生成的“虚拟元素”，不会出现在 HTML 结构中。'
       }
     ]
   },
@@ -464,6 +758,48 @@ export default [
         options: ['absolute', 'fixed', 'relative', 'sticky'],
         answer: [0, 1],
         explanation: 'absolute 和 fixed 完全脱离文档流；relative 和 sticky 仍保留在文档流中。'
+      },
+      {
+        type: 'single',
+        question: 'position: absolute 的元素相对于什么定位？',
+        options: ['一定是父元素', '最近的非 static 祖先', '浏览器窗口', '它原来的位置'],
+        answer: 1,
+        explanation: 'absolute 找最近的非 static 祖先作为参照，找不到才相对于整个页面。'
+      },
+      {
+        type: 'single',
+        question: 'sticky 定位在滚动到达阈值之前，表现类似于？',
+        options: ['fixed', 'absolute', 'relative', 'float'],
+        answer: 2,
+        explanation: 'sticky 是混合体：滚动前像 relative 正常占位，滚到指定位置后像 fixed 吸住。'
+      },
+      {
+        type: 'judge',
+        question: 'static 定位下，top、left 等偏移属性是无效的。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'static 是默认值，元素按文档流排列，偏移属性对它不起作用。'
+      },
+      {
+        type: 'judge',
+        question: 'sticky 定位不设置 top 等阈值也能生效。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '必须设置 top（或 bottom 等）阈值，否则元素没有“粘住”的触发位置。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 position 的合法取值？（多选）',
+        options: ['static', 'relative', 'sticky', 'float'],
+        answer: [0, 1, 2],
+        explanation: 'position 有 static、relative、absolute、fixed、sticky 五个取值；float 是独立属性。'
+      },
+      {
+        type: 'multiple',
+        question: 'sticky 吸顶不生效，可能的原因有？（多选）',
+        options: ['父元素设置了 overflow: hidden', '没有设置 top 等阈值', '父容器已完全滚出视野', '元素设置了 color 属性'],
+        answer: [0, 1, 2],
+        explanation: '前三个都是 sticky 失效的常见原因；color 与定位无关。'
       }
     ]
   },
@@ -514,6 +850,48 @@ export default [
         options: ['浮动元素后加空元素并设 clear: both', '父元素使用 clearfix 伪元素', '父元素设 overflow: hidden 触发 BFC', '给父元素设 text-align: center'],
         answer: [0, 1, 2],
         explanation: '前三种都是有效的清除浮动方案；text-align 只影响文字对齐，与浮动无关。'
+      },
+      {
+        type: 'single',
+        question: 'float 属性的合法取值是？',
+        options: ['left 和 right', 'top 和 bottom', 'center', '任意方向'],
+        answer: 0,
+        explanation: 'float 只有 left、right（和 none）取值，没有 top、bottom 或 center。'
+      },
+      {
+        type: 'single',
+        question: '通过触发 BFC 来清除浮动，可以给父元素设置？',
+        options: ['overflow: hidden', 'text-align: center', 'color: red', 'font-weight: bold'],
+        answer: 0,
+        explanation: 'overflow: hidden 触发 BFC，让父元素自己计算浮动子元素的高度。'
+      },
+      {
+        type: 'judge',
+        question: '元素浮动后会脱离文档流，向左或向右贴边。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '浮动元素脱离文档流并贴边，后面的文字会围绕它排列，这正是高度塌陷的根源。'
+      },
+      {
+        type: 'judge',
+        question: '现代布局中，多栏布局仍应首选浮动而不是 Flex 和 Grid。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '现在布局首选 Flex 和 Grid，学习浮动主要是为了维护老代码。'
+      },
+      {
+        type: 'multiple',
+        question: '高度塌陷会带来哪些后果？（多选）',
+        options: ['父元素背景消失', '父元素边框消失', '后续元素跑上来', '浮动子元素自动清除浮动'],
+        answer: [0, 1, 2],
+        explanation: '父元素高度为 0 后背景、边框都会消失，后续元素也会上移，布局全乱。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 clear: both，以下说法正确的有？（多选）',
+        options: ['表示左右都不允许浮动元素', '元素会被挤到浮动元素下方', '可配合空元素或伪元素清除浮动', '会让元素自身产生浮动'],
+        answer: [0, 1, 2],
+        explanation: 'clear 用来清除别人的浮动影响，而不是让自己浮动。'
       }
     ]
   },
@@ -564,6 +942,48 @@ export default [
         options: ['根元素 html', 'position 非 static 且 z-index 有值', '设置 transform', '设置 color: red'],
         answer: [0, 1, 2],
         explanation: '根元素、带 z-index 的定位元素、transform 等都会创建层叠上下文；color 不会。'
+      },
+      {
+        type: 'single',
+        question: '关于 !important，正确的说法是？',
+        options: ['完全无效', '能强行置顶但应尽量少用', '只在行内样式中有效', '日常开发推荐多用'],
+        answer: 1,
+        explanation: '!important 优先级最高，但会破坏样式可维护性，能不用就不用。'
+      },
+      {
+        type: 'single',
+        question: '在优先级四位数记法中，类、伪类、属性选择器对应的级别是？',
+        options: ['1000', '0100', '0010', '0001'],
+        answer: 2,
+        explanation: '行内 1000、id 0100、类/伪类/属性 0010、标签/伪元素 0001。'
+      },
+      {
+        type: 'judge',
+        question: '父元素形成层叠上下文后，子元素的 z-index 再高也跳不出父元素的层级。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'z-index 只在同一个层叠上下文里比较，这就是“9999 也被盖住”的原因。'
+      },
+      {
+        type: 'judge',
+        question: '遇到 z-index 被盖住的问题，正确做法是不断把 z-index 加得更大。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '应该调整两个祖先元素的层级关系，一味加大数值治标不治本。'
+      },
+      {
+        type: 'multiple',
+        question: '浏览器按层叠规则决定样式生效时，依次比较哪些因素？（多选）',
+        options: ['重要性', '优先级', '书写顺序', '文件大小'],
+        answer: [0, 1, 2],
+        explanation: '层叠顺序是：先看重要性，再看优先级，最后看书写顺序，与文件大小无关。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些做法可能让元素形成新的层叠上下文？（多选）',
+        options: ['opacity 小于 1', '设置 transform', '定位元素设置 z-index', '设置 margin'],
+        answer: [0, 1, 2],
+        explanation: 'opacity、transform、带 z-index 的定位元素都会创建层叠上下文；margin 不会。'
       }
     ]
   },
@@ -614,6 +1034,48 @@ export default [
         options: ['box-shadow', 'text-shadow', 'linear-gradient', 'line-height'],
         answer: [0, 1, 2],
         explanation: '盒阴影、文字阴影和渐变都能提升视觉层次；line-height 只控制行间距。'
+      },
+      {
+        type: 'single',
+        question: 'box-shadow 加上哪个关键字可以变成内阴影？',
+        options: ['inset', 'inside', 'inner', 'in'],
+        answer: 0,
+        explanation: 'box-shadow 前加 inset 关键字，投影就会画在盒子内部。'
+      },
+      {
+        type: 'single',
+        question: 'radial-gradient 径向渐变默认的形状是？',
+        options: ['正圆', '椭圆', '方形', '三角形'],
+        answer: 1,
+        explanation: '径向渐变默认是椭圆形，加 circle 关键字才能强制为正圆。'
+      },
+      {
+        type: 'judge',
+        question: 'border-radius 可以写 1 到 4 个值，分别控制四个角。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '与 margin、padding 类似，border-radius 支持一到四个值分别设置四角。'
+      },
+      {
+        type: 'judge',
+        question: '阴影用得越重，页面就显得越高级。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '阴影过重会显得廉价，淡淡的投影才有层次感，克制才高级。'
+      },
+      {
+        type: 'multiple',
+        question: 'linear-gradient 的渐变方向可以用哪些方式指定？（多选）',
+        options: ['to right 等方向关键字', '角度，如 45deg', '配合多个颜色和色标位置', 'float 关键字'],
+        answer: [0, 1, 2],
+        explanation: '方向可用关键字或角度，色标可精确控制颜色节点；float 与渐变无关。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 text-shadow，以下说法正确的有？（多选）',
+        options: ['作用于文字', '用法与 box-shadow 类似', '可以做出描边或发光效果', '可以替代 font-size'],
+        answer: [0, 1, 2],
+        explanation: 'text-shadow 是文字版阴影，参数形式类似 box-shadow，但与字号无关。'
       }
     ]
   },
@@ -664,6 +1126,48 @@ export default [
         options: ['translate(10px, 20px)', 'rotate(45deg)', 'scale(1.2)', 'float(left)'],
         answer: [0, 1, 2],
         explanation: 'translate、rotate、scale 都是 transform 的函数；float 是独立属性，不是 transform 函数。'
+      },
+      {
+        type: 'single',
+        question: 'rotate(45deg) 表示元素如何旋转？',
+        options: ['逆时针转 45 度', '顺时针转 45 度', '放大 45 倍', '位移 45px'],
+        answer: 1,
+        explanation: '正数角度为顺时针旋转，负数角度为逆时针旋转。'
+      },
+      {
+        type: 'single',
+        question: 'transform-origin 的默认基准点是？',
+        options: ['左上角', '元素中心', '右下角', '视口中心'],
+        answer: 1,
+        explanation: '默认基准点是元素中心（50% 50%），旋转、缩放都围绕它进行。'
+      },
+      {
+        type: 'judge',
+        question: 'transform 不影响文档流，是做动画性能最好的属性之一。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'transform 不触发重排，在合成阶段处理，因此动画首选 transform。'
+      },
+      {
+        type: 'judge',
+        question: '祖先元素设置 transform 后，其 fixed 定位的后代仍然相对于视口定位。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'transform 会让元素成为 fixed 后代的定位参照，这是容易踩的坑。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 scale 缩放，以下写法或说法正确的有？（多选）',
+        options: ['scale(1.2) 放大到 1.2 倍', 'scale(0.5) 缩小一半', 'scale(x, y) 可分别设置两轴', 'scale 规定最小只能到 0.1'],
+        answer: [0, 1, 2],
+        explanation: 'scale 接受任意数值，没有最小 0.1 的规定，甚至可以写负数实现翻转。'
+      },
+      {
+        type: 'multiple',
+        question: '使用 transform 可能带来的副作用包括？（多选）',
+        options: ['创建新的层叠上下文', '成为 fixed 后代的定位参照', '组合变形的书写顺序影响结果', '触发整个页面重新排版'],
+        answer: [0, 1, 2],
+        explanation: '前三个都是本课提到的注意点；transform 恰恰不会引起重新排版。'
       }
     ]
   },
@@ -714,6 +1218,48 @@ export default [
         options: ['设置 viewport meta 标签', '使用 rem 或 vw 做弹性尺寸', '用媒体查询调整布局', '所有尺寸写死 750px'],
         answer: [0, 1, 2],
         explanation: '视口设置、弹性单位和媒体查询是适配三件套；写死宽度无法适配不同屏幕。'
+      },
+      {
+        type: 'single',
+        question: 'rem 单位是相对于什么计算的？',
+        options: ['父元素的字号', '根元素 html 的 font-size', '视口高度', '固定像素'],
+        answer: 1,
+        explanation: 'rem 相对根元素字号，所以动态设置 html 字号就能让整页尺寸整体缩放。'
+      },
+      {
+        type: 'single',
+        question: '以下哪个不是常见的响应式断点？',
+        options: ['768px', '992px', '1200px', '3333px'],
+        answer: 3,
+        explanation: '常见断点是 768（平板）、992（小桌面）、1200（大桌面），3333px 不是约定俗成的断点。'
+      },
+      {
+        type: 'judge',
+        question: '不设置 viewport meta 标签时，手机浏览器可能按约 980px 宽渲染再整体缩小。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这正是要设置 width=device-width 的原因，否则页面会显示成“微缩版”。'
+      },
+      {
+        type: 'judge',
+        question: 'min-width: 768px 表示屏幕宽度不超过 768px 时样式生效。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'min-width 是“最小不低于”，即宽度 ≥ 768px 时生效；不超过要用 max-width。'
+      },
+      {
+        type: 'multiple',
+        question: '小屏幕下的常见响应式调整有？（多选）',
+        options: ['多栏改成单栏', '隐藏次要内容', '横向导航改成汉堡菜单', '把所有文字放大三倍'],
+        answer: [0, 1, 2],
+        explanation: '前三个都是实战常用手法；文字只需适度调大点击区域，不是无脑放大。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 rem 适配方案，以下做法正确的有？（多选）',
+        options: ['动态设置 html 的 font-size', '页面尺寸统一用 rem', '屏幕变化时页面整体缩放', '所有元素尺寸用 px 写死'],
+        answer: [0, 1, 2],
+        explanation: 'rem 方案靠根字号联动实现整体缩放；写死 px 就失去了适配能力。'
       }
     ]
   },
@@ -764,6 +1310,48 @@ export default [
         options: ['Flex 双 center', 'display: grid; place-items: center', '绝对定位 + translate(-50%, -50%)', 'float: left + margin'],
         answer: [0, 1, 2],
         explanation: '前三种都是常用居中方案；float 用于左右贴边，无法实现居中。'
+      },
+      {
+        type: 'single',
+        question: '想让行内元素水平居中，应该给父元素设置？',
+        options: ['text-align: center', 'margin: 0 auto', 'flex: 1', 'float: center'],
+        answer: 0,
+        explanation: '行内元素水平居中用 text-align: center；margin: 0 auto 只适用于定宽块级元素。'
+      },
+      {
+        type: 'single',
+        question: '实现粘性页脚时，body 应该设置为？',
+        options: ['height: 100px', 'min-height: 100vh 的纵向 Flex 容器', 'position: fixed', 'overflow: hidden'],
+        answer: 1,
+        explanation: 'body 设为 min-height: 100vh 的纵向 flex 容器，主内容 flex: 1，页脚自然被推到底部。'
+      },
+      {
+        type: 'judge',
+        question: 'margin: 0 auto 让块级元素水平居中的前提是该元素设置了宽度。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '不定宽的块级元素默认占满整行，auto 外边距没有可分配的空间。'
+      },
+      {
+        type: 'judge',
+        question: '三栏“圣杯布局”中，中间自适应列应该写死宽度。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '左右两列写死宽度，中间列用 flex: 1 占满剩余空间，才是自适应。'
+      },
+      {
+        type: 'multiple',
+        question: '用 Grid 实现水平垂直居中，需要哪些设置？（多选）',
+        options: ['display: grid', 'place-items: center', '这是最短的居中写法之一', '必须配合 float'],
+        answer: [0, 1, 2],
+        explanation: 'display: grid 加 place-items: center 两行搞定，是最短写法，与 float 无关。'
+      },
+      {
+        type: 'multiple',
+        question: '关于水平居中的分情况处理，以下说法正确的有？（多选）',
+        options: ['行内元素给父元素加 text-align: center', '定宽块级元素用 margin: 0 auto', 'Flex 可同时实现水平和垂直居中', 'float 是居中的最优方案'],
+        answer: [0, 1, 2],
+        explanation: '居中要分场景选方案；float 用于贴边和环绕，不能实现居中。'
       }
     ]
   },
@@ -814,6 +1402,48 @@ export default [
         options: ['浮动导致的高度塌陷', '相邻元素的外边距合并', '文字环绕浮动元素', '选择器优先级冲突'],
         answer: [0, 1, 2],
         explanation: '清除浮动、阻止 margin 合并、防止环绕是 BFC 的三大用途；优先级冲突由层叠规则决定，与 BFC 无关。'
+      },
+      {
+        type: 'single',
+        question: '100vw 等于多少？',
+        options: ['视口高度的一半', '整个视口宽度', '根字号的 100 倍', '100px'],
+        answer: 1,
+        explanation: 'vw 相对于视口宽度，100vw 正好铺满整个视口宽，适合全屏横幅。'
+      },
+      {
+        type: 'single',
+        question: '父元素 font-size 为 16px 时，1.5em 等于多少？',
+        options: ['16px', '24px', '32px', '1.5px'],
+        answer: 1,
+        explanation: 'em 相对父元素字号，16 × 1.5 = 24px。'
+      },
+      {
+        type: 'judge',
+        question: 'px 是绝对单位，适合边框、小图标等精确尺寸。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'px 大小固定不随环境变化，用于需要精确控制的场景正合适。'
+      },
+      {
+        type: 'judge',
+        question: '经验法则建议在嵌套结构中大量使用 em 单位。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '恰恰相反：em 嵌套会层层放大失控，嵌套结构里应避免，优先用 rem。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些方式可以触发 BFC？（多选）',
+        options: ['overflow: hidden', 'float: left', 'display: flow-root', 'color: red'],
+        answer: [0, 1, 2],
+        explanation: 'overflow 非 visible、float 非 none、flow-root、absolute/fixed 都能触发 BFC；color 不能。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 vw / vh 单位，以下说法正确的有？（多选）',
+        options: ['相对于视口的宽高', '适合全屏横幅', '适合移动端适配', '与视口大小无关'],
+        answer: [0, 1, 2],
+        explanation: 'vw/vh 就是视口单位，视口变化它们就跟着变，所以适合全屏与移动端场景。'
       }
     ]
   }

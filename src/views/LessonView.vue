@@ -26,7 +26,7 @@ function paragraphs(text) {
         {{ lesson.moduleName }}
       </span>
       <h2>{{ lesson.title }}</h2>
-      <p class="muted">约 {{ lesson.minutes }} 分钟 · 学完需通过 {{ lesson.quiz.length }} 道测试题</p>
+      <p class="muted">约 {{ lesson.minutes }} 分钟 · 题库 {{ lesson.quiz.length }} 题，每次随机抽题测试</p>
     </div>
 
     <div v-for="(sec, i) in lesson.sections" :key="i" class="card reading">
