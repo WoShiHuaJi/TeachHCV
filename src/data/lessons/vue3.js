@@ -93,6 +93,20 @@ export default [
         options: ['启动速度极快', '支持热更新', '通过 npm run dev 启动开发服务器', '必须先配置 Webpack 才能使用'],
         answer: [0, 1, 2],
         explanation: 'Vite 开箱即用，无需手动配置 Webpack。'
+      },
+      {
+        type: 'single',
+        question: 'Vue 框架的作者是？',
+        options: ['尤雨溪', 'Dan Abramov', 'Ryan Dahl', 'Brendan Eich'],
+        answer: 0,
+        explanation: 'Vue 由尤雨溪创建，渐进式的设计理念让入门和扩展都很平滑。'
+      },
+      {
+        type: 'judge',
+        question: '通过 CDN 方式引入 Vue3 体验时，必须先安装 Node.js 和 npm。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'CDN 方式只需在 HTML 中引入一个 script 标签即可体验，无需安装任何工具。'
       }
     ]
   },
@@ -191,6 +205,34 @@ export default [
         options: ['基本语法是 item in items', '建议为每一项提供唯一的 :key', '与 v-if 同用时 v-if 优先级更高', '遍历时绝对不需要 :key'],
         answer: [0, 1, 2],
         explanation: ':key 能帮助 Vue 高效复用 DOM 并避免状态错乱，应始终提供。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：希望用户输入的内容自动去除首尾空格后再同步到数据，最简洁的写法是？',
+        options: ['v-model.trim="username"', '在 @input 中手动调用 trim', '用 watch 监听后再处理', '定义一个 computed 处理'],
+        answer: 0,
+        explanation: 'v-model 的 .trim 修饰符会自动去除首尾空格，无需手动处理。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：点击按钮既要执行方法，又要阻止事件冒泡到父元素，应使用？',
+        options: ['@click.stop="fn"', '@click.prevent="fn"', '@click.once="fn"', '@click.self="fn"'],
+        answer: 0,
+        explanation: '.stop 修饰符等价于调用 event.stopPropagation()，可阻止事件冒泡。'
+      },
+      {
+        type: 'judge',
+        question: 'v-model.number 会自动把用户输入的内容转换为数字类型。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '.number 修饰符会把输入值转成数字，转换失败时保留原始字符串。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：实现一个待办事项列表，下列做法正确的有？（多选）',
+        options: ['用 v-for 遍历数组渲染每一项', '为每一项提供唯一的 :key', '列表为空时用 v-if 显示提示文案', '把 v-if 和 v-for 写在同一个 li 上'],
+        answer: [0, 1, 2],
+        explanation: 'v-if 与 v-for 不要写在同一元素上，v-if 优先级更高，会拿不到循环变量。'
       }
     ]
   },
@@ -288,6 +330,48 @@ export default [
         options: ['返回带 .value 属性的对象', 'script 中读写需通过 .value', '模板中会自动解包', '只能包装对象类型'],
         answer: [0, 1, 2],
         explanation: 'ref 可以包装任意类型的值，不局限于对象。'
+      },
+      {
+        type: 'single',
+        question: '面试题：const count = ref(0) 后，在模板中写 {{ count.value }} 会显示什么？',
+        options: ['显示 0', '显示 undefined', '直接报错', '显示 [object Object]'],
+        answer: 1,
+        explanation: '模板中 ref 会自动解包，count 已经是数值 0，再访问 .value 得到 undefined。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：把 reactive 对象 state 直接解构出 name 后，再修改 state.name，页面上的 name 会怎样？',
+        options: ['同步更新', '不再更新，解构丢失了响应式', '延迟一会儿才更新', '页面直接报错'],
+        answer: 1,
+        explanation: '直接解构 reactive 对象会丢失响应式，需要解构时应使用 toRefs。'
+      },
+      {
+        type: 'single',
+        question: 'ref 和 reactive 的响应式底层都基于什么实现？',
+        options: ['ES6 Proxy', 'Object.defineProperty', '手动发布订阅', '虚拟 DOM diff'],
+        answer: 0,
+        explanation: 'Vue3 响应式系统基于 ES6 Proxy，能检测新增、删除属性等更多操作。'
+      },
+      {
+        type: 'judge',
+        question: 'ref 包装对象类型的值时，其内部深层属性同样具有响应式。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'ref 内部会借助 reactive 处理对象值，因此深层属性也是响应式的。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：下列操作会导致响应式丢失的有？（多选）',
+        options: ['直接解构 reactive 对象的属性', '把 reactive 对象整体替换为另一个对象', '通过 state.age = 20 修改 reactive 属性', '通过 count.value = 5 修改 ref'],
+        answer: [0, 1],
+        explanation: '解构 reactive 属性和整体替换 reactive 对象都会断开响应式连接，后两种是标准写法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 ref 在模板中的自动解包，下列说法正确的有？（多选）',
+        options: ['模板中直接写 {{ count }} 即可读取值', 'script 中仍需通过 .value 读写', '自动解包只发生在模板渲染中', 'script 中也可以省略 .value'],
+        answer: [0, 1, 2],
+        explanation: 'script 中必须写 .value，只有模板里 ref 才会自动解包。'
       }
     ]
   },
@@ -385,6 +469,34 @@ export default [
         options: ['会自动收集回调里用到的依赖', '依赖变化时会重新执行', '适合依赖较多的场景', '必须显式传入要监听的数据源'],
         answer: [0, 1, 2],
         explanation: 'watchEffect 不需要显式指定数据源，它会自动追踪回调中用到的依赖。'
+      },
+      {
+        type: 'single',
+        question: '面试题：搜索框输入变化后等待用户停手再发请求（防抖），最适合使用？',
+        options: ['computed', 'watch', 'v-model', 'props'],
+        answer: 1,
+        explanation: '防抖属于变化后执行副作用，应在 watch 回调中配合定时器实现。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：要监听 reactive 对象 state 的 count 属性，watch 的数据源正确写法是？',
+        options: ['watch(state.count, cb)', 'watch(() => state.count, cb)', 'watch(\'state.count\', cb)', 'watch(count, cb)'],
+        answer: 1,
+        explanation: '监听 reactive 对象的某个属性，数据源需要写成函数形式 () => state.count。'
+      },
+      {
+        type: 'judge',
+        question: 'watch 的回调函数可以同时拿到数据变化后的新值和变化前的旧值。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'watch 回调的参数就是 (newVal, oldVal)，方便对比前后变化。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：下列需求中更适合用 computed 而非 watch 的有？（多选）',
+        options: ['计算购物车商品总价', '根据关键字过滤出要展示的列表', '把姓和名拼成全名展示', '关键字变化后发送搜索请求'],
+        answer: [0, 1, 2],
+        explanation: '前三项都是同步派生数据，用 computed 带缓存更好；发请求属于副作用，用 watch。'
       }
     ]
   },
@@ -483,6 +595,34 @@ export default [
         options: ['先用 defineEmits 声明会触发的事件', '调用 emit 时可以携带数据', '父组件用 @事件名 接收消息', 'emit 只能传递字符串类型的数据'],
         answer: [0, 1, 2],
         explanation: 'emit 可以携带任意类型的数据，不限于字符串。'
+      },
+      {
+        type: 'single',
+        question: '面试题：子组件想基于 prop 的值维护一份可编辑的本地数据，正确做法是？',
+        options: ['直接修改 prop', '把 prop 复制到本地 ref 中再修改', '用 v-model 直接改 prop', '在子组件里调用 defineProps 覆盖'],
+        answer: 1,
+        explanation: 'props 单向数据流不可直接改，需要本地编辑时应复制到本地响应式变量。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：父组件需要响应子组件的按钮点击并累加数量，正确的通信方式是？',
+        options: ['子组件 emit 自定义事件，父组件用 @事件名 接收', '子组件直接修改父组件的变量', '父组件定时轮询子组件的状态', '子组件通过 v-if 通知父组件'],
+        answer: 0,
+        explanation: '子传父的标准方式就是 emit 事件，父组件像监听原生事件一样接收。'
+      },
+      {
+        type: 'judge',
+        question: 'props 是单向数据流：父组件数据更新会流向子组件，子组件不应反向修改 prop。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '单向数据流让数据流向清晰，便于排查问题，是 props 的核心原则。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：封装一个通用按钮组件，下列设计合理的有？（多选）',
+        options: ['通过 props 接收按钮文字', '点击时 emit 事件通知父组件', '样式写在 style scoped 中避免污染', '在子组件内部直接修改父组件的数据'],
+        answer: [0, 1, 2],
+        explanation: '子组件不应直接修改父组件数据，应通过 emit 事件把变化通知出去。'
       }
     ]
   },
@@ -581,6 +721,34 @@ export default [
         options: ['本质上是一个普通函数', '内部可以使用 ref、computed 等 API', '通常把状态和方法返回出去', '所有组件调用后共享同一份状态'],
         answer: [0, 1, 2],
         explanation: '每个组件调用组合式函数都会得到一份独立的响应式状态。'
+      },
+      {
+        type: 'single',
+        question: '面试题：组件中创建的定时器，在哪个钩子中清理最合适？',
+        options: ['onMounted', 'onUnmounted', 'onUpdated', 'watch 回调中'],
+        answer: 1,
+        explanation: 'onUnmounted 在组件卸载后触发，是清理定时器、事件监听的正确时机。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：发现三个组件都有获取列表数据并分页的相似逻辑，最好的做法是？',
+        options: ['复制三份代码各自维护', '抽取成组合式函数 usePagination', '把数据放到全局变量中共享', '用 props 一层层传递逻辑'],
+        answer: 1,
+        explanation: '多组件有相似逻辑时，抽取组合式函数复用是 Vue3 推荐的做法。'
+      },
+      {
+        type: 'judge',
+        question: '组合式 API 中的生命周期钩子以 on 开头命名，如 onMounted、onUnmounted。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '组合式 API 钩子统一以 on 开头，需从 vue 中导入后使用。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：关于组合式函数与普通工具函数的区别，正确的有？（多选）',
+        options: ['组合式函数管理的是响应式状态', '组合式函数内部可以使用生命周期钩子', '每次调用组合式函数都会创建独立状态', '两者在使用上完全没有区别'],
+        answer: [0, 1, 2],
+        explanation: '普通工具函数处理纯计算，组合式函数处理响应式状态和副作用。'
       }
     ]
   },
@@ -679,6 +847,20 @@ export default [
         options: ['子组件在 slot 标签上绑定属性传递数据', '父组件通过 v-slot 接收插槽数据', '典型场景是列表项结构由父组件决定、数据由子组件提供', '使用作用域插槽后默认插槽会被禁用'],
         answer: [0, 1, 2],
         explanation: '作用域插槽与默认插槽互不影响，可以共存。'
+      },
+      {
+        type: 'single',
+        question: '作用域插槽中，子组件把数据传给插槽内容的方式是？',
+        options: ['在 slot 标签上绑定属性', '使用 defineProps 声明', '使用 emit 触发事件', '使用 provide 提供'],
+        answer: 0,
+        explanation: '子组件在 <slot :msg="message"> 上绑定属性，父组件通过 v-slot 接收。'
+      },
+      {
+        type: 'judge',
+        question: '父组件没有给某个具名插槽传内容时，该插槽会显示子组件 slot 标签内的后备内容。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '具名插槽和默认插槽一样，slot 标签内部的内容就是未传内容时的后备内容。'
       }
     ]
   },
@@ -777,6 +959,20 @@ export default [
         options: ['无需手动声明 prop 和事件', '返回的 ref 可直接在模板中 v-model 绑定', '支持默认值、校验和修饰符', '只能用于原生表单元素'],
         answer: [0, 1, 2],
         explanation: 'defineModel 用于自定义组件的双向绑定，不局限于原生表单元素。'
+      },
+      {
+        type: 'single',
+        question: 'v-model:title 在子组件中等价于哪组 prop 和事件？',
+        options: ['title 和 update:title', 'modelValue 和 update:modelValue', 'title 和 change:title', 'value 和 input'],
+        answer: 0,
+        explanation: '带参数的 v-model:title 等价于 title prop 加 update:title 事件的语法糖。'
+      },
+      {
+        type: 'judge',
+        question: 'defineModel 支持为绑定的值设置默认值和校验规则。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'defineModel 可以传入选项配置默认值、校验和修饰符。'
       }
     ]
   },
@@ -874,6 +1070,20 @@ export default [
         options: ['数据的所有权归祖先', '祖先 provide 时同时提供修改方法', '后代想改数据就调用祖先提供的方法', '后代随意直接修改注入的数据'],
         answer: [0, 1, 2],
         explanation: '后代随意修改会让状态难以追踪，应通过祖先提供的方法来改。'
+      },
+      {
+        type: 'single',
+        question: 'provide 的第一个参数 key 的作用是？',
+        options: ['唯一标识这份数据，供后代 inject 取用', '指定数据的类型', '指定数据的默认值', '指定提供数据的组件名'],
+        answer: 0,
+        explanation: 'key 是数据的唯一标识，后代用 inject(key) 按同样的 key 取回数据。'
+      },
+      {
+        type: 'judge',
+        question: 'provide / inject 只能用于父子直接相邻的两层组件之间通信。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'provide / inject 可以跨越多层组件，这正是它解决 prop 逐级透传的价值。'
       }
     ]
   },
@@ -971,6 +1181,20 @@ export default [
         options: ['只作用于单个根元素', '进入起始阶段的类名是 v-enter-from', 'name 属性可自定义类名前缀', 'Transition 自身内置了全套动画效果'],
         answer: [0, 1, 2],
         explanation: 'Transition 不提供现成动画，需要我们自己编写对应的 CSS。'
+      },
+      {
+        type: 'single',
+        question: '想让弹窗在 DOM 上渲染到 body 下、逻辑上仍属于当前组件，应使用哪个内置组件？',
+        options: ['Transition', 'Teleport', 'TransitionGroup', 'slot'],
+        answer: 1,
+        explanation: 'Teleport 通过 to 属性把内容传送到指定位置，组件逻辑关系保持不变。'
+      },
+      {
+        type: 'judge',
+        question: 'TransitionGroup 支持列表项位置变化时的移动动画。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'TransitionGroup 用于一组元素的过渡，并额外支持位置变化的移动动画。'
       }
     ]
   },
@@ -1068,6 +1292,20 @@ export default [
         options: ['多个组件有相似逻辑', '需要复用响应式状态', '需要复用事件监听等副作用逻辑', '项目中的每个组件都必须抽取'],
         answer: [0, 1, 2],
         explanation: '发现多个组件有相似逻辑时才是抽取的好时机，并非强制。'
+      },
+      {
+        type: 'single',
+        question: '在组件中使用 useMouse 组合式函数的正确方式是？',
+        options: ['在 setup 中调用并解构返回值', '在模板中直接调用 useMouse()', '把它注册为全局组件', '通过 props 传给子组件'],
+        answer: 0,
+        explanation: '组合式函数像普通函数一样在 setup 中调用，返回的 ref 可直接用于模板。'
+      },
+      {
+        type: 'judge',
+        question: '组合式函数内部不可以再调用其他的组合式函数。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '组合式函数之间可以相互调用，从而组合出更复杂的复用逻辑。'
       }
     ]
   },
@@ -1165,6 +1403,20 @@ export default [
         options: ['路由模式 history', '路由规则数组 routes', '规则中 path 与 component 的对应关系', '全局状态管理配置'],
         answer: [0, 1, 2],
         explanation: '状态管理由 Pinia 负责，与路由实例的配置无关。'
+      },
+      {
+        type: 'single',
+        question: '创建 Vue Router 路由实例使用的函数是？',
+        options: ['createRouter', 'createApp', 'createPinia', 'defineRouter'],
+        answer: 0,
+        explanation: '调用 createRouter 并传入 history 模式和 routes 规则数组来创建路由实例。'
+      },
+      {
+        type: 'judge',
+        question: '开发新项目一般推荐使用 history 模式，并在上线时配置好服务器回退规则。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'history 模式地址干净美观，但刷新子路径需要服务器回退到 index.html。'
       }
     ]
   },
@@ -1263,6 +1515,20 @@ export default [
         options: ['回调能拿到目标路由 to', '回调能拿到来源路由 from', '通过返回值控制是否放行', '回调中可以直接操作目标组件的 DOM'],
         answer: [0, 1, 2],
         explanation: '导航发生在目标组件渲染之前，此时拿不到目标组件的 DOM。'
+      },
+      {
+        type: 'single',
+        question: '注册全局前置守卫，在每次路由跳转前拦截判断，应使用？',
+        options: ['router.beforeEach', 'router.afterEach', 'router.push', 'router.onEnter'],
+        answer: 0,
+        explanation: 'router.beforeEach 注册全局前置守卫，回调能拿到 to 和 from，通过返回值控制导航。'
+      },
+      {
+        type: 'judge',
+        question: '动态路由参数和查询字符串参数都可以从 route.params 中读取。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '动态路由参数在 route.params 中，查询字符串参数要从 route.query 中读取。'
       }
     ]
   },
@@ -1361,6 +1627,20 @@ export default [
         options: ['调用 useCounterStore() 得到 store 实例', '直接解构 store 会丢失响应式', '模板中可以直接写 store.count', '解构 state 后仍自动保持响应式'],
         answer: [0, 1, 2],
         explanation: '解构 state 或 getters 必须用 storeToRefs 包一层才能保持响应式。'
+      },
+      {
+        type: 'single',
+        question: '定义一个 Pinia store 使用的函数是？',
+        options: ['defineStore', 'createStore', 'useStore', 'newStore'],
+        answer: 0,
+        explanation: 'defineStore 第一个参数是唯一 id，第二个参数是包含 state、getters、actions 的配置对象。'
+      },
+      {
+        type: 'judge',
+        question: '直接解构 store 中的 state 会丢失响应式。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '想解构 state 或 getters 必须使用 storeToRefs，actions 则可以直接解构。'
       }
     ]
   },
@@ -1459,6 +1739,20 @@ export default [
         options: ['复杂表达式应移入 computed', '一个组件只负责一件事，太大就拆分', '团队项目可配合 ESLint 和 Prettier 统一风格', 'style 加 scoped 会污染全局样式'],
         answer: [0, 1, 2],
         explanation: 'scoped 的作用恰恰是让样式只作用于当前组件，避免污染全局。'
+      },
+      {
+        type: 'single',
+        question: '在代码中读取 Vite 环境变量 VITE_API_BASE 的正确方式是？',
+        options: ['import.meta.env.VITE_API_BASE', 'process.env.VITE_API_BASE', 'window.VITE_API_BASE', 'localStorage.getItem(\'VITE_API_BASE\')'],
+        answer: 0,
+        explanation: 'Vite 中以 VITE_ 开头的环境变量通过 import.meta.env 暴露给客户端代码。'
+      },
+      {
+        type: 'judge',
+        question: 'Vite 项目的开发服务器通过 npm run dev 启动，并支持毫秒级热更新。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'npm run dev 启动开发服务器，修改代码后页面立刻热更新对应部分。'
       }
     ]
   }

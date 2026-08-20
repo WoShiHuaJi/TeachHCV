@@ -94,6 +94,20 @@ export default [
         options: ['空格表示后代关系', '.box p 选中 box 内所有层级的 p', '.box > p 只选中直接子元素 p', '大于号表示兄弟关系'],
         answer: [0, 1, 2],
         explanation: '空格是后代、大于号是子代；兄弟关系另有 + 和 ~ 选择器，本课未涉及。'
+      },
+      {
+        type: 'single',
+        question: '引入外部样式表 style.css 的正确写法是？',
+        options: ['<link rel="stylesheet" href="style.css">', '<style src="style.css"></style>', '<css href="style.css">', '<script rel="stylesheet" href="style.css"></script>'],
+        answer: 0,
+        explanation: '外部样式表用 link 标签引入，rel 为 stylesheet，href 指向 css 文件。'
+      },
+      {
+        type: 'judge',
+        question: 'id 选择器优先级高，因此日常开发中应该尽量多用 id 来写样式。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'id 优先级过高会导致样式难以覆盖，日常开发推荐使用可复用、低优先级的类选择器。'
       }
     ]
   },
@@ -192,6 +206,20 @@ export default [
         options: ['content', 'padding', 'margin', '其他元素下方'],
         answer: [0, 1],
         explanation: '背景从 content 一直延伸到 padding 区域，margin 完全透明。'
+      },
+      {
+        type: 'single',
+        question: 'border-box 下，width: 300px、padding: 20px、border: 1px 的盒子，内容区实际宽度是？',
+        options: ['300px', '258px', '342px', '280px'],
+        answer: 1,
+        explanation: 'border-box 下 width 是总宽，内容区 = 300 - 20×2 - 1×2 = 258px。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 margin: 0 auto 实现水平居中，以下说法正确的有？（多选）',
+        options: ['适用于块级元素', '前提是该元素设置了宽度', '可以同时实现垂直居中', '左右外边距会自动均分剩余空间'],
+        answer: [0, 1, 3],
+        explanation: 'auto 只均分水平方向剩余空间，且元素必须定宽；它无法实现垂直居中。'
       }
     ]
   },
@@ -290,6 +318,20 @@ export default [
         options: ['颜色名，如 red', '十六进制，如 #333', 'rgb() 函数', 'url() 函数'],
         answer: [0, 1, 2],
         explanation: '颜色名、十六进制和 rgb 都是合法颜色值；url() 用于引入图片，不能表示颜色。'
+      },
+      {
+        type: 'single',
+        question: 'box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) 中，2px 表示什么？',
+        options: ['水平偏移', '垂直偏移', '模糊半径', '阴影颜色'],
+        answer: 1,
+        explanation: '四个值依次是水平偏移、垂直偏移、模糊半径、颜色，2px 是垂直方向的偏移。'
+      },
+      {
+        type: 'judge',
+        question: 'background-size: cover 会保持图片比例，超出容器的部分会被裁掉。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'cover 缩放图片直到铺满容器，保持比例，多余部分裁剪，不会变形。'
       }
     ]
   },
@@ -393,6 +435,34 @@ export default [
         options: ['space-between 两端对齐', 'space-between 项目之间间距相等', 'space-around 每个项目两侧间距相等', '两者效果完全相同'],
         answer: [0, 1, 2],
         explanation: 'space-between 首尾贴边、中间均分；space-around 每项两侧间距相等，首尾留有半间距。'
+      },
+      {
+        type: 'single',
+        question: '容器设置 display: flex; justify-content: space-between; align-items: center，三个子项目的呈现效果是？',
+        options: ['首尾贴边、中间均分，且交叉轴居中', '全部堆叠在容器正中央', '等宽排列并自动换行', '垂直排成一列'],
+        answer: 0,
+        explanation: 'space-between 让项目在主轴两端对齐、间距均分，align-items: center 让项目在交叉轴居中。'
+      },
+      {
+        type: 'single',
+        question: '设置 flex-direction: column 后，justify-content 控制的是哪个方向的分布？',
+        options: ['仍然是水平方向', '垂直方向', '交叉轴变为水平后无法控制', '两个方向同时控制'],
+        answer: 1,
+        explanation: 'flex-direction 改变主轴方向，column 下主轴为垂直方向，justify-content 始终跟随主轴。'
+      },
+      {
+        type: 'judge',
+        question: 'flex: 1 是写在 Flex 容器上的属性。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'flex 写在子项目上，用来分配主轴剩余空间；容器上写的是 display、justify-content 等。'
+      },
+      {
+        type: 'multiple',
+        question: '用 Flex 实现一个卡片列表：每行尽量多放、放不下自动换行、行间两端对齐，需要哪些设置？（多选）',
+        options: ['display: flex', 'flex-wrap: wrap', 'justify-content: space-between', 'float: left'],
+        answer: [0, 1, 2],
+        explanation: 'Flex 容器加 wrap 换行、space-between 分布即可实现卡片列表，无需 float。'
       }
     ]
   },
@@ -496,6 +566,34 @@ export default [
         options: ['grid-column: 1 / 3', 'grid-column: span 2', 'grid-row', 'flex-grow'],
         answer: [0, 1, 2],
         explanation: 'grid-column、grid-row 及 span 关键字都能控制跨格；flex-grow 是 Flex 属性。'
+      },
+      {
+        type: 'single',
+        question: '容器宽 800px（忽略 gap），grid-template-columns: 200px 1fr 2fr，第二列的实际宽度是？',
+        options: ['200px', '400px', '300px', '600px'],
+        answer: 0,
+        explanation: '剩余空间 800-200=600px，按 1:2 分配，1fr 得 200px，2fr 得 400px。'
+      },
+      {
+        type: 'single',
+        question: '要做“左大图跨两列、顶部横幅横跨整行”的杂志式布局，最合适的方案是？',
+        options: ['float 浮动', 'Flex', 'Grid', 'table 表格'],
+        answer: 2,
+        explanation: 'Grid 是二维布局，配合 grid-column 跨格能轻松实现杂志式结构，Flex 要绕不少弯路。'
+      },
+      {
+        type: 'judge',
+        question: 'minmax(200px, 1fr) 表示列宽最小 200px，最大也不能超过 200px。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'minmax(200px, 1fr) 表示最小 200px、最大可瓜分剩余空间，即宽屏时列会变宽。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 repeat(auto-fill, minmax(200px, 1fr)) 自适应网格，以下说法正确的有？（多选）',
+        options: ['浏览器自动计算能放几列', '屏幕越宽列数越多', '不需要手写媒体查询指定列数', '每列宽度固定为 200px 不变'],
+        answer: [0, 1, 2],
+        explanation: 'auto-fill 自动算列数，minmax 让列在 200px 到平分剩余之间伸缩；列宽并非固定 200px。'
       }
     ]
   },
@@ -604,6 +702,20 @@ export default [
         options: ['Flex 的 flex-wrap', 'Grid 的 auto-fill', 'Grid 的 minmax', 'table 表格布局'],
         answer: [0, 1, 2],
         explanation: 'wrap、auto-fill 和 minmax 都能随空间自动调整，媒体查询留给结构大调整。'
+      },
+      {
+        type: 'single',
+        question: 'transition: all 0.3s ease 中，ease 表示什么？',
+        options: ['过渡时长', '速度曲线', '延迟时间', '循环次数'],
+        answer: 1,
+        explanation: 'ease 是速度曲线（缓动函数），表示先快后慢；0.3s 才是时长。'
+      },
+      {
+        type: 'judge',
+        question: '卡片悬停时用 transform: translateY(-2px) 可以实现轻微上浮的效果。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'translateY 负值向上位移，配合 transition 就是经典的卡片悬停上浮微交互。'
       }
     ]
   },
@@ -702,6 +814,20 @@ export default [
         options: ['::before 在元素内容最前面插入', '::after 在元素内容最后面插入', '必须配合 content 属性才生效', '会向 HTML 中插入真实的标签'],
         answer: [0, 1, 2],
         explanation: '伪元素是渲染时生成的“虚拟元素”，不会出现在 HTML 结构中。'
+      },
+      {
+        type: 'single',
+        question: '想在输入框获得焦点时改变边框颜色，应该使用哪个伪类？',
+        options: [':hover', ':focus', ':active', ':visited'],
+        answer: 1,
+        explanation: ':focus 匹配获得焦点的元素，是表单高亮的标准做法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于属性选择器的符号，以下含义正确的有？（多选）',
+        options: ['^= 表示以……开头', '$= 表示以……结尾', '*= 表示包含……', '*= 表示以……开头'],
+        answer: [0, 1, 2],
+        explanation: '^= 开头、$= 结尾、*= 包含，三者不要混淆；开头用 ^= 而不是 *=。'
       }
     ]
   },
@@ -800,6 +926,34 @@ export default [
         options: ['父元素设置了 overflow: hidden', '没有设置 top 等阈值', '父容器已完全滚出视野', '元素设置了 color 属性'],
         answer: [0, 1, 2],
         explanation: '前三个都是 sticky 失效的常见原因；color 与定位无关。'
+      },
+      {
+        type: 'single',
+        question: '页面右下角做一个“回到顶部”按钮，要求滚动页面时始终固定可见，应该用？',
+        options: ['position: absolute', 'position: relative', 'position: fixed', 'position: static'],
+        answer: 2,
+        explanation: 'fixed 相对视口定位，滚动时纹丝不动，是“回到顶部”按钮的标准方案。'
+      },
+      {
+        type: 'single',
+        question: '表格表头需要在滚动到顶部时吸住、父容器滚出视野后自然释放，应该用？',
+        options: ['position: fixed', 'position: sticky', 'position: absolute', 'float: left'],
+        answer: 1,
+        explanation: 'sticky 在容器内吸顶、容器滚出后释放，正是表头、分组标题的场景。'
+      },
+      {
+        type: 'judge',
+        question: '子元素设置 absolute 脱离文档流后，父元素的高度不再被它撑开。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'absolute 元素不参与文档流，父元素高度不被撑开，要当心布局塌陷。'
+      },
+      {
+        type: 'multiple',
+        question: '关于“父相子绝”组合，以下说法正确的有？（多选）',
+        options: ['父元素 relative 自身位置不变', '子元素 absolute 相对于父元素定位', '常用于角标、关闭按钮等场景', '父元素必须同时设置 top 值才有效'],
+        answer: [0, 1, 2],
+        explanation: 'relative 不设置偏移时位置不变，仅建立参照系；父元素不需要设置 top。'
       }
     ]
   },
@@ -892,6 +1046,20 @@ export default [
         options: ['表示左右都不允许浮动元素', '元素会被挤到浮动元素下方', '可配合空元素或伪元素清除浮动', '会让元素自身产生浮动'],
         answer: [0, 1, 2],
         explanation: 'clear 用来清除别人的浮动影响，而不是让自己浮动。'
+      },
+      {
+        type: 'single',
+        question: '实际开发中，清除浮动最推荐的方案是？',
+        options: ['clearfix 伪元素法', '再给父元素加一个浮动子元素', '把父元素 z-index 调大', '给父元素加大量 padding'],
+        answer: 0,
+        explanation: 'clearfix 不污染 HTML、语义清晰且无副作用，是推荐的清除浮动写法。'
+      },
+      {
+        type: 'judge',
+        question: '图片设置 float: left 后，后面的文字会围绕图片排列。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '文字环绕正是 float 最初的设计目的，浮动元素贴边后文字绕其排布。'
       }
     ]
   },
@@ -984,6 +1152,20 @@ export default [
         options: ['opacity 小于 1', '设置 transform', '定位元素设置 z-index', '设置 margin'],
         answer: [0, 1, 2],
         explanation: 'opacity、transform、带 z-index 的定位元素都会创建层叠上下文；margin 不会。'
+      },
+      {
+        type: 'single',
+        question: '按四位数优先级记法，#nav .item 的优先级是？',
+        options: ['0110', '0020', '0101', '1001'],
+        answer: 0,
+        explanation: 'id 权重 100 加一个类权重 10，合计 0110，高于纯类组合。'
+      },
+      {
+        type: 'judge',
+        question: '只要把 z-index 设为 9999，元素就一定能显示在页面所有内容之上。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'z-index 只在同一层叠上下文内比较，父级层级低时子元素再大的 z-index 也跳不出去。'
       }
     ]
   },
@@ -1076,6 +1258,20 @@ export default [
         options: ['作用于文字', '用法与 box-shadow 类似', '可以做出描边或发光效果', '可以替代 font-size'],
         answer: [0, 1, 2],
         explanation: 'text-shadow 是文字版阴影，参数形式类似 box-shadow，但与字号无关。'
+      },
+      {
+        type: 'single',
+        question: 'linear-gradient(135deg, #667eea, #764ba2) 中，135deg 表示什么？',
+        options: ['渐变方向的角度', '模糊程度', '透明度', '色标位置'],
+        answer: 0,
+        explanation: '渐变方向既可用 to right 等关键字，也可用 45deg、135deg 这样的角度值。'
+      },
+      {
+        type: 'multiple',
+        question: '利用 CSS 渐变可以实现哪些效果？（多选）',
+        options: ['两种颜色的平滑过渡色带', '多个色标组成彩虹效果', '配合 background-size 做重复纹理', '自动调整文字字号'],
+        answer: [0, 1, 2],
+        explanation: '渐变支持多色标与位置节点，还能配合 background-size 画纹理；与字号无关。'
       }
     ]
   },
@@ -1168,6 +1364,20 @@ export default [
         options: ['创建新的层叠上下文', '成为 fixed 后代的定位参照', '组合变形的书写顺序影响结果', '触发整个页面重新排版'],
         answer: [0, 1, 2],
         explanation: '前三个都是本课提到的注意点；transform 恰恰不会引起重新排版。'
+      },
+      {
+        type: 'single',
+        question: 'transform: translate(10px, 0) rotate(45deg) 的执行顺序是？',
+        options: ['先旋转再平移', '先平移再旋转', '同时执行互不干扰', '由浏览器随机决定'],
+        answer: 1,
+        explanation: '组合变形从左到右依次执行，此例先向右平移 10px，再旋转 45 度。'
+      },
+      {
+        type: 'judge',
+        question: 'scale 可以写负值（如 scale(-1, 1)），用来水平翻转元素。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'scale 接受任意数值，负值会让对应轴反向，可实现镜像翻转效果。'
       }
     ]
   },
@@ -1260,6 +1470,34 @@ export default [
         options: ['动态设置 html 的 font-size', '页面尺寸统一用 rem', '屏幕变化时页面整体缩放', '所有元素尺寸用 px 写死'],
         answer: [0, 1, 2],
         explanation: 'rem 方案靠根字号联动实现整体缩放；写死 px 就失去了适配能力。'
+      },
+      {
+        type: 'single',
+        question: '设计稿宽 375px，其中一个盒子宽 100px，用 vw 方案约等于多少？',
+        options: ['100vw', '26.67vw', '37.5vw', '10vw'],
+        answer: 1,
+        explanation: '100 ÷ 375 × 100 ≈ 26.67，即 100px 约占视口宽度的 26.67%。'
+      },
+      {
+        type: 'single',
+        question: '@media (min-width: 768px) 的生效条件是？',
+        options: ['屏幕宽度不超过 768px', '屏幕宽度不低于 768px', '屏幕宽度恰好等于 768px', '只在平板上生效'],
+        answer: 1,
+        explanation: 'min-width 表示“最小不低于”，宽度 ≥ 768px 时生效，常用于移动优先的逐级增强。'
+      },
+      {
+        type: 'judge',
+        question: 'rem 方案中，只要动态修改根元素 html 的 font-size，整页 rem 尺寸就会整体缩放。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '所有 rem 都参照根字号，改一处根字号即可联动整页尺寸，这是 rem 适配的核心原理。'
+      },
+      {
+        type: 'multiple',
+        question: '一个“移动优先”的响应式卡片列表，合理的写法有？（多选）',
+        options: ['默认样式写成单列', 'min-width: 768px 时改为两列', 'min-width: 992px 时改为四列', '先写桌面四列再用 max-width 逐级覆盖'],
+        answer: [0, 1, 2],
+        explanation: '移动优先以小屏单列为基础，用 min-width 逐级增强；先写桌面再覆盖是“桌面优先”的思路。'
       }
     ]
   },
@@ -1352,6 +1590,20 @@ export default [
         options: ['行内元素给父元素加 text-align: center', '定宽块级元素用 margin: 0 auto', 'Flex 可同时实现水平和垂直居中', 'float 是居中的最优方案'],
         answer: [0, 1, 2],
         explanation: '居中要分场景选方案；float 用于贴边和环绕，不能实现居中。'
+      },
+      {
+        type: 'single',
+        question: '经典“圣杯布局”指的是？',
+        options: ['左右固定、中间自适应的三栏布局', '上中下三行布局', '圆形头像布局', '图片瀑布流布局'],
+        answer: 0,
+        explanation: '圣杯布局即左右两列定宽、中间列 flex: 1 自适应的三栏结构。'
+      },
+      {
+        type: 'judge',
+        question: '使用 Flex 实现水平垂直居中，需要先知道子元素的具体宽高。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'Flex 居中由容器控制对齐，与子元素尺寸无关，这正是它比定位方案省心的地方。'
       }
     ]
   },
@@ -1444,6 +1696,20 @@ export default [
         options: ['相对于视口的宽高', '适合全屏横幅', '适合移动端适配', '与视口大小无关'],
         answer: [0, 1, 2],
         explanation: 'vw/vh 就是视口单位，视口变化它们就跟着变，所以适合全屏与移动端场景。'
+      },
+      {
+        type: 'single',
+        question: 'html 的 font-size 为 16px 时，.title { font-size: 1.5rem } 的实际字号是？',
+        options: ['16px', '24px', '32px', '取决于父元素字号'],
+        answer: 1,
+        explanation: 'rem 相对根元素字号，16 × 1.5 = 24px，与父元素无关。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 BFC（块级格式化上下文），以下说法正确的有？（多选）',
+        options: ['内部布局不受外界影响', 'BFC 容器会计算浮动子元素的高度', 'display: flow-root 可以创建 BFC', 'BFC 能提升选择器优先级'],
+        answer: [0, 1, 2],
+        explanation: 'BFC 是独立渲染区域，可清除浮动、阻止 margin 合并；它与选择器优先级无关。'
       }
     ]
   }

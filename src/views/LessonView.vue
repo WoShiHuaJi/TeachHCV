@@ -1,18 +1,24 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore, REVIEW_INTERVALS } from '../composables/useStore'
-import { getLesson } from '../data'
+import { getLesson, loadLessonFull } from '../data'
 import { formatCN } from '../utils/date'
 
 const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const lesson = computed(() => getLesson(route.params.id))
+/** 先用轻量元信息渲染标题，完整内容异步加载 */
+const lesson = ref(getLesson(route.params.id))
 const rec = computed(() => store.lessonState(route.params.id))
 
 if (!lesson.value) router.replace('/modules')
+
+onMounted(async () => {
+  const full = await loadLessonFull(route.params.id)
+  if (full) lesson.value = full
+})
 
 function paragraphs(text) {
   return text.split('\n').filter((s) => s.trim())
@@ -26,14 +32,17 @@ function paragraphs(text) {
         {{ lesson.moduleName }}
       </span>
       <h2>{{ lesson.title }}</h2>
-      <p class="muted">约 {{ lesson.minutes }} 分钟 · 题库 {{ lesson.quiz.length }} 题，每次随机抽题测试</p>
+      <p class="muted">约 {{ lesson.minutes }} 分钟 · 题库 {{ lesson.quizCount }} 题，每次随机抽题测试</p>
     </div>
 
-    <div v-for="(sec, i) in lesson.sections" :key="i" class="card reading">
-      <h3>{{ sec.heading }}</h3>
-      <p v-for="(p, j) in paragraphs(sec.text)" :key="j">{{ p }}</p>
-      <pre v-if="sec.code" class="code"><code>{{ sec.code }}</code></pre>
-    </div>
+    <template v-if="lesson.sections">
+      <div v-for="(sec, i) in lesson.sections" :key="i" class="card reading">
+        <h3>{{ sec.heading }}</h3>
+        <p v-for="(p, j) in paragraphs(sec.text)" :key="j">{{ p }}</p>
+        <pre v-if="sec.code" class="code"><code>{{ sec.code }}</code></pre>
+      </div>
+    </template>
+    <div v-else class="card empty">📖 内容加载中…</div>
 
     <!-- 已学信息 -->
     <div v-if="rec" class="notice notice-info">

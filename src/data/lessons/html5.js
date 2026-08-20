@@ -94,6 +94,20 @@ export default [
         options: ['搜索引擎更好理解页面', '屏幕阅读器更容易解析', '代码更好维护', '让页面加载速度翻倍'],
         answer: [0, 1, 2],
         explanation: '语义化标签让浏览器、搜索引擎和屏幕阅读器都能看懂结构，代码也更易维护，但与加载速度无直接关系。'
+      },
+      {
+        type: 'single',
+        question: '页面中一篇独立完整的文章，最适合用哪个标签包裹？',
+        options: ['<section>', '<article>', '<div>', '<span>'],
+        answer: 1,
+        explanation: 'article 表示独立完整的内容块，如一篇文章；section 表示章节，div 和 span 无语义。'
+      },
+      {
+        type: 'judge',
+        question: '在 HTML5 骨架中，title 标签应该写在 head 标签里。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。title 属于元信息，放在 head 中；body 里放用户能看到的内容。'
       }
     ]
   },
@@ -192,6 +206,20 @@ export default [
         options: ['标题应按层级顺序使用', '一个页面通常只用一个 h1', '可以随意跳级使用标题', 'h6 比 h1 更大更重要'],
         answer: [0, 1],
         explanation: '标题要按层级使用、不跳级，一个页面一般一个 h1；h1 最大最重要，h6 最小。'
+      },
+      {
+        type: 'single',
+        question: '想让文字倾斜以强调语气，应该用哪个标签？',
+        options: ['<strong>', '<em>', '<code>', '<mark>'],
+        answer: 1,
+        explanation: 'em 表示强调语气，默认显示为斜体；strong 是加粗重要内容，code 是代码片段，mark 是高亮。'
+      },
+      {
+        type: 'judge',
+        question: '链接到外部网站时，href 应该写完整的网址。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。外部链接要写完整网址，站内页面才使用相对路径。'
       }
     ]
   },
@@ -290,6 +318,20 @@ export default [
         options: ['autoplay', 'loop', 'muted', 'poster'],
         answer: [0, 1, 2],
         explanation: 'autoplay 自动播放、loop 循环、muted 静音（多数浏览器要求静音才允许自动播放）；poster 只是封面图。'
+      },
+      {
+        type: 'single',
+        question: '控制图片在页面中的显示大小，更推荐的做法是？',
+        options: ['只用 width 属性', '只用 height 属性', '使用 CSS 控制', '无法调整大小'],
+        answer: 2,
+        explanation: '虽然 img 有 width 和 height 属性，但实际项目中更推荐用 CSS 统一控制尺寸。'
+      },
+      {
+        type: 'judge',
+        question: 'img 标签的 alt 替代文字会被屏幕阅读器朗读给视障用户听。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。alt 不仅在图片加载失败时显示，也是无障碍访问的重要内容。'
       }
     ]
   },
@@ -388,6 +430,20 @@ export default [
         options: ['email', 'number', 'date', 'text'],
         answer: [0, 1, 2],
         explanation: 'email 校验格式、number 限制数字并可配 min/max、date 弹出日期选择器；text 只是普通文本框，不做格式校验。'
+      },
+      {
+        type: 'single',
+        question: '想让用户从多个选项中同时勾选多项，应该使用哪种 input 类型？',
+        options: ['radio', 'checkbox', 'select', 'text'],
+        answer: 1,
+        explanation: 'checkbox 是多选框，可同时勾选多个；radio 同组内只能单选。'
+      },
+      {
+        type: 'judge',
+        question: 'input type="range" 会把输入框变成一个滑块控件。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。range 显示为滑块，常配合 min、max 限定取值范围。'
       }
     ]
   },
@@ -486,6 +542,20 @@ export default [
         options: ['<thead>', '<tbody>', '<tr>', '<li>'],
         answer: [0, 1],
         explanation: 'thead 包裹表头行、tbody 包裹数据行，让表格结构清晰；tr 是行标签，li 属于列表。'
+      },
+      {
+        type: 'single',
+        question: '想让一个单元格纵向跨两行，应该使用哪个属性？',
+        options: ['rowspan', 'colspan', 'merge', 'span'],
+        answer: 0,
+        explanation: 'rowspan 控制纵向跨行，colspan 控制横向跨列。'
+      },
+      {
+        type: 'judge',
+        question: 'th 表头单元格默认会加粗并居中显示。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。th 默认样式是加粗居中，用于表头；普通数据单元格用 td。'
       }
     ]
   },
@@ -590,6 +660,20 @@ export default [
         options: ['主题设置', '用户名', '登录密码', '一次性会话草稿'],
         answer: [0, 1],
         explanation: '主题、用户名等不敏感的小数据适合 localStorage；密码不能存本地；一次性草稿更适合 sessionStorage。'
+      },
+      {
+        type: 'single',
+        question: 'sessionStorage 中的数据在什么情况下会被清除？',
+        options: ['关闭浏览器后仍在', '当前标签页会话结束时', '永远不会清除', '每小时自动清除'],
+        answer: 1,
+        explanation: 'sessionStorage 只在当前标签页会话中有效，关掉标签页数据就消失；localStorage 才长期保存。'
+      },
+      {
+        type: 'judge',
+        question: 'Web Worker 可以让耗时的计算在后台线程运行，避免卡住页面。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Web Worker 把耗时任务放到后台线程，页面交互不受影响。'
       }
     ]
   },
@@ -688,6 +772,20 @@ export default [
         options: ['width=device-width', 'initial-scale=1.0', 'charset=UTF-8', 'name="viewport"'],
         answer: [0, 1, 3],
         explanation: 'viewport 声明写作 meta name="viewport"，内容含 width=device-width 和 initial-scale=1.0；charset 是另一个独立的 meta。'
+      },
+      {
+        type: 'single',
+        question: 'SEO 中建议 description 页面简介控制在多少字以内？',
+        options: ['20 字', '80 字', '200 字', '500 字'],
+        answer: 1,
+        explanation: 'description 建议 80 字以内，过长会在搜索结果中被截断。'
+      },
+      {
+        type: 'judge',
+        question: '如果不加 viewport 声明，手机浏览器可能把页面按电脑宽度渲染再整体缩小。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。缺少 viewport 时页面会被缩小显示，文字小得看不清，因此移动端页面必须加这行声明。'
       }
     ]
   },
@@ -786,6 +884,20 @@ export default [
         options: ['搜索框输入建议', '城市快速选择', '完全禁止自由输入的场景', '提供常见选项供快速选取'],
         answer: [0, 1, 3],
         explanation: 'datalist 提供候选又允许自由输入，适合搜索建议、城市选择等；要完全限制输入应使用 select。'
+      },
+      {
+        type: 'single',
+        question: 'maxlength 属性的作用是？',
+        options: ['限制最多输入的字符数', '限制数值的下限', '显示灰色提示文字', '标记字段为必填'],
+        answer: 0,
+        explanation: 'maxlength 限制最多输入多少字符；提示文字用 placeholder，必填用 required。'
+      },
+      {
+        type: 'judge',
+        question: '表单验证不通过时，浏览器会弹出提示并阻止表单提交。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。HTML5 的内置验证在提交时自动触发，验证失败会提示且不提交。'
       }
     ]
   },
@@ -884,6 +996,20 @@ export default [
         options: ['fillStyle', 'strokeStyle', 'color-stop', 'font'],
         answer: [0, 1, 3],
         explanation: 'fillStyle 填充色、strokeStyle 描边色、font 字体都是上下文属性；color-stop 不是 Canvas 的属性。'
+      },
+      {
+        type: 'single',
+        question: 'strokeRect 方法绘制出来的是？',
+        options: ['实心矩形', '只有边框的矩形', '圆形', '一段文字'],
+        answer: 1,
+        explanation: 'strokeRect 只画矩形边框，fillRect 才是实心矩形，颜色分别由 strokeStyle 和 fillStyle 控制。'
+      },
+      {
+        type: 'judge',
+        question: 'fillText 方法用于在画布上绘制文字。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。先用 font 属性设置字号字体，再调用 fillText 绘制文字内容。'
       }
     ]
   },
@@ -982,6 +1108,20 @@ export default [
         options: ['图标和 Logo', '可交互的图表', '海量图形的游戏画面', '需要无损缩放的插画'],
         answer: [0, 1, 3],
         explanation: 'SVG 清晰、可交互、可用 CSS 控制，适合图标、图表和插画；海量图形求性能应选 Canvas。'
+      },
+      {
+        type: 'single',
+        question: 'SVG 的 rect 标签中，x 和 y 属性表示什么？',
+        options: ['矩形右下角的坐标', '矩形左上角的坐标', '矩形的宽和高', '矩形的旋转角度'],
+        answer: 1,
+        explanation: 'rect 的 x、y 指定矩形左上角位置，width、height 指定尺寸。'
+      },
+      {
+        type: 'judge',
+        question: 'SVG 的 fill、stroke 等外观属性也可以写进 CSS 统一管理。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。这些外观属性既能写在标签上，也能用 CSS 控制，方便统一维护样式。'
       }
     ]
   },
@@ -1080,6 +1220,20 @@ export default [
         options: ['存之前用 JSON.stringify 转换', '取出后用 JSON.parse 还原', '读取结果可能为 null，需要判空', '直接存取就能得到数组'],
         answer: [0, 1, 2],
         explanation: '数组要先序列化再存，取出时解析还原，并对不存在的键做判空；直接存对象会被转成无用的字符串。'
+      },
+      {
+        type: 'single',
+        question: '一次性的表单草稿（关掉标签页就不需要了）更适合用哪种存储？',
+        options: ['localStorage', 'sessionStorage', '两者一样合适', '都不适合'],
+        answer: 1,
+        explanation: 'sessionStorage 在会话结束时自动清除，适合一次性草稿；长期有效的数据才用 localStorage。'
+      },
+      {
+        type: 'judge',
+        question: 'Web Storage 的键和值都会被当作字符串处理，传入数字也会自动转换。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Web Storage 只存字符串，存入数字时会被自动转成字符串。'
       }
     ]
   },
@@ -1178,6 +1332,20 @@ export default [
         options: ['dragstart 里用 setData 存数据', 'drop 里用 getData 取数据', '存取时使用相同的类型标识', '它可以用来操作 localStorage'],
         answer: [0, 1, 2],
         explanation: 'dataTransfer 在拖放事件中传递数据，setData 存、getData 按相同类型取；它与 localStorage 无关。'
+      },
+      {
+        type: 'single',
+        question: '以下哪个 API 适合用来制作流畅的动画效果？',
+        options: ['Notification', 'History', 'requestAnimationFrame', 'localStorage'],
+        answer: 2,
+        explanation: 'requestAnimationFrame 会在浏览器每次重绘前执行回调，是制作流畅动画的首选；Notification 发通知，History 管理历史记录。'
+      },
+      {
+        type: 'judge',
+        question: 'History API 可以用来管理浏览器的浏览历史。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。History 是 HTML5 的实用 API 之一，用于管理浏览历史。'
       }
     ]
   }

@@ -100,6 +100,20 @@ export default [
         options: ['提交说明写清楚这次改了什么', '每完成一个小功能就提交一次', '提交说明随便写无所谓', '攒够几个月的代码再一次性提交'],
         answer: [0, 1],
         explanation: '小步提交加清晰的说明，出问题时容易回退，也方便同事理解历史。'
+      },
+      {
+        type: 'single',
+        question: '想把提交历史压缩成一行一条来查看，该用哪条命令？',
+        options: ['git log --oneline', 'git log --all', 'git status --short', 'git show'],
+        answer: 0,
+        explanation: 'git log --oneline 会把每次提交压缩成一行显示，查看历史更清爽。'
+      },
+      {
+        type: 'judge',
+        question: '首次安装 Git 后，每次提交代码前都要重新配置一遍用户名和邮箱。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。用户名和邮箱的配置只需要做一次，之后可以用 git config --list 查看。'
       }
     ]
   },
@@ -198,6 +212,20 @@ export default [
         options: ['<<<<<<<', '=======', '>>>>>>>', '+++++++'],
         answer: [0, 1, 2],
         explanation: '冲突标记是 <<<<<<<、======= 和 >>>>>>>，解决时要手动编辑并删掉这些标记。'
+      },
+      {
+        type: 'single',
+        question: '只想创建一个新分支 dev 但不切换过去，该用哪条命令？',
+        options: ['git branch dev', 'git switch -c dev', 'git switch dev', 'git merge dev'],
+        answer: 0,
+        explanation: 'git branch dev 只创建分支，当前仍停留在原分支；git switch -c 才会创建并切换过去。'
+      },
+      {
+        type: 'judge',
+        question: '两个分支改了同一文件的同一部分时，Git 会自动挑选其中一边的内容保留下来。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Git 无法自动决定时会报冲突，需要手动编辑文件、删掉冲突标记后再提交。'
       }
     ]
   },
@@ -296,6 +324,20 @@ export default [
         options: ['GitHub 是流行的代码托管平台', '远程仓库方便备份和多人协作', 'GitHub 上的仓库无法保存历史提交', '可以在 GitHub 网页上发起 Pull Request'],
         answer: [0, 1, 3],
         explanation: 'GitHub 把仓库放到云端，保存完整历史，支持多人协作和 Pull Request 流程。'
+      },
+      {
+        type: 'single',
+        question: '只想把远程的最新状态下载到本地查看、不改动自己的文件，该用哪条命令？',
+        options: ['git pull', 'git fetch origin', 'git push', 'git merge'],
+        answer: 1,
+        explanation: 'git fetch 只下载远程信息供查看，不会动工作区；git pull 才会把更新合并进来。'
+      },
+      {
+        type: 'judge',
+        question: 'Pull Request 审查通过并合并后，通常会删除对应的功能分支，保持仓库整洁。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。PR 流程的最后一步就是合并后删除功能分支，避免分支越积越多。'
       }
     ]
   }

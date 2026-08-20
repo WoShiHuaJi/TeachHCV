@@ -94,6 +94,20 @@ export default [
         options: ['给 const 声明的常量重新赋值', '在 let 声明语句之前访问该变量', '修改 const 保存的对象的属性', '在 if 代码块外访问块内 let 声明的变量'],
         answer: [0, 1, 3],
         explanation: 'const 禁止重新赋值、let 有暂时性死区和块级作用域，这三项都会报错；修改 const 对象的属性是允许的。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nfor (var i = 0; i < 2; i++) {}\nconsole.log(i);',
+        options: ['报错', 'undefined', '2', '1'],
+        answer: 2,
+        explanation: 'var 没有块级作用域，循环结束后 i 泄漏到外部且值为 2；若改用 let，循环外访问 i 会报错。'
+      },
+      {
+        type: 'judge',
+        question: '在同一个作用域中，可以连续用 let 重复声明同名变量。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。let 不允许在同一作用域重复声明同名变量，会报语法错误。'
       }
     ]
   },
@@ -192,6 +206,34 @@ export default [
         options: ['箭头函数没有自己的 this', '箭头函数捕获定义时外层作用域的 this', '普通函数的 this 取决于调用方式', '箭头函数的 this 可以通过 call 随意改变'],
         answer: [0, 1, 2],
         explanation: '箭头函数的 this 在定义时就确定了，call、apply 无法改变它；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst fn = () => ({ a: 1 });\nconsole.log(fn().a);',
+        options: ['undefined', '1', '{ a: 1 }', '报错'],
+        answer: 1,
+        explanation: '箭头函数返回对象字面量时需要用小括号包裹，否则花括号会被当作函数体；这里返回 { a: 1 }，所以 fn().a 为 1。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst name = "小明";\nconsole.log("你好，${name}");',
+        options: ['你好，小明', '你好，${name}', '报错', 'undefined'],
+        answer: 1,
+        explanation: '${} 插值只在反引号包裹的模板字符串中生效，普通字符串会原样输出 ${name}。'
+      },
+      {
+        type: 'judge',
+        question: '箭头函数可以配合 new 关键字当作构造函数来创建实例。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。箭头函数没有自己的 this，也不能作为构造函数，用 new 调用会报错。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是箭头函数不具备的能力？（多选）',
+        options: ['拥有自己的 this', '使用 arguments 对象', '作为构造函数被 new 调用', '用一行代码返回表达式结果'],
+        answer: [0, 1, 2],
+        explanation: '箭头函数没有自己的 this 和 arguments，也不能作为构造函数；单行返回表达式是它的简写能力。'
       }
     ]
   },
@@ -290,6 +332,34 @@ export default [
         options: ['取到的值为 undefined 时默认值生效', '数组解构可以设置默认值', '对象解构可以设置默认值', '取到的值为 null 时默认值也会生效'],
         answer: [0, 1, 2],
         explanation: '解构默认值只在值为 undefined 时生效，null 不会触发默认值；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst { a: { b } } = { a: { b: 2 } };\nconsole.log(b);',
+        options: ['undefined', '2', '报错', '{ b: 2 }'],
+        answer: 1,
+        explanation: '对象解构支持嵌套模式，这里沿属性路径 a.b 取出值赋给变量 b，所以输出 2。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst arr1 = [1, 2];\nconst arr2 = arr1;\narr2.push(3);\nconsole.log(arr1.length);',
+        options: ['2', '3', '报错', 'undefined'],
+        answer: 1,
+        explanation: '直接赋值复制的是引用，arr1 和 arr2 指向同一个数组，所以 arr1.length 变为 3；想复制新数组应使用 [...arr1]。'
+      },
+      {
+        type: 'judge',
+        question: '对象解构时可以用冒号为变量重命名，例如 const { name: n } = obj 会把 obj.name 赋给变量 n。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。冒号左边是要匹配的属性名，右边才是新变量名。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于三个点（...）写法的说法，哪些是正确的？（多选）',
+        options: ['用在参数列表或解构末尾时是剩余参数，负责收集', '用在数组或对象字面量中是展开运算符，负责拆开', '剩余参数收集到的是真正的数组', '剩余参数可以放在参数列表的任意位置'],
+        answer: [0, 1, 2],
+        explanation: '剩余参数必须放在最后位置，否则报错；其余三项均正确。'
       }
     ]
   },
@@ -388,6 +458,48 @@ export default [
         options: ['Promise.all 成功时 then 拿到的是结果数组', 'Promise.race 只要有一个完成就返回结果', 'Promise.allSettled 无论成败都等全部结束', 'Promise.all 最多只能接收两个 Promise'],
         answer: [0, 1, 2],
         explanation: 'Promise.all 接收的是 Promise 数组，数量不限；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出顺序是？\nconsole.log("A");\nsetTimeout(() => console.log("B"), 0);\nPromise.resolve().then(() => console.log("C"));\nconsole.log("D");',
+        options: ['A B C D', 'A D B C', 'A D C B', 'A C D B'],
+        answer: 2,
+        explanation: '同步代码先输出 A、D；then 回调是微任务，先于宏任务 setTimeout 执行，所以顺序是 A、D、C、B。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nPromise.resolve(1)\n  .then(v => v + 1)\n  .then(v => v * 2)\n  .then(v => console.log(v));',
+        options: ['1', '2', '4', 'undefined'],
+        answer: 2,
+        explanation: '链式调用中每个 then 的返回值会传给下一个 then：1 加 1 得 2，再乘 2 得 4，所以输出 4。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nPromise.reject("出错了")\n  .then(() => console.log("A"))\n  .catch(e => console.log("B", e))\n  .then(() => console.log("C"));',
+        options: ['只输出 B 出错了', '输出 B 出错了，然后输出 C', '只输出 A', '程序中断，什么都不输出'],
+        answer: 1,
+        explanation: 'reject 跳过第一个 then 进入 catch；catch 处理完后返回的是成功的 Promise，链式调用继续，所以还会输出 C。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出顺序是？\nasync function f() {\n  console.log(1);\n  await Promise.resolve();\n  console.log(2);\n}\nf();\nconsole.log(3);',
+        options: ['1 2 3', '1 3 2', '3 1 2', '1 3'],
+        answer: 1,
+        explanation: 'f() 先同步输出 1，await 之后的代码作为微任务挂起；主线程继续输出 3，最后再执行输出 2。'
+      },
+      {
+        type: 'judge',
+        question: '在 then 的回调中抛出错误，会被链条上后续最近的 catch 捕获。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。then 回调中抛出的错误会让返回的 Promise 变为 rejected，交给后面的 catch 处理。'
+      },
+      {
+        type: 'multiple',
+        question: '以下关于事件循环与异步任务的说法，哪些是正确的？（多选）',
+        options: ['Promise 的 then 回调属于微任务', 'setTimeout 的回调属于宏任务', '同步代码执行完后会先清空微任务队列再执行宏任务', 'await 会阻塞浏览器主线程'],
+        answer: [0, 1, 2],
+        explanation: 'await 只暂停所在 async 函数，主线程可以继续处理其他任务；其余三项均正确。'
       }
     ]
   },
@@ -486,6 +598,20 @@ export default [
         options: ['命名导出可以有多个', '导入命名导出时可以用 as 起别名', '每个模块只能有一个默认导出', '导入命名导出时名称可以随意书写'],
         answer: [0, 1, 2],
         explanation: '导入命名导出时名称必须与导出时一致，只能用 as 起别名；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '已知 math.js 中命名导出了 add 函数，导入时想给它起别名 sum，正确写法是？',
+        options: ['import add as sum from "./math.js";', 'import { add as sum } from "./math.js";', 'import { sum: add } from "./math.js";', 'import sum from "./math.js";'],
+        answer: 1,
+        explanation: '给命名导出的成员起别名，要在花括号内使用 as 关键字：import { add as sum }。'
+      },
+      {
+        type: 'judge',
+        question: '父类中定义的原型方法，子类的实例可以直接调用。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。extends 继承会把父类原型链接到子类上，子类实例可以直接使用父类方法。'
       }
     ]
   },
@@ -584,6 +710,20 @@ export default [
         options: ['2 ** 10 的结果是 1024', 'arr.includes(x) 用于判断数组是否包含 x', 'Object.assign 可以用于合并对象', '?. 在左边为 0 时也会短路返回 undefined'],
         answer: [0, 1, 2],
         explanation: '可选链只在左边为 null 或 undefined 时短路，0 不会触发短路；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst user = undefined;\nconsole.log(user?.name ?? "匿名");',
+        options: ['undefined', '报错', '匿名', 'null'],
+        answer: 2,
+        explanation: '可选链让 user?.name 短路返回 undefined，随后 ?? 判定左边为 undefined，返回右边的 "匿名"。'
+      },
+      {
+        type: 'judge',
+        question: '可以使用 Object.keys(map) 获取 Map 实例的所有键。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Map 的键存放在内部结构中而非自身属性上，应使用 map.keys() 获取，Object.keys 对 Map 无效。'
       }
     ]
   },
@@ -682,6 +822,20 @@ export default [
         options: ['find', 'findIndex', 'includes', 'assign'],
         answer: [0, 1, 2],
         explanation: 'assign 是 Object 上用于合并对象的方法，不是数组查找方法；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconsole.log([1, 2, 3].findIndex(n => n > 5));',
+        options: ['undefined', '-1', '0', 'null'],
+        answer: 1,
+        explanation: 'findIndex 找不到满足条件的元素时返回 -1，而 find 找不到时返回 undefined。'
+      },
+      {
+        type: 'judge',
+        question: 'find 方法会返回所有满足条件的元素组成的新数组。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。find 只返回第一个满足条件的元素本身，找到即停止。'
       }
     ]
   },
@@ -780,6 +934,20 @@ export default [
         options: ['第一个参数是目标对象', '同名属性时后面的源对象覆盖前面的', '常用于给默认配置合并用户配置', '它做的是深拷贝'],
         answer: [0, 1, 2],
         explanation: 'Object.assign 是浅拷贝，嵌套对象仍共享引用；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst obj = { a: 1, b: 2 };\nconsole.log(Object.keys(obj).map(k => obj[k]));',
+        options: ['["a", "b"]', '[1, 2]', '[["a", 1], ["b", 2]]', '报错'],
+        answer: 1,
+        explanation: 'Object.keys 返回键数组 ["a", "b"]，再用 map 取出每个键对应的值，得到 [1, 2]。'
+      },
+      {
+        type: 'judge',
+        question: 'for...in 会遍历对象原型链上的可枚举属性，因此遍历对象自身键时更推荐 Object.keys。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。for...in 会把原型链上的可枚举属性也遍历出来，Object.keys 只返回对象自身的键。'
       }
     ]
   },
@@ -878,6 +1046,20 @@ export default [
         options: ['不会出现在 for...in 循环中', '不会出现在 Object.keys 的结果中', '可用 Object.getOwnPropertySymbols 获取', '容易与他人定义的字符串属性重名冲突'],
         answer: [0, 1, 2],
         explanation: 'Symbol 独一无二，用它做属性键绝不会重名冲突；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst s = Symbol("id");\nconst obj = { [s]: 1, id: 2 };\nconsole.log(obj.id);',
+        options: ['1', '2', 'undefined', '报错'],
+        answer: 1,
+        explanation: 'Symbol 键与字符串键互不相干，obj.id 访问的是字符串属性 id，值为 2；Symbol 属性要用 obj[s] 访问。'
+      },
+      {
+        type: 'judge',
+        question: 'Symbol 是引用类型，typeof Symbol() 的结果是 object。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Symbol 是第七种原始数据类型，typeof 检测的结果是 symbol。'
       }
     ]
   },
@@ -976,6 +1158,20 @@ export default [
         options: ['for...of 循环', '展开运算符 ...', '数组的解构赋值', 'if 条件语句'],
         answer: [0, 1, 2],
         explanation: 'for...of、展开运算符、数组解构都建立在迭代协议之上；if 与迭代无关。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst map = new Map([["a", 1]]);\nfor (const [k, v] of map) {\n  console.log(k, v);\n}',
+        options: ['a 1', '["a", 1]', '0 a', '报错'],
+        answer: 0,
+        explanation: 'Map 是可迭代对象，遍历时每个成员是 [键, 值] 数组，配合解构可直接拿到 k 为 "a"、v 为 1。'
+      },
+      {
+        type: 'judge',
+        question: 'Set 是可迭代对象，可以直接用 for...of 遍历其中的成员。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Set 内置实现了 Symbol.iterator，for...of 会依次取出每个成员。'
       }
     ]
   },
@@ -1074,6 +1270,20 @@ export default [
         options: ['Reflect.get(target, key) 等价于读取 target[key]', 'Reflect.set 设置属性并返回是否成功', 'Reflect 的方法与 Proxy 陷阱一一对应', 'Reflect 需要用 new 实例化后才能使用'],
         answer: [0, 1, 2],
         explanation: 'Reflect 是内置对象，直接调用其静态方法即可，不能也不需要用 new；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nconst p = new Proxy({ x: 1 }, {});\nconsole.log(p.x);',
+        options: ['undefined', '1', '报错', 'Proxy 对象'],
+        answer: 1,
+        explanation: '处理器对象为空时没有定义任何陷阱，对代理的操作会直接转发到目标对象，所以 p.x 为 1。'
+      },
+      {
+        type: 'judge',
+        question: 'Proxy 的 has 陷阱可以拦截 in 运算符的属性检查。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。has 陷阱在使用 in 运算符检测属性时触发，可以自定义 "key" in proxy 的结果。'
       }
     ]
   },
@@ -1172,6 +1382,20 @@ export default [
         options: ['yield 后面的值会作为 next 结果的 value 返回', 'yield 可以让函数中途暂停', 'next(x) 传入的值会成为上一个 yield 表达式的返回值', '一个 Generator 函数中最多只能写一个 yield'],
         answer: [0, 1, 2],
         explanation: 'Generator 中可以有任意多个 yield，甚至可以在循环中使用；其余三项均正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出结果是什么？\nfunction* g() {\n  yield "a";\n  return "b";\n  yield "c";\n}\nconst it = g();\nit.next();\nconsole.log(it.next());',
+        options: ['{ value: "c", done: false }', '{ value: "b", done: true }', '{ value: "b", done: false }', '{ value: undefined, done: true }'],
+        answer: 1,
+        explanation: '第二次 next 执行到 return "b"，函数结束，返回 { value: "b", done: true }，return 之后的 yield 不会再执行。'
+      },
+      {
+        type: 'judge',
+        question: 'yield 可以写在 Generator 函数内部嵌套的普通回调函数（如 forEach 的回调）中直接使用。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。yield 只能直接位于 Generator 函数体内，写在嵌套的普通函数中会报语法错误。'
       }
     ]
   }

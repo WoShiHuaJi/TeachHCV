@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore, PASS_RATE } from '../composables/useStore'
-import { getLesson, getNextLesson } from '../data'
+import { getLesson, getNextLesson, loadLessonFull } from '../data'
 import QuizRunner from '../components/QuizRunner.vue'
 
 const route = useRoute()
@@ -11,16 +11,23 @@ const store = useStore()
 
 /** 通过路由名区分：新课学习测试 / 复习测试 */
 const isReview = computed(() => route.name === 'review-quiz')
-const lesson = computed(() => getLesson(route.params.id))
+const lesson = ref(getLesson(route.params.id))
+const ready = ref(false) // 完整题库是否加载完成
 
 /** 每次测验从题库随机抽取的题数 */
 const QUIZ_COUNT = 4
-const quizCount = computed(() => Math.min(QUIZ_COUNT, lesson.value?.quiz.length || QUIZ_COUNT))
+const quizCount = computed(() => Math.min(QUIZ_COUNT, lesson.value?.quizCount || QUIZ_COUNT))
 
 const finished = ref(false)
 const result = ref({ correct: 0, total: 0, pass: false })
 
 if (!lesson.value) router.replace('/')
+
+onMounted(async () => {
+  const full = await loadLessonFull(route.params.id)
+  if (full) lesson.value = full
+  ready.value = true
+})
 
 function onFinish({ correct, total, wrong }) {
   const pass = isReview.value
@@ -35,7 +42,7 @@ const nextLesson = computed(() => getNextLesson(route.params.id))
 function retry() {
   finished.value = false
   result.value = { correct: 0, total: 0, pass: false }
-  // 通过替换 key 强制重渲染 QuizRunner
+  // 通过替换 key 强制重渲染 QuizRunner（重新抽题）
   runnerKey.value += 1
 }
 
@@ -48,11 +55,13 @@ const runnerKey = ref(0)
       {{ isReview ? '🔁 复习测试' : '✍️ 学习测试' }}：{{ lesson.title }}
     </div>
     <p class="muted" style="margin-bottom: 14px">
-      题库 {{ lesson.quiz.length }} 题，本次随机抽 {{ quizCount }} 题，答对 {{ Math.ceil(quizCount * PASS_RATE) }} 题即通过
+      题库 {{ lesson.quizCount }} 题，本次随机抽 {{ quizCount }} 题，答对 {{ Math.ceil(quizCount * PASS_RATE) }} 题即通过
       <template v-if="!isReview">，通过后进入复习计划</template>
     </p>
 
-    <QuizRunner v-if="!finished" :key="runnerKey" :questions="lesson.quiz" :sample="QUIZ_COUNT" @finish="onFinish" />
+    <div v-if="!ready" class="card empty">📝 题目加载中…</div>
+
+    <QuizRunner v-else-if="!finished" :key="runnerKey" :questions="lesson.quiz" :sample="QUIZ_COUNT" @finish="onFinish" />
 
     <div v-else class="card result-card">
       <div class="emoji">{{ result.pass ? '🎉' : '💪' }}</div>

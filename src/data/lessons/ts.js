@@ -94,6 +94,20 @@ export default [
         options: ['unknown 使用前必须先检查或断言', 'any 会跳过类型检查', 'unknown 比 any 更安全', 'unknown 可以直接调用任意方法'],
         answer: [0, 1, 2],
         explanation: 'unknown 必须先收窄才能操作，any 不做检查；说 unknown 可直接调用方法是错误的。'
+      },
+      {
+        type: 'single',
+        question: 'let b: unknown = \'hi\'; b.toUpperCase(); 这段代码是否有类型错误？',
+        options: ['没有错误，unknown 可直接调用方法', '有错误，unknown 必须先收窄类型再使用', '有错误，unknown 不能赋字符串', '没有错误，TS 会自动推断为 string'],
+        answer: 1,
+        explanation: 'unknown 类型的变量在使用前必须先用 typeof 等检查收窄，直接调用方法会报类型错误。'
+      },
+      {
+        type: 'judge',
+        question: 'let tags: Array<string> = [1, 2]; 这段代码能通过 TS 编译。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Array<string> 是字符串数组，元素 1、2 是数字，类型不匹配会报错。'
       }
     ]
   },
@@ -192,6 +206,34 @@ export default [
         options: ['描述对象结构优先用 interface', '联合类型用 type 定义', '交叉类型也可以用 type 定义', 'interface 可以方便地表示元组类型'],
         answer: [0, 1, 2],
         explanation: '对象结构优先 interface；联合、交叉、元组等复杂组合用 type 更方便。'
+      },
+      {
+        type: 'single',
+        question: 'interface Dog extends Animal 中 extends 的作用是？',
+        options: ['让 Dog 继承 Animal 的成员', '把 Dog 和 Animal 合并为联合类型', '让 Dog 变成类', '声明 Dog 是可选接口'],
+        answer: 0,
+        explanation: '接口的 extends 表示继承，Dog 会拥有 Animal 的全部成员，再加上自己新增的成员。'
+      },
+      {
+        type: 'single',
+        question: 'interface User { readonly id: number }，const u: User = { id: 1 }; u.id = 2; 这段代码是否有类型错误？',
+        options: ['没有错误', '有错误，readonly 属性不能重新赋值', '有错误，id 初始值不能为 1', '没有错误，运行时才报错'],
+        answer: 1,
+        explanation: 'readonly 表示只读属性，对象创建后再给它赋值会在编译时报类型错误。'
+      },
+      {
+        type: 'judge',
+        question: 'type ID = string | number; let x: ID = true; 这段代码能通过 TS 编译。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。ID 只能是 string 或 number，布尔值 true 不在联合类型范围内。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 interface 支持的写法？（多选）',
+        options: ['用 ? 声明可选属性', '用 readonly 声明只读属性', '用 extends 继承其他接口', '直接表示 string | number 联合类型'],
+        answer: [0, 1, 2],
+        explanation: 'interface 支持可选属性、只读属性和 extends 继承；联合类型只能用 type 定义。'
       }
     ]
   },
@@ -290,6 +332,20 @@ export default [
         options: ['定义回调函数的类型', '约束作为参数传入的函数', '数组 forEach、filter 的回调', '声明一个 number 类型的变量'],
         answer: [0, 1, 2],
         explanation: '回调、函数参数、数组方法回调都常用函数类型约束；声明数字变量只需标注 number。'
+      },
+      {
+        type: 'single',
+        question: 'function greet(name: string, title?: string) 定义后，调用 greet(\'小明\') 是否有类型错误？',
+        options: ['没有错误，title 是可选参数可以不传', '有错误，必须传满所有参数', '有错误，可选参数必须传 null', '有错误，字符串不能用单引号'],
+        answer: 0,
+        explanation: 'title 加了问号是可选参数，调用时可以省略，因此只传一个参数没有错误。'
+      },
+      {
+        type: 'judge',
+        question: '在 TS 的类中，不写访问修饰符的成员默认是 public。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。public 是默认修饰符，成员随处可访问；需要限制时才显式写 private 或 protected。'
       }
     ]
   },
@@ -388,6 +444,34 @@ export default [
         options: ['不同接口的数据可复用同一定义', '使用时 T 会被具体类型替换', 'ApiResponse<string[]> 的 data 是字符串数组', 'T 在定义时就固定为 string'],
         answer: [0, 1, 2],
         explanation: '泛型接口复用性强，T 在使用时才确定；说 T 定义时就固定为 string 是错误的。'
+      },
+      {
+        type: 'single',
+        question: '已知 function first<T>(arr: T[]): T，调用 const n = first([1, 2, 3]) 不写类型参数时，n 的类型是？',
+        options: ['number', 'number[]', 'T', 'any'],
+        answer: 0,
+        explanation: 'TS 根据实参 [1, 2, 3] 自动推断 T 为 number，返回类型 T 即 number。'
+      },
+      {
+        type: 'single',
+        question: 'function f<T>(x: T) { return x.length; } 这段代码是否有类型错误？',
+        options: ['没有错误', '有错误，T 未约束为带 length 属性的类型', '有错误，泛型函数不能有返回值', '没有错误，length 是通用属性'],
+        answer: 1,
+        explanation: 'T 可以是任何类型，不保证有 length，必须写成 T extends { length: number } 加约束后才能访问。'
+      },
+      {
+        type: 'judge',
+        question: '泛型可以理解为“类型的参数”，调用时再传入具体类型。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。就像函数有参数一样，泛型让类型也变成可传入的参数，从而复用同一段代码。'
+      },
+      {
+        type: 'multiple',
+        question: '相比直接使用 any，使用泛型的优势有？（多选）',
+        options: ['保留类型检查', '使用时能获得类型提示', '同一段代码可复用于多种类型', '让程序运行速度更快'],
+        answer: [0, 1, 2],
+        explanation: '泛型既复用代码又不丢失类型检查和提示；any 则放弃检查。泛型与运行速度无关。'
       }
     ]
   },
@@ -486,6 +570,34 @@ export default [
         options: ['每个类型有共同的字面量字段', '用 switch 或 if 判断该字段收窄', '收窄后可安全调用各自方法', '必须通过 class 继承实现'],
         answer: [0, 1, 2],
         explanation: '可辨识联合靠共同的字面量字段（如 kind）区分类型，判断后精确收窄；不要求使用 class。'
+      },
+      {
+        type: 'single',
+        question: '通过判断共同的字面量字段（如 pet.kind）来收窄联合类型的模式称为？',
+        options: ['可辨识联合', '声明合并', '泛型约束', '类型断言'],
+        answer: 0,
+        explanation: '每个成员都有共同的字面量字段，用 if 或 switch 判断它即可精确收窄，这种模式叫可辨识联合。'
+      },
+      {
+        type: 'single',
+        question: 'function f(id: string | number) { if (typeof id === \'string\') { id.toFixed(2); } } 是否有类型错误？',
+        options: ['没有错误', '有错误，分支内 id 是 string，toFixed 是 number 的方法', '有错误，if 里不能用 typeof', '没有错误，TS 会自动转换类型'],
+        answer: 1,
+        explanation: 'typeof id === \'string\' 的分支内 id 已收窄为 string，而 toFixed 是 number 的方法，调用会报类型错误。'
+      },
+      {
+        type: 'judge',
+        question: '交叉类型 A & B 的对象必须同时满足 A 和 B 的结构要求。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。& 表示“与”，结果类型同时拥有 A 和 B 的全部成员，缺一不可。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些写法能让联合类型的变量安全调用各成员特有的方法？（多选）',
+        options: ['用 typeof 收窄', '用 instanceof 收窄', '用返回“参数 is 某类型”的自定义守卫', '不做任何判断直接调用'],
+        answer: [0, 1, 2],
+        explanation: 'typeof、instanceof 和自定义类型守卫都能收窄类型；不收窄直接调用特有方法会报类型错误。'
       }
     ]
   },
@@ -584,6 +696,20 @@ export default [
         options: ['Record<string, number> 的值必须是数字', '键可以用联合类型限定', 'Record<Roles, boolean> 要求每个 Roles 键都存在', '它等同于 any 类型'],
         answer: [0, 1, 2],
         explanation: 'Record 限定键和值的类型，用联合类型作键时每个键都必须出现；它与 any 完全不同。'
+      },
+      {
+        type: 'single',
+        question: 'enum Direction { Up, Down, Left, Right } 中 Direction.Left 的值是？',
+        options: ['0', '1', '2', '3'],
+        answer: 2,
+        explanation: '数字枚举默认从 0 开始自增：Up 为 0、Down 为 1、Left 为 2、Right 为 3。'
+      },
+      {
+        type: 'judge',
+        question: 'Partial<User> 常用于“更新用户信息”这类只需传部分字段的接口入参。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。更新接口通常允许只传要改的字段，Partial 让所有属性可选，正好契合这一场景。'
       }
     ]
   },
@@ -682,6 +808,20 @@ export default [
         options: ['自己写声明用 declare 关键字', '编译后不产生额外的运行代码', '可以为无类型的 JS 库提供类型', '必须包含函数的实现代码'],
         answer: [0, 1, 2],
         explanation: '.d.ts 只描述类型、不含实现，用 declare 声明，让 TS 理解无类型的 JS 库。'
+      },
+      {
+        type: 'single',
+        question: '开启 strictNullChecks 后，let name: string | null = null; console.log(name.length); 是否有类型错误？',
+        options: ['没有错误', '有错误，name 可能为 null，必须先判空', '有错误，string 不能与 null 联合', '没有错误，运行时才报错'],
+        answer: 1,
+        explanation: 'name 的类型包含 null，直接访问 length 会在编译时报错，需先用 if (name !== null) 收窄。'
+      },
+      {
+        type: 'judge',
+        question: 'tsconfig.json 中的 include 用于指定哪些文件参与编译。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。include 指定参与编译的文件范围（如 ["src"]），exclude 则用于排除。'
       }
     ]
   },
@@ -780,6 +920,20 @@ export default [
         options: ['ref 的初始值类型', 'computed 回调的返回值类型', 'defineProps 泛型后的 props 类型', '模板中普通 HTML 文本的内容'],
         answer: [0, 1, 2],
         explanation: 'ref、computed 会自动推断，defineProps 泛型提供完整 props 类型；HTML 文本与类型推断无关。'
+      },
+      {
+        type: 'single',
+        question: 'const name = ref(null); name.value = \'小明\'; 这段代码是否有类型错误？',
+        options: ['没有错误', '有错误，应写成 ref<string | null>(null) 后再赋值', '有错误，ref 的初始值不能为 null', '没有错误，TS 会自动拓宽类型'],
+        answer: 1,
+        explanation: 'ref(null) 会被推断为只存 null 的类型，赋字符串会报错；需用泛型 ref<string | null>(null) 标注。'
+      },
+      {
+        type: 'judge',
+        question: 'defineEmits<{ change: [value: string] }>() 声明后，调用 emit(\'change\', 123) 会得到类型错误提示。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。泛型声明了 change 事件的参数必须是 string，传入数字 123 类型不匹配。'
       }
     ]
   }

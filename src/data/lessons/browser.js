@@ -92,6 +92,20 @@ export default [
         options: ['减少关键资源的数量', '压缩资源减小体积', '内联少量首屏关键 CSS', '把全部 CSS 和 JS 都内联进 HTML'],
         answer: [0, 1, 2],
         explanation: '减少关键资源、压缩体积、内联少量首屏样式都能缩短关键渲染路径；全部内联会让 HTML 体积过大，反而拖慢首屏。'
+      },
+      {
+        type: 'single',
+        question: '关于渲染树（Render Tree）的构建，下列说法正确的是？',
+        options: ['包含 HTML 中的所有节点（含 head、script）', '由 DOM 与 CSSOM 合并而成，只包含可见节点', 'display:none 的元素会进入渲染树参与布局', '渲染树构建完成后才会开始解析 HTML'],
+        answer: 1,
+        explanation: '渲染树由 DOM 与 CSSOM 合并而成，只包含可见节点；display:none、head 等非可见节点不会进入渲染树。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些情况会导致 HTML 解析被阻塞？（多选）',
+        options: ['遇到没有 defer/async 的同步 script 标签', 'async 脚本下载完成后立即执行时', '加载外部 CSS 文件', '使用 defer 的脚本下载时'],
+        answer: [0, 1],
+        explanation: '同步 script 会暂停解析先执行 JS；async 脚本执行时也会阻塞解析；CSS 只阻塞渲染不阻塞解析；defer 脚本下载和执行都不阻塞解析。'
       }
     ]
   },
@@ -190,6 +204,20 @@ export default [
         options: ['修改 color', '修改 visibility', '修改 margin', '修改元素的背景颜色'],
         answer: [0, 1, 3],
         explanation: '颜色、背景、visibility 只改变外观不影响布局，只触发重绘；margin 是几何属性，会触发回流。'
+      },
+      {
+        type: 'single',
+        question: '需要对一个元素批量修改多个几何样式时，下列做法最优的是？',
+        options: ['逐条修改 style 属性', '先把元素设为 display:none，修改完再显示', '每改一条就读一次 offsetWidth 确认生效', '用 setInterval 分多次修改'],
+        answer: 1,
+        explanation: 'display:none 的元素不在渲染树中，修改其样式不触发回流，集中修改完再显示只产生一次回流；逐条改 style 会触发多次回流。'
+      },
+      {
+        type: 'judge',
+        question: '使用 opacity 做透明度渐变动画与 transform 一样，通常只触发合成阶段，不触发回流和重绘。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。transform 和 opacity 的动画由合成线程处理，是性能最好的两类动画属性。'
       }
     ]
   },
@@ -288,6 +316,48 @@ export default [
         options: ['setTimeout、setInterval 的回调是宏任务', 'script 整体代码是第一个宏任务', '每执行完一个宏任务会先清空微任务队列', 'Promise.then 的回调属于宏任务'],
         answer: [0, 1, 2],
         explanation: 'setTimeout/setInterval 和 script 整体都是宏任务，每轮宏任务后清空微任务；Promise.then 是微任务。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nasync function fn() {\n  console.log('A');\n  await Promise.resolve();\n  console.log('B');\n}\nfn();\nconsole.log('C');",
+        options: ['A B C', 'A C B', 'C A B', 'A C 不输出 B'],
+        answer: 1,
+        explanation: '调用 fn 先同步打印 A；await 之后的代码 console.log(B) 进入微任务队列；继续同步打印 C，最后清空微任务打印 B，输出 A C B。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nsetTimeout(function () { console.log('T'); }, 0);\nasync function fn() {\n  console.log('S');\n  await null;\n  console.log('E');\n}\nfn();\nconsole.log('D');",
+        options: ['S D E T', 'S E D T', 'S D T E', 'D S E T'],
+        answer: 0,
+        explanation: 'fn 内 await 前同步打印 S，await 后的 E 进微任务；同步代码打印 D；清空微任务打印 E；宏任务 setTimeout 最后打印 T，输出 S D E T。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nconsole.log('1');\nsetTimeout(function () {\n  console.log('2');\n  Promise.resolve().then(function () { console.log('3'); });\n}, 0);\nsetTimeout(function () { console.log('4'); }, 0);",
+        options: ['1 2 4 3', '1 2 3 4', '1 4 2 3', '1 3 2 4'],
+        answer: 1,
+        explanation: '同步打印 1；第一个宏任务打印 2 并产生微任务 3，该宏任务结束后立即清空微任务打印 3；最后执行第二个宏任务打印 4，输出 1 2 3 4。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nasync function f1() {\n  console.log('f1 start');\n  await f2();\n  console.log('f1 end');\n}\nasync function f2() { console.log('f2'); }\nconsole.log('script start');\nf1();\nconsole.log('script end');",
+        options: ['script start f1 start f2 f1 end script end', 'script start f1 start f2 script end f1 end', 'f1 start f2 script start script end f1 end', 'script start f1 start f1 end f2 script end'],
+        answer: 1,
+        explanation: '同步打印 script start；f1 同步打印 f1 start，await f2() 时 f2 同步执行打印 f2，f1 end 进微任务；同步打印 script end，最后微任务打印 f1 end。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些代码的回调或后续逻辑会进入微任务队列？（多选）',
+        options: ['Promise.resolve().then(fn)', 'queueMicrotask(fn)', 'setTimeout(fn, 0)', 'async 函数中 await 表达式之后的代码'],
+        answer: [0, 1, 3],
+        explanation: 'Promise.then、queueMicrotask、await 之后的代码都是微任务；setTimeout 的回调是宏任务。'
+      },
+      {
+        type: 'judge',
+        question: 'async 函数中，await 表达式之后的代码会暂停执行，并作为微任务进入微任务队列。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。await 会挂起 async 函数的后续执行，后续代码相当于被包装进 Promise.then，按微任务规则调度。'
       }
     ]
   },
@@ -384,6 +454,34 @@ export default [
         options: ['GET', 'PUT', 'DELETE', 'POST'],
         answer: [0, 1, 2],
         explanation: 'GET、PUT、DELETE 都是幂等的：多次执行效果与一次相同；POST 每次调用都可能创建新资源，不幂等。'
+      },
+      {
+        type: 'single',
+        question: 'HTTP 响应报文的状态行不包含以下哪项？',
+        options: ['协议版本', '状态码', '状态描述（如 OK）', '响应体数据'],
+        answer: 3,
+        explanation: '状态行 = 协议版本 + 状态码 + 状态描述；响应体在空行之后，不属于状态行。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 GET 请求，下列说法正确的有？（多选）',
+        options: ['参数拼接在 URL 中', '会被浏览器缓存并保留在历史记录中', '语义上用于获取资源且是幂等的', '适合用于上传大文件'],
+        answer: [0, 1, 2],
+        explanation: 'GET 参数在 URL、可缓存、幂等；URL 有长度限制，上传大文件应使用 POST/PUT 把数据放在请求体中。'
+      },
+      {
+        type: 'single',
+        question: '状态码 204 的含义是？',
+        options: ['请求成功但没有响应体内容', '永久重定向', '请求参数错误', '服务器处理超时'],
+        answer: 0,
+        explanation: '204 No Content 表示请求处理成功，但响应没有实体内容，常用于删除、更新等不需要返回数据的操作。'
+      },
+      {
+        type: 'judge',
+        question: 'HTTP 默认端口是 80，HTTPS 默认端口是 443。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。URL 中省略端口时，HTTP 默认走 80，HTTPS 默认走 443。'
       }
     ]
   },
@@ -480,6 +578,34 @@ export default [
         options: ['强缓存命中时浏览器不发请求', '强缓存过期后会带上缓存标识发协商请求', '服务器返回 304 时浏览器下载新资源更新缓存', '服务器返回 200 时浏览器更新本地缓存'],
         answer: [0, 1, 3],
         explanation: '强缓存命中直接用本地缓存；过期后带 If-None-Match 等标识协商，返回 304 继续用旧缓存，返回 200 才下载新资源更新缓存。'
+      },
+      {
+        type: 'single',
+        question: '用户在页面按 F5 普通刷新时，浏览器通常会如何处理缓存？',
+        options: ['完全不使用任何缓存', '跳过强缓存，带上缓存标识发起协商缓存验证', '强缓存和协商缓存都直接使用', '清空整个浏览器缓存'],
+        answer: 1,
+        explanation: 'F5 刷新时浏览器会让强缓存失效（请求头带 max-age=0 一类标识），转而走协商缓存验证，服务器多数返回 304；Ctrl+F5 才是完全不用缓存。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些响应适合设置 Cache-Control: no-store 完全不缓存？（多选）',
+        options: ['包含用户隐私信息的接口响应', '银行交易类数据', 'CDN 上的公共静态图片', '实时行情类接口数据'],
+        answer: [0, 1, 3],
+        explanation: '隐私数据、交易数据、实时数据都不应被缓存，适合 no-store；公共静态资源恰恰应该设置超长 max-age 充分利用缓存。'
+      },
+      {
+        type: 'judge',
+        question: '强缓存命中时，浏览器显示的状态码仍是 200（from cache），而不是 304。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。304 只在协商缓存命中时由服务器返回；强缓存不发请求，直接以 200 (from cache) 展示。'
+      },
+      {
+        type: 'single',
+        question: '以下哪种情况浏览器会发起协商缓存验证请求？',
+        options: ['强缓存未过期', '强缓存已过期且本地存有 ETag/Last-Modified 标识', '服务器响应为 no-store', '首次访问没有任何缓存'],
+        answer: 1,
+        explanation: '强缓存过期后，浏览器会带上 If-None-Match / If-Modified-Since 发起协商请求；未过期直接用缓存，no-store 和首次访问则走正常完整请求。'
       }
     ]
   },
@@ -578,6 +704,20 @@ export default [
         options: ['默认端口是 443', '证书用于验证服务器身份、防止中间人攻击', '握手阶段用非对称加密交换会话密钥', '数据传输全程使用非对称加密'],
         answer: [0, 1, 2],
         explanation: 'HTTPS 默认 443 端口，证书验证身份防中间人，非对称加密只用于握手交换密钥，之后的数据传输用对称加密。'
+      },
+      {
+        type: 'single',
+        question: '关于反射型 XSS，下列说法正确的是？',
+        options: ['恶意脚本被存入数据库，所有访问者都会中招', '恶意脚本藏在 URL 参数中被页面直接输出执行，通常需要诱导用户点击链接', '只能攻击 IE 浏览器', '通过抓包篡改请求头实现'],
+        answer: 1,
+        explanation: '反射型 XSS 把恶意脚本放在 URL 参数里，服务器未做转义直接输出到页面而执行，常配合钓鱼链接诱导点击；存入数据库的是存储型 XSS。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些 Cookie 属性与 Web 安全直接相关？（多选）',
+        options: ['HttpOnly', 'Secure', 'SameSite', 'Max-Age'],
+        answer: [0, 1, 2],
+        explanation: 'HttpOnly 防止 JS 读取 Cookie（防 XSS 窃取），Secure 限定仅 HTTPS 传输，SameSite 限制跨站携带（防 CSRF）；Max-Age 只是过期时间，与安全无直接关系。'
       }
     ]
   },
@@ -676,6 +816,34 @@ export default [
         options: ['利用 script 标签不受同源策略限制的特点', '只支持 GET 请求', '服务器返回“回调函数名(数据)”形式的 JS', '适合用于任意包含敏感操作的接口'],
         answer: [0, 1, 2],
         explanation: 'JSONP 通过动态 script 标签 + 回调函数拿数据，只支持 GET 且安全性较差，不适合敏感接口。'
+      },
+      {
+        type: 'single',
+        question: '下列哪种跨域请求不会触发 OPTIONS 预检？',
+        options: ['Content-Type 为 text/plain 的 POST 请求', 'Content-Type 为 application/json 的 POST 请求', '携带自定义请求头 X-Token 的请求', 'PUT 请求'],
+        answer: 0,
+        explanation: '简单请求（GET/POST，且 Content-Type 为 text/plain、form 等少数类型，无自定义头）直接发送；JSON、自定义头、PUT 都属于非简单请求，会触发预检。'
+      },
+      {
+        type: 'judge',
+        question: 'JSONP 可以用于向后端发送 POST 请求提交数据。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。JSONP 依赖 script 标签加载资源，而 script 的 src 只能发起 GET 请求，因此 JSONP 只支持 GET。'
+      },
+      {
+        type: 'multiple',
+        question: '生产环境中常用的跨域解决方案包括？（多选）',
+        options: ['Nginx 反向代理转发接口请求', '服务器正确配置 CORS 响应头', '窗口间使用 postMessage 通信', '修改本机 hosts 文件指向后端'],
+        answer: [0, 1, 2],
+        explanation: 'Nginx 反向代理、CORS、postMessage 都是生产可用的跨域方案；改 hosts 只是本机调试手段，无法解决真实用户的跨域问题。'
+      },
+      {
+        type: 'single',
+        question: '关于同源策略的限制范围，下列哪项不受同源策略限制？',
+        options: ['AJAX 读取跨域接口的响应', '跨域读写 localStorage', '跨域操作 iframe 中的 DOM', 'img 标签加载跨域图片'],
+        answer: 3,
+        explanation: '同源策略限制 AJAX 读响应、跨域存储和 DOM 访问；img/script/link 等标签加载跨域资源是允许的，这也是 JSONP 能工作的前提。'
       }
     ]
   },
@@ -772,6 +940,20 @@ export default [
         options: ['HTTP/HTTPS', 'FTP 文件传输', 'SMTP 邮件', 'DNS 域名查询'],
         answer: [0, 1, 2],
         explanation: 'HTTP/HTTPS、FTP、SMTP 都要求可靠传输，基于 TCP；DNS 查询通常基于 UDP。'
+      },
+      {
+        type: 'single',
+        question: '四次挥手中，服务器向客户端发送 FIN 表示什么？',
+        options: ['服务器收到了客户端的 FIN', '服务器自己的数据也全部发完，准备关闭连接', '服务器要求客户端立即断开', '服务器拒绝建立连接'],
+        answer: 1,
+        explanation: '服务器收到客户端 FIN 后先回 ACK；等自己剩余数据发完后再发 FIN，表示服务器方向也发完数据、准备关闭，之后客户端回 ACK 完成挥手。'
+      },
+      {
+        type: 'judge',
+        question: '相比 TCP，UDP 的首部开销更小，这也是它传输更快的原因之一。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。UDP 首部只有 8 字节，无连接管理、确认重传等机制，开销远小于 TCP（首部至少 20 字节），因此更快但不可靠。'
       }
     ]
   }

@@ -94,6 +94,34 @@ export default [
         options: ['"object"', '"string"', '"number"', '"undefined"'],
         answer: 1,
         explanation: 'JSON.stringify 会把 Date 转成 ISO 字符串，parse 后不会还原为 Date 实例，typeof copy.d 是 "string"。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar d = new Date(0);\nvar copy = new Date(d.getTime());\ncopy.setTime(1000);\nconsole.log(d.getTime());',
+        options: ['0', '1000', 'undefined', '报错'],
+        answer: 0,
+        explanation: '用 new Date(d.getTime()) 重建得到的是独立的 Date 实例，修改 copy 不影响原对象 d，输出 0。'
+      },
+      {
+        type: 'judge',
+        question: '深拷贝遇到函数类型的属性时，常见处理是直接保留原函数引用，而不是尝试复制函数。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。函数无法被有意义地“拷贝”，约定俗成的做法是直接返回原引用，这也是面试中的标准答案。'
+      },
+      {
+        type: 'judge',
+        question: 'for in 循环可以遍历到对象上以 Symbol 作为键的属性。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Symbol 键不会被 for in 遍历到，需要配合 Object.getOwnPropertySymbols 单独处理。'
+      },
+      {
+        type: 'multiple',
+        question: '关于深拷贝中特殊对象的处理，以下说法正确的有哪些？（多选）',
+        options: ['Date 可用 new Date(target.getTime()) 重建', 'RegExp 可用 new RegExp(target) 重建', '函数属性一般直接保留原引用', 'Symbol 键靠 for in 就能完整遍历'],
+        answer: [0, 1, 2],
+        explanation: 'Date 和 RegExp 需要用各自的方式重建，函数直接保留引用；for in 遍历不到 Symbol 键，第四项错误。'
       }
     ]
   },
@@ -192,6 +220,34 @@ export default [
         options: ['"全局"', '"对象"', 'undefined', '报错'],
         answer: 1,
         explanation: 'myBind 内部固定用 fn.apply(context, ...) 执行，绑定后的函数 this 无法被后续的 call 覆盖，仍输出 "对象"。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nfunction fn() { return this.x; }\nvar obj = { x: 5 };\nvar bound = fn.bind(obj);\nvar o2 = { x: 9, bound: bound };\nconsole.log(o2.bound());',
+        options: ['5', '9', 'undefined', '报错'],
+        answer: 0,
+        explanation: 'bind 绑定的 this 是永久的，即使把 bound 挂到 o2 上以方法形式调用，this 仍指向最初绑定的 obj，输出 5。'
+      },
+      {
+        type: 'judge',
+        question: 'bind 返回的函数被 new 调用时，规范实现中 this 应指向新创建的实例，而不是绑定的对象。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。这是 bind 的进阶考点：new 的优先级高于 bind，实现时通过判断 this 是否为绑定函数的实例来决定传给 apply 的对象。'
+      },
+      {
+        type: 'single',
+        question: '补全 myApply 的第 5 行，应该选哪段？\n1: Function.prototype.myApply = function (context, arr) {\n2:   var ctx = context == null ? globalThis : Object(context);\n3:   var key = Symbol("fn");\n4:   ctx[key] = this;\n5:   __________\n6:   delete ctx[key];\n7:   return result;\n8: };',
+        options: ['var result = ctx[key](arr);', 'var result = arr ? ctx[key].apply(ctx, arr) : ctx[key]();', 'var result = ctx[key].apply(arr, ctx);', 'var result = this.apply(ctx, arr);'],
+        answer: 1,
+        explanation: '要兼容不传参数数组的情况：arr 存在就展开传入，不存在就直接无参调用；且必须用挂到 ctx 上的临时方法调用，this 才指向 ctx。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 myCall 中 Object(context) 的处理，以下说法正确的有哪些？（多选）',
+        options: ['能把基本类型的 context 包装成对象，才能挂载临时属性', 'context 是基本类型时不包装，直接挂属性会静默失败或报错', '它与 null 回退全局对象的判断配合，覆盖各种入参情况', '它的作用是把要执行的函数本身转成对象'],
+        answer: [0, 1, 2],
+        explanation: 'Object(context) 是包装调用方传入的 context，让基本类型也能作为挂载点；它与函数本身无关，第四项错误。'
       }
     ]
   },
@@ -290,6 +346,34 @@ export default [
         options: ['if (self.state === "fulfilled") {', 'if (self.state === "pending") {', 'if (self.state !== "pending") {', 'if (value !== undefined) {'],
         answer: 1,
         explanation: '只有 pending 状态才允许改变状态，这就是“状态不可逆、resolve 只生效一次”的实现方式。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出顺序是什么？\nconsole.log("a");\nnew MyPromise(function (resolve) {\n  resolve(1);\n}).then(function (v) {\n  console.log("then");\n});\nconsole.log("b");',
+        options: ['a then b', 'a b then', 'then a b', '报错'],
+        answer: 1,
+        explanation: 'then 的回调被 setTimeout 包成异步执行，会等当前同步代码结束后才运行，所以顺序是 a、b、then。'
+      },
+      {
+        type: 'judge',
+        question: 'then 的回调中抛出的错误会被 try catch 捕获，并以该错误 reject then 返回的新 Promise。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。run 函数内部用 try catch 包住回调执行，抛错时 reject(e)，错误会沿着 Promise 链向后传递。'
+      },
+      {
+        type: 'judge',
+        question: 'then 的回调返回另一个 Promise 时，新 Promise 会等待这个返回的 Promise 落定后再决定自己的状态。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。这称为 Promise 解析过程，完整实现需要对回调返回值递归处理，直到拿到非 Promise 的值。'
+      },
+      {
+        type: 'multiple',
+        question: '关于手写 Promise 中的发布订阅模式，以下说法正确的有哪些？（多选）',
+        options: ['pending 状态下 then 的回调会存入数组等待', '状态改变时统一遍历执行数组中已存的回调', '同一个 Promise 多次调用 then，各回调都会被执行', 'pending 状态下 then 的回调会被直接丢弃'],
+        answer: [0, 1, 2],
+        explanation: 'pending 时回调入数组、状态改变时统一执行、多次 then 各自注册回调都会执行；回调被保存而不是丢弃，第四项错误。'
       }
     ]
   },
@@ -382,6 +466,34 @@ export default [
         options: ['0', '1', '2', '3'],
         answer: 2,
         explanation: '两次触发间隔 200ms 大于 100ms 延迟，第一次的计时器在 100ms 时已执行，第二次又在 300ms 时执行，count 为 2。'
+      },
+      {
+        type: 'judge',
+        question: '带 leading 选项的防抖变体会在连续触发的第一次立即执行，之后的连续触发只重置计时器。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。leading 变体在计时器不存在时立即执行一次并启动计时，后续触发只 clearTimeout 重计，直到停下后进入下一轮。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar count = 0;\nvar fn = throttle(function () { count++; }, 100);\nfn();\nsetTimeout(function () { fn(); }, 150);\nsetTimeout(function () { console.log(count); }, 300);',
+        options: ['0', '1', '2', '3'],
+        answer: 2,
+        explanation: '时间戳版节流第一次立即执行，150ms 时距上次已超过 100ms 再执行一次，300ms 时输出 count 为 2。'
+      },
+      {
+        type: 'single',
+        question: '补全时间戳版节流的第 7 行，应该选哪段？\n1: function throttle(fn, interval) {\n2:   var lastTime = 0;\n3:   return function () {\n4:     var context = this;\n5:     var args = arguments;\n6:     var now = Date.now();\n7:     __________\n8:       lastTime = now;\n9:       fn.apply(context, args);\n10:     }\n11:   };\n12: }',
+        options: ['if (now - lastTime >= interval) {', 'if (now - lastTime <= interval) {', 'if (lastTime === 0) {', 'if (now > interval) {'],
+        answer: 0,
+        explanation: '只有当前时间与上次执行时间的差值达到间隔才执行并更新 lastTime，差值不足则忽略本次触发。'
+      },
+      {
+        type: 'multiple',
+        question: '关于定时器版节流，以下说法正确的有哪些？（多选）',
+        options: ['用闭包中的 timer 标记是否存在计时器', '计时器存在期间的触发会被忽略', '第一次触发会延迟一个间隔才执行', '每次触发都重新创建计时器并立即执行'],
+        answer: [0, 1, 2],
+        explanation: '定时器版靠 timer 是否存在来拦截触发，计时期间触发被忽略，首次执行要等定时器到点；第四项描述的不是节流。'
       }
     ]
   },
@@ -474,6 +586,34 @@ export default [
         options: ['var start = 0;', 'var start = hasInit ? 0 : 1;', 'var start = hasInit ? 1 : 0;', 'var start = 1;'],
         answer: 1,
         explanation: '有初始值时从下标 0 开始累加所有元素；无初始值时累加器已是 this[0]，必须从下标 1 开始，避免重复累加第一个元素。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar r = [1, 2, 3].myReduce(function (acc, x) {\n  return acc + x;\n});\nconsole.log(r);',
+        options: ['6', '9', '3', '报错'],
+        answer: 0,
+        explanation: '没有传初始值，累加器取第一个元素 1，从下标 1 开始累加，1 + 2 + 3 = 6。'
+      },
+      {
+        type: 'judge',
+        question: 'myMap 的回调会收到三个参数：当前元素、当前下标和原数组本身。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。这与原生 map 的回调签名一致，实现时用 fn(this[i], i, this) 传入。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log([[1, 2], [3]].myFlat());',
+        options: ['[1, 2, 3]', '[[1, 2], [3]]', '[1, 2, [3]]', '报错'],
+        answer: 0,
+        explanation: 'depth 默认为 1，两个子数组各被拍平一层，元素合并后结果是 [1, 2, 3]。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 myMap 的正确实现，以下说法正确的有哪些？（多选）',
+        options: ['新建空数组存放结果，不修改原数组', '回调依次收到元素、下标、原数组', '把回调返回值依次 push 进新数组', '用 for in 遍历数组是推荐写法'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；数组遍历应使用带下标的 for 循环，for in 会遍历到原型链上的可枚举属性且顺序不保证，不是推荐写法。'
       }
     ]
   },
@@ -572,6 +712,34 @@ export default [
         options: ['先 slice 拷贝一份再排序，不修改入参数组', '内层循环条件为 j < a.length - 1 - i，跳过已排好的末尾', '交换时不用临时变量，直接 a[j] = a[j + 1]; a[j + 1] = a[j]', '交换时用临时变量暂存 a[j] 再互换'],
         answer: 2,
         explanation: '不用临时变量时，a[j] 先被覆盖为 a[j + 1] 的值，随后 a[j + 1] 拿到的已不是原来的 a[j]，交换失败，这是经典 bug。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log(twoSum([3, 2, 4], 6));',
+        options: ['[0, 1]', '[1, 2]', '[0, 2]', '[]'],
+        answer: 1,
+        explanation: 'i=0 时差值 3 不在表中，存入 3->0；i=1 时差值 4 不在表中，存入 2->1；i=2 时差值 2 已存在，返回 [map[2], i] 即 [1, 2]。'
+      },
+      {
+        type: 'judge',
+        question: '调用 isPalindrome("ab") 时，left 为 0、right 为 1，第一次比较两端字符不等就立即返回 false。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。str[0] 是 "a"、str[1] 是 "b"，不相等时循环内直接 return false，不再继续比较。'
+      },
+      {
+        type: 'judge',
+        question: '冒泡排序的时间复杂度是 O(n^2)，适合数据量较小或数组几乎有序的场景。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。冒泡是 O(n^2) 的排序，小数据或几乎有序时表现可接受，大数据量应选择快排、归并等 O(n log n) 算法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于双指针技巧，以下说法正确的有哪些？（多选）',
+        options: ['回文判断用左右指针从两端向中间收缩', '双指针常把 O(n^2) 的暴力比较优化到 O(n)', '回文判断的循环条件是 left < right，交错即结束', '回文判断中 left 与 right 每次必须同时移动两位'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；每轮 left 加一、right 减一即可，移动两位会跳过中间位置的比较，第四项错误。'
       }
     ]
   }

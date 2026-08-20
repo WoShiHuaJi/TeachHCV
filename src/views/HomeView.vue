@@ -118,7 +118,7 @@ function overdueDays(lesson) {
         <span class="dot" :style="{ background: l.moduleColor }"></span>
         <div class="info">
           <div class="title">{{ l.title }}</div>
-          <div class="sub">{{ l.moduleName }} · 约 {{ l.minutes }} 分钟 · 题库 {{ l.quiz.length }} 题</div>
+          <div class="sub">{{ l.moduleName }} · 约 {{ l.minutes }} 分钟 · 题库 {{ l.quizCount }} 题</div>
         </div>
         <span class="arrow">›</span>
       </router-link>

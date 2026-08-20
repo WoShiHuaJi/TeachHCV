@@ -1,15 +1,15 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '../composables/useStore'
-import { getLesson } from '../data'
+import { getLesson, loadLessonFull } from '../data'
 import QuizRunner from '../components/QuizRunner.vue'
 
 const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const lesson = computed(() => getLesson(route.params.id))
+const lesson = ref(getLesson(route.params.id))
 if (!lesson.value) router.replace('/wrongbook')
 
 /** 本轮重练的题目快照（indices 为原 quiz 下标） */
@@ -17,7 +17,14 @@ const practice = ref(null)
 const result = ref(null)
 const runnerKey = ref(0)
 
+onMounted(async () => {
+  const full = await loadLessonFull(route.params.id)
+  if (full) lesson.value = full
+  startPractice()
+})
+
 function startPractice() {
+  if (!lesson.value.quiz) return
   const inds = [...(store.state.wrong[lesson.value.id]?.indices || [])]
   if (!inds.length) {
     practice.value = null
@@ -27,8 +34,6 @@ function startPractice() {
   result.value = null
   runnerKey.value += 1
 }
-
-startPractice()
 
 function onFinish({ correct, total, wrong }) {
   // wrong 是本轮 questions 数组内的位置下标，映射回原 quiz 下标
@@ -62,6 +67,8 @@ const remaining = computed(() => store.state.wrong[lesson.value.id]?.indices.len
         <router-link :to="`/lesson/${lesson.id}`" class="btn btn-ghost">回看课程内容</router-link>
       </div>
     </div>
+
+    <div v-else-if="!lesson.quiz" class="card empty">📝 题目加载中…</div>
 
     <div v-else class="card empty">
       🎉 本课没有错题了
