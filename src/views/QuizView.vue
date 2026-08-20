@@ -30,10 +30,11 @@ onMounted(async () => {
 })
 
 function onFinish({ correct, total, wrong }) {
+  const wasLearned = store.isLearned(lesson.value.id)
   const pass = isReview.value
     ? store.recordReview(lesson.value.id, correct, total, wrong)
     : store.recordLearn(lesson.value.id, correct, total, wrong)
-  result.value = { correct, total, pass, wrongCount: wrong ? wrong.length : 0 }
+  result.value = { correct, total, pass, wrongCount: wrong ? wrong.length : 0, wasLearned }
   finished.value = true
 }
 
@@ -66,7 +67,7 @@ const runnerKey = ref(0)
     <div v-else class="card result-card">
       <div class="emoji">{{ result.pass ? '🎉' : '💪' }}</div>
       <h3>
-        {{ result.pass ? (isReview ? '复习通过！' : '测试通过，已加入复习计划！') : '还差一点点' }}
+        {{ result.pass ? (isReview ? '复习通过！' : result.wasLearned ? '巩固完成，复习进度保持不变！' : '测试通过，已加入复习计划！') : '还差一点点' }}
       </h3>
       <p class="muted">
         答对 {{ result.correct }} / {{ result.total }} 题

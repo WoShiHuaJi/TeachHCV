@@ -72,12 +72,8 @@ export async function loadLessonFull(id) {
   const mod = await loaders[stub.module]()
   const full = mod.default.find((l) => l.id === id)
   if (!full) return null
-  const merged = {
-    ...full,
-    module: stub.module,
-    moduleName: stub.moduleName,
-    moduleColor: stub.moduleColor
-  }
+  // 注意顺序：stub 在前，保留 quizCount 等元信息字段
+  const merged = { ...stub, ...full }
   fullCache.set(id, merged)
   return merged
 }

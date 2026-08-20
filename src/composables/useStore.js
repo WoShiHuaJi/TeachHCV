@@ -112,24 +112,34 @@ export function useStore() {
 
   /**
    * 记录新课测试结果。通过才标记为已学并安排首次复习；无论是否通过都会记录错题。
+   * 已学过的课「重新测试」不重置复习进度，只更新最高分和错题。
    * @returns 是否通过
    */
   function recordLearn(id, correct, total, wrongIndices = []) {
     const pass = correct / total >= PASS_RATE
     addWrong(id, wrongIndices)
+    const prev = state.lessons[id]
+    // 已学过：视为巩固练习，保留复习阶段与日程
+    if (prev) {
+      if (pass) {
+        prev.bestScore = Math.max(prev.bestScore, correct / total)
+        touchDaily('learned', id)
+      }
+      save()
+      return pass
+    }
     if (!pass) {
       save()
       return false
     }
     const t = todayStr()
-    const prev = state.lessons[id]
     state.lessons[id] = {
-      learnedAt: prev?.learnedAt || t,
-      bestScore: Math.max(prev?.bestScore || 0, correct / total),
+      learnedAt: t,
+      bestScore: correct / total,
       reviewStage: 0,
       nextReviewDate: addDays(t, stageInterval(0, wrongIndices.length >= 2)),
       mastered: false,
-      reviewHistory: prev?.reviewHistory || []
+      reviewHistory: []
     }
     touchDaily('learned', id)
     save()
