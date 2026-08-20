@@ -24,7 +24,7 @@ function shuffleArr(arr) {
  * 错题上报始终用题库原始下标，保证错题本数据一致。
  */
 let order = props.questions.map((_, i) => i)
-if (props.shuffle || props.sample) shuffleArr(order)
+if (props.shuffle || props.sample) order = shuffleArr(order)
 if (props.sample > 0 && props.sample < order.length) order = order.slice(0, props.sample)
 
 const idx = ref(0)
