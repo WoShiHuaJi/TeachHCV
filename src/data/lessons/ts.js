@@ -108,6 +108,62 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。Array<string> 是字符串数组，元素 1、2 是数字，类型不匹配会报错。'
+      },
+      {
+        type: 'single',
+        question: 'TypeScript 是由哪家公司开发的？',
+        options: ['Google', 'Microsoft', 'Facebook', 'Apple'],
+        answer: 1,
+        explanation: 'TypeScript 是微软（Microsoft）开发并开源的编程语言。'
+      },
+      {
+        type: 'single',
+        question: 'let s: string = 100 这段代码是否有类型错误？',
+        options: ['没有错误', '有错误，数字不能赋给 string 类型', '有错误，string 类型必须加引号声明', '没有错误，TS 会自动转成字符串'],
+        answer: 1,
+        explanation: 'string 类型只能赋字符串值，100 是数字，编译时会报类型错误。'
+      },
+      {
+        type: 'judge',
+        question: 'TypeScript 的类型检查发生在编译阶段，而不是代码运行时。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。TS 在写代码、编译阶段就发现类型错误，这正是它相对 JS 的核心价值。'
+      },
+      {
+        type: 'judge',
+        question: 'unknown 与 any 完全等价，二者在使用上没有任何区别。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。any 不做任何检查，unknown 使用前必须先收窄类型，unknown 更安全。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于 TypeScript 的常用基础类型？（多选）',
+        options: ['string', 'number', 'boolean', 'div'],
+        answer: [0, 1, 2],
+        explanation: 'string、number、boolean 都是 TS 基础类型；div 是 HTML 标签，不是类型。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 tsc 编译器，说法正确的有？（多选）',
+        options: ['可以把 TS 文件编译成 JS', '编译时会进行类型检查', '编译产物可由浏览器或 Node 运行', '编译产物需要 TS 虚拟机执行'],
+        answer: [0, 1, 2],
+        explanation: 'tsc 编译时做类型检查并生成 JS，产物在浏览器或 Node 中运行，不需要 TS 虚拟机。'
+      },
+      {
+        type: 'single',
+        question: 'let a: any = \'x\'; a.toFixed(2); 这段代码的情况是？',
+        options: ['编译时报类型错误', '编译时不检查，运行时可能出错', 'a 必须先收窄才能使用', '语法错误无法编译'],
+        answer: 1,
+        explanation: 'any 会跳过类型检查，编译通过；但字符串没有 toFixed 方法，运行时才报错。'
+      },
+      {
+        type: 'single',
+        question: '下列哪个变量的赋值能通过 TS 编译？',
+        options: ['let a: number = \'1\'', 'let b: string = 1', 'let c: boolean = false', 'let d: number[] = 1'],
+        answer: 2,
+        explanation: '只有 boolean 赋 false 类型匹配；其余选项值与标注类型不一致，都会报错。'
       }
     ]
   },
@@ -234,6 +290,48 @@ export default [
         options: ['用 ? 声明可选属性', '用 readonly 声明只读属性', '用 extends 继承其他接口', '直接表示 string | number 联合类型'],
         answer: [0, 1, 2],
         explanation: 'interface 支持可选属性、只读属性和 extends 继承；联合类型只能用 type 定义。'
+      },
+      {
+        type: 'single',
+        question: 'type Point = { x: number; y: number }; const p: Point = { x: 1 } 是否有类型错误？',
+        options: ['没有错误', '有错误，缺少必填属性 y', '有错误，x 不能为数字', '没有错误，y 会自动为 0'],
+        answer: 1,
+        explanation: 'Point 中 x 和 y 都是必填，缺少 y 会在编译时报类型错误。'
+      },
+      {
+        type: 'single',
+        question: '在 interface 中描述对象形状时，各个属性成员之间通常用什么分隔？',
+        options: ['分号或换行', '加号', '冒号', '竖线'],
+        answer: 0,
+        explanation: '接口成员之间用分号（或换行）分隔；冒号用于标注属性类型，竖线用于联合类型。'
+      },
+      {
+        type: 'judge',
+        question: 'type 类型别名不支持声明合并，重复声明同名 type 会报错。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。声明合并是 interface 特有的能力，同名 type 会报重复标识符错误。'
+      },
+      {
+        type: 'judge',
+        question: '接口的可选属性在对象没有传入时，读取它得到的是 undefined。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。可选属性相当于类型自动带上 undefined，未传时读取结果为 undefined。'
+      },
+      {
+        type: 'multiple',
+        question: '关于接口中的可选属性 age?: number，说法正确的有？（多选）',
+        options: ['对象可以不传 age', '传入时必须是 number 类型', '读取时可能得到 undefined', '传入字符串也能通过编译'],
+        answer: [0, 1, 2],
+        explanation: '可选属性可省略，但传了就必须符合标注类型；未传时读取为 undefined；传字符串会报错。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些类型适合用 type 定义？（多选）',
+        options: ['string | number 联合类型', 'A & B 交叉类型', '函数的参数与返回值类型', '仅描述一个普通对象结构时必选 type'],
+        answer: [0, 1, 2],
+        explanation: '联合、交叉、函数类型都用 type 定义；普通对象结构优先用 interface，并非必选 type。'
       }
     ]
   },
@@ -346,6 +444,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。public 是默认修饰符，成员随处可访问；需要限制时才显式写 private 或 protected。'
+      },
+      {
+        type: 'single',
+        question: 'function f(a: number): void 中，返回值类型 void 表示？',
+        options: ['函数返回数字', '函数没有返回值', '函数是私有的', '参数列表为空'],
+        answer: 1,
+        explanation: 'void 表示函数没有返回值，不需要 return 任何结果。'
+      },
+      {
+        type: 'single',
+        question: 'type Fn = (a: number, b: number) => number; const mul: Fn = (x, y) => x * y; 调用 mul(3, 4) 的结果是？',
+        options: ['7', '12', '34', '编译错误'],
+        answer: 1,
+        explanation: '箭头函数返回 x * y 即 3 * 4，结果为 12，且类型与 Fn 的声明一致。'
+      },
+      {
+        type: 'single',
+        question: 'class A { private x: number = 1 }，const a = new A(); a.x 这段代码是否有类型错误？',
+        options: ['没有错误', '有错误，private 成员不能在类外部访问', '有错误，x 不能初始化为 1', '没有错误，读取结果是 undefined'],
+        answer: 1,
+        explanation: 'private 成员仅限类内部访问，在类外部读取 a.x 会在编译时报类型错误。'
+      },
+      {
+        type: 'single',
+        question: '类要实现一个接口，应使用的关键字是？',
+        options: ['extends', 'implements', 'declare', 'interface'],
+        answer: 1,
+        explanation: '类用 implements 实现接口，保证类具备接口要求的成员；extends 用于类的继承或接口继承接口。'
+      },
+      {
+        type: 'judge',
+        question: '函数不显式写返回值类型时，TS 会根据 return 语句自动推断。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。返回值类型可以省略由 TS 推断，但写清楚更利于团队协作。'
+      },
+      {
+        type: 'judge',
+        question: '剩余参数 ...args: number[] 在函数内部是一个真正的数组，可以使用数组方法。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。剩余参数会把传入的多个实参收集为一个数组，函数内可正常使用数组方法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于类的访问修饰符，说法正确的有？（多选）',
+        options: ['public 是默认修饰符', 'private 仅本类内部可访问', 'protected 在子类中可访问', 'private 成员子类也能直接访问'],
+        answer: [0, 1, 2],
+        explanation: 'public 默认随处可访问；private 仅本类内部；protected 允许子类访问；子类直接访问 private 会报错。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些函数参数写法是正确的？（多选）',
+        options: ['function f(a: number)', 'function f(a?: number)', 'function f(a: number = 0)', 'function f(a?: number, b: string)'],
+        answer: [0, 1, 2],
+        explanation: '必填、可选、默认参数写法都正确；可选参数后面不能再跟必填参数，最后一项写法错误。'
       }
     ]
   },
@@ -472,6 +626,48 @@ export default [
         options: ['保留类型检查', '使用时能获得类型提示', '同一段代码可复用于多种类型', '让程序运行速度更快'],
         answer: [0, 1, 2],
         explanation: '泛型既复用代码又不丢失类型检查和提示；any 则放弃检查。泛型与运行速度无关。'
+      },
+      {
+        type: 'single',
+        question: '已知 interface ApiResponse<T> { data: T }，则 ApiResponse<number> 中 data 的类型是？',
+        options: ['number', 'T', 'any', 'number[]'],
+        answer: 0,
+        explanation: '使用时传入 number，接口内的 T 全部被替换为 number，所以 data 是 number 类型。'
+      },
+      {
+        type: 'single',
+        question: 'class Box<T> { value: T } 这个定义说明什么？',
+        options: ['类也可以使用泛型', '类不能使用泛型', 'T 必须是 string', 'Box 只能实例化一次'],
+        answer: 0,
+        explanation: '泛型不仅用于函数，类也可以带类型参数，实例化时再确定具体类型。'
+      },
+      {
+        type: 'judge',
+        question: '使用泛型接口时，传入的类型参数会替换接口内所有出现 T 的位置。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。T 是类型占位符，使用时被具体类型统一替换，从而复用同一套定义。'
+      },
+      {
+        type: 'judge',
+        question: '泛型只能有一个类型参数，不能写成 <T, K> 这样的形式。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。泛型可以有多个类型参数，如 <T, K>，用逗号分隔即可。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是泛型的典型应用场景？（多选）',
+        options: ['返回数组第一个元素的函数', '后端返回的统一响应结构', '需要适配多种类型的工具函数', '只处理数字的固定加法函数'],
+        answer: [0, 1, 2],
+        explanation: '需要适配多种类型又要保留类型检查的场景适合泛型；只处理固定数字类型无需泛型。'
+      },
+      {
+        type: 'multiple',
+        question: '关于泛型约束 T extends { length: number }，说法正确的有？（多选）',
+        options: ['约束后函数内可安全访问 length', '不满足约束的实参会报类型错误', '字符串和数组都满足该约束', '约束后 T 只能是数组类型'],
+        answer: [0, 1, 2],
+        explanation: '约束让函数内能安全使用 length，不满足约束的实参会报错；字符串、数组都有 length；满足结构即可，不限于数组。'
       }
     ]
   },
@@ -598,6 +794,48 @@ export default [
         options: ['用 typeof 收窄', '用 instanceof 收窄', '用返回“参数 is 某类型”的自定义守卫', '不做任何判断直接调用'],
         answer: [0, 1, 2],
         explanation: 'typeof、instanceof 和自定义类型守卫都能收窄类型；不收窄直接调用特有方法会报类型错误。'
+      },
+      {
+        type: 'single',
+        question: '联合类型在书写时使用哪个符号连接各个类型？',
+        options: ['&', '|', '+', '&&'],
+        answer: 1,
+        explanation: '联合类型用竖线 | 表示“或”，如 string | number；& 是交叉类型的符号。'
+      },
+      {
+        type: 'single',
+        question: 'type Cat = { kind: \'cat\' }; type Dog = { kind: \'dog\' }; function f(p: Cat | Dog) { return p.kind; } 是否有类型错误？',
+        options: ['有错误，联合类型不能访问属性', '没有错误，kind 是两者共有的属性', '有错误，必须先收窄类型', '没有错误，但返回值是 undefined'],
+        answer: 1,
+        explanation: '联合类型可以安全访问所有成员共有的属性，kind 在 Cat 和 Dog 中都存在，无需收窄。'
+      },
+      {
+        type: 'judge',
+        question: '用 in 操作符检查对象上是否存在某个属性，也可以起到收窄对象类型的作用。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。in 可以判断属性是否存在，TS 会据此在分支内收窄对象的类型。'
+      },
+      {
+        type: 'judge',
+        question: '自定义类型守卫函数只返回普通 boolean（不写 is 形式）时，TS 也会自动收窄参数类型。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。返回类型必须写成“参数 is 某类型”的形式，TS 才会信任并在判断为真时收窄。'
+      },
+      {
+        type: 'multiple',
+        question: '关于联合类型 string | number，说法正确的有？（多选）',
+        options: ['变量可以存字符串或数字', '未收窄时只能访问共有成员', '用 typeof 可以收窄类型', '可以同时调用 string 和 number 的特有方法'],
+        answer: [0, 1, 2],
+        explanation: '联合类型可存任一成员类型，未收窄只能用共有成员，typeof 可收窄；直接调用某成员特有方法会报错。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些方式可以判断或区分类的实例类型？（多选）',
+        options: ['instanceof 判断是否为某类实例', '用 in 检查实例上的属性', 'typeof === \'object\' 精确区分不同的类', '通过共同的字面量字段判断'],
+        answer: [0, 1, 3],
+        explanation: 'instanceof、in、可辨识联合字段都能区分类型；typeof 对任何对象都只返回 object，无法精确区分类。'
       }
     ]
   },
@@ -710,6 +948,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。更新接口通常允许只传要改的字段，Partial 让所有属性可选，正好契合这一场景。'
+      },
+      {
+        type: 'single',
+        question: 'type Perm = Record<\'admin\' | \'user\', boolean> 的对象必须包含哪些键？',
+        options: ['只有 admin', '只有 user', 'admin 和 user 都必须有', '键可以任意写'],
+        answer: 2,
+        explanation: '用联合类型作为 Record 的键时，每个键都必须出现在对象中，缺一不可。'
+      },
+      {
+        type: 'single',
+        question: 'enum Status { Pending = \'pending\' } 中，Status.Pending 的值是？',
+        options: ['0', '\'pending\'', 'undefined', '\'Pending\''],
+        answer: 1,
+        explanation: '字符串枚举成员的值就是显式指定的字符串，即 pending。'
+      },
+      {
+        type: 'single',
+        question: 'const p: Partial<{ a: number }> = {} 这段代码是否有类型错误？',
+        options: ['有错误，缺少属性 a', '没有错误，Partial 让属性全部可选', '有错误，Partial 不能用于对象字面量类型', '没有错误，但 p 是 any 类型'],
+        answer: 1,
+        explanation: 'Partial 把所有属性变为可选，因此空对象也满足类型要求，不会报错。'
+      },
+      {
+        type: 'single',
+        question: '想基于 User 生成一个“所有属性都必填”的新类型，应使用哪个工具类型？',
+        options: ['Required<User>', 'Partial<User>', 'Readonly<User>', 'Omit<User>'],
+        answer: 0,
+        explanation: 'Required 与 Partial 相反，会把所有属性（包括可选属性）变为必填。'
+      },
+      {
+        type: 'judge',
+        question: 'Readonly<T> 会让 T 的所有属性都变为只读，不允许重新赋值。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Readonly 给所有属性加上只读限制，修改时会在编译期报错。'
+      },
+      {
+        type: 'judge',
+        question: 'Record<string, number> 的对象中，值为字符串时也能通过编译。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Record<string, number> 要求值必须是数字，赋字符串会报类型错误。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于 TypeScript 的内置工具类型？（多选）',
+        options: ['Partial', 'Pick', 'Omit', 'Enum'],
+        answer: [0, 1, 2],
+        explanation: 'Partial、Pick、Omit 都是内置工具类型；enum 是枚举关键字，不是工具类型。'
+      },
+      {
+        type: 'multiple',
+        question: '关于数字枚举 enum E { A = 1, B }，说法正确的有？（多选）',
+        options: ['A 的值是 1', 'B 的值是 2', 'B 会在上一个成员值的基础上自增', 'B 的值是 0'],
+        answer: [0, 1, 2],
+        explanation: '手动指定 A 为 1 后，后续成员在此基础上自增，所以 B 为 2，不是 0。'
       }
     ]
   },
@@ -822,6 +1116,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。include 指定参与编译的文件范围（如 ["src"]），exclude 则用于排除。'
+      },
+      {
+        type: 'single',
+        question: 'tsconfig.json 中 target 选项的作用是？',
+        options: ['指定编译出的 JS 版本', '指定模块规范', '指定编译输出目录', '指定源码所在目录'],
+        answer: 0,
+        explanation: 'target 指定编译产物的 JS 版本，如 ES2018；模块规范由 module 指定，输出目录由 outDir 指定。'
+      },
+      {
+        type: 'single',
+        question: '自己编写 .d.ts 声明文件时，声明函数类型使用的关键字是？',
+        options: ['declare', 'interface', 'export', 'type'],
+        answer: 0,
+        explanation: '声明文件中使用 declare 关键字描述类型，如 declare function chunk(...)。'
+      },
+      {
+        type: 'single',
+        question: 'tsconfig.json 中 module 选项设置为 ESNext 表示？',
+        options: ['使用 ES 模块规范', '使用 CommonJS 模块规范', '编译到最新浏览器版本', '自动开启严格模式'],
+        answer: 0,
+        explanation: 'module 指定编译产物的模块规范，ESNext 表示使用最新的 ES 模块（import/export）。'
+      },
+      {
+        type: 'single',
+        question: '开启 strict 后，function f(a) { return a; }（参数 a 未标类型）通常会怎样？',
+        options: ['正常编译通过', 'noImplicitAny 会报类型错误', 'target 选项会报错', 'a 被自动推断为 string'],
+        answer: 1,
+        explanation: 'strict 包含 noImplicitAny，参数没写类型又推断不出来时会被判定为隐式 any 而报错。'
+      },
+      {
+        type: 'judge',
+        question: '@types/lodash 这类类型包通常作为开发依赖（--save-dev）安装。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。类型只在开发编译阶段使用，运行时不需要，因此装为开发依赖。'
+      },
+      {
+        type: 'judge',
+        question: 'tsconfig.json 中的 exclude 选项用于排除不需要参与编译的文件。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。exclude 与 include 配合，控制哪些文件不参与编译，如排除 node_modules。'
+      },
+      {
+        type: 'multiple',
+        question: '开启 strictNullChecks 后，以下哪些赋值是合法的？（多选）',
+        options: ['let a: string | null = null', 'let b: null = null', 'let c: string = null', 'let d: string | undefined = undefined'],
+        answer: [0, 1, 3],
+        explanation: 'null 只能赋给显式包含 null 的类型，undefined 同理；把 null 直接赋给 string 会报类型错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 tsconfig.json，说法正确的有？（多选）',
+        options: ['可用 tsc --init 生成', 'compilerOptions 中存放编译选项', 'include 控制参与编译的文件范围', '它与 package.json 是同一个文件'],
+        answer: [0, 1, 2],
+        explanation: 'tsconfig.json 是 TS 项目的配置文件，与 package.json 是两个不同的文件。'
       }
     ]
   },
@@ -934,6 +1284,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。泛型声明了 change 事件的参数必须是 string，传入数字 123 类型不匹配。'
+      },
+      {
+        type: 'single',
+        question: '组合式 API 中 const double = computed(() => age.value * 2) 的类型如何确定？',
+        options: ['自动根据回调返回值推断', '必须手动用泛型标注', '固定为 number 之外的类型', '固定为 any'],
+        answer: 0,
+        explanation: 'computed 会根据回调的返回值自动推断类型，这里推断为 number 类型。'
+      },
+      {
+        type: 'single',
+        question: 'Props 接口中 count?: number 配合 withDefaults 指定默认值 0 后，组件内 props.count 的类型是？',
+        options: ['number | undefined', 'number', 'any', 'null'],
+        answer: 1,
+        explanation: '有了默认值后 count 一定有值，类型收窄为 number，不再是 number | undefined。'
+      },
+      {
+        type: 'single',
+        question: '在 script setup 中要给一个初始为 null 的 ref 标注可存字符串，正确的写法是？',
+        options: ['ref(null): string', 'ref<string | null>(null)', 'string ref(null)', 'ref(null, string)'],
+        answer: 1,
+        explanation: 'ref 用泛型参数标注类型：ref<string | null>(null)，之后才能赋字符串或 null。'
+      },
+      {
+        type: 'single',
+        question: '已声明 defineEmits<{ change: [value: string] }>()，调用 emit(\'change\', \'abc\') 是否有类型错误？',
+        options: ['没有错误，参数类型匹配', '有错误，参数必须是数字', '有错误，事件名不存在', '有错误，emit 不能传参数'],
+        answer: 0,
+        explanation: 'change 事件要求参数为 string，传入字符串 abc 类型匹配，没有错误。'
+      },
+      {
+        type: 'judge',
+        question: '组合式 API 与 TypeScript 配合非常自然，是 Vue3 推荐的开发方式。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。script setup 组合式 API 天生适合类型推导，是 Vue3 + TS 的主流写法。'
+      },
+      {
+        type: 'judge',
+        question: '使用 defineProps 泛型写法时，可选的 prop 需要在接口中用问号标注。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。接口中加问号的属性即为可选 prop，默认值可再用 withDefaults 指定。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 Vue3 + TS 中常见的类型标注场景？（多选）',
+        options: ['用泛型声明 props', '用泛型声明 emits', '用泛型标注 ref 的元素类型', '给模板中的 HTML 标签加类型'],
+        answer: [0, 1, 2],
+        explanation: 'props、emits、ref 都常用泛型标注类型；模板中的 HTML 标签不需要手动加类型。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 withDefaults，说法正确的有？（多选）',
+        options: ['用于给泛型声明的 props 设置默认值', '是 script setup 的编译器宏，无需导入即可使用', '默认值对应接口中的可选属性', '它的作用是让 props 变成只读'],
+        answer: [0, 1, 2],
+        explanation: 'withDefaults 给可选 props 设默认值，是编译器宏无需导入；props 只读是自身特性，与 withDefaults 无关。'
       }
     ]
   }

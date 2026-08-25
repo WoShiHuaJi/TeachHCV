@@ -106,6 +106,62 @@ export default [
         options: ['遇到没有 defer/async 的同步 script 标签', 'async 脚本下载完成后立即执行时', '加载外部 CSS 文件', '使用 defer 的脚本下载时'],
         answer: [0, 1],
         explanation: '同步 script 会暂停解析先执行 JS；async 脚本执行时也会阻塞解析；CSS 只阻塞渲染不阻塞解析；defer 脚本下载和执行都不阻塞解析。'
+      },
+      {
+        type: 'single',
+        question: '现代浏览器在绘制（Paint）之后，还会进行哪个阶段来生成最终画面？',
+        options: ['重新解析 HTML', '分层与合成（Composite）', '重新构建 DOM 树', '执行所有 script 标签'],
+        answer: 1,
+        explanation: '绘制后浏览器会把页面分成多个图层，由合成线程将各层合成为最终画面；transform 动画就发生在合成阶段。'
+      },
+      {
+        type: 'single',
+        question: '把 script 标签放在 body 底部或给它加 defer 的主要目的是？',
+        options: ['让 JS 文件下载得更快', '避免 JS 执行阻塞 HTML 解析导致白屏', '让 CSS 优先于 HTML 加载', '减小 JS 文件的体积'],
+        answer: 1,
+        explanation: '同步 JS 执行会暂停 HTML 解析，放底部或加 defer 可以让页面先把内容渲染出来，避免长时间白屏。'
+      },
+      {
+        type: 'judge',
+        question: '多个使用 async 的脚本，其执行顺序与在 HTML 中书写的顺序一致。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。async 脚本下载完立即执行，谁先下载完谁先执行，顺序不保证；保证顺序的是 defer。'
+      },
+      {
+        type: 'judge',
+        question: '关键渲染路径越短，页面完成首次渲染通常越快。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。优化的目标就是缩短关键渲染路径：减少关键资源数量、减小体积、优化加载顺序。'
+      },
+      {
+        type: 'judge',
+        question: '图片懒加载可以减少首屏需要加载的资源数量，从而加快首屏渲染。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。首屏外的图片延迟加载，能减少首屏的关键资源数量和请求数，缩短白屏时间。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些节点不会进入渲染树（Render Tree）？（多选）',
+        options: ['display:none 的元素', 'head 标签及其中的内容', 'visibility:hidden 的元素', 'script 标签'],
+        answer: [0, 1, 3],
+        explanation: '渲染树只包含可见节点；display:none、head、script 等非可见节点不进入渲染树；visibility:hidden 仍占据空间，会进入。'
+      },
+      {
+        type: 'multiple',
+        question: '关于渲染流水线中的布局（Layout）阶段，下列说法正确的有？（多选）',
+        options: ['计算每个节点的精确位置和大小', '在渲染树构建完成之后进行', '又被称为回流（Reflow）', '负责把节点绘制成像素'],
+        answer: [0, 1, 2],
+        explanation: '布局阶段在渲染树之后，计算节点几何信息，也叫回流；把节点绘制成像素是绘制（Paint）阶段的工作。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些做法可能会延长页面的白屏时间？（多选）',
+        options: ['在 head 中引入体积很大的同步 JS', 'CSS 文件加载缓慢迟迟未完成', '给所有 script 加上 defer', '首屏 CSS 依赖一个不可用的 CDN'],
+        answer: [0, 1, 3],
+        explanation: '大体积同步 JS 阻塞解析、CSS 阻塞渲染都会拖长白屏；defer 不阻塞解析，是优化手段而非问题。'
       }
     ]
   },
@@ -218,6 +274,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。transform 和 opacity 的动画由合成线程处理，是性能最好的两类动画属性。'
+      },
+      {
+        type: 'single',
+        question: '下列关于 getBoundingClientRect() 的说法正确的是？',
+        options: ['读取它可能强制浏览器同步回流', '它只会触发重绘不会触发回流', '它可以随意在循环中读取，没有性能影响', '它会触发浏览器重新解析 HTML'],
+        answer: 0,
+        explanation: 'getBoundingClientRect 需要最新的布局信息，读取时浏览器会刷新渲染队列、强制同步回流。'
+      },
+      {
+        type: 'single',
+        question: '做元素的淡入淡出动画时，优先推荐使用哪个属性？',
+        options: ['width', 'opacity', 'margin', 'font-size'],
+        answer: 1,
+        explanation: 'opacity 动画只触发合成阶段，不触发回流和重绘；width、margin、font-size 都是几何属性，会触发回流。'
+      },
+      {
+        type: 'judge',
+        question: '连续多次修改同一个元素的 style，浏览器通常会先把修改放入渲染队列批量处理，而不是每条都立即回流。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。浏览器有渲染队列优化机制；只有在读取布局信息（如 offsetWidth）时才不得不立即清空队列强制回流。'
+      },
+      {
+        type: 'judge',
+        question: '修改元素的 visibility 属性会同时触发回流和重绘。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。visibility 只改变可见性、不影响布局，元素仍占据空间，因此只触发重绘，不触发回流。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些读取操作可能强制浏览器同步回流（刷新渲染队列）？（多选）',
+        options: ['读取 offsetHeight', '调用 getBoundingClientRect()', '读取 scrollTop', '读取 dataset 中的自定义属性'],
+        answer: [0, 1, 2],
+        explanation: 'offsetHeight、getBoundingClientRect、scrollTop 都需要最新布局信息，会强制回流；dataset 只是读字符串属性，与布局无关。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 DocumentFragment，下列说法正确的有？（多选）',
+        options: ['可以先在它上面批量构建节点再一次性插入页面', '插入页面时只有它的子节点会进入文档', '使用它可以减少插入大量节点时的回流次数', '它会作为真实节点保留在最终的 DOM 树中'],
+        answer: [0, 1, 2],
+        explanation: 'DocumentFragment 是离线的轻量容器，插入时只把子节点移入文档，自身不保留；离线构建再一次性插入能显著减少回流。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些做法有助于提升动画过程中的渲染性能？（多选）',
+        options: ['动画使用 transform 和 opacity', '让频繁动画的元素脱离文档流', '在每一帧回调中读取 offsetWidth', '用 class 切换代替逐条修改 style'],
+        answer: [0, 1, 3],
+        explanation: 'transform/opacity 只触发合成，脱离文档流减少回流波及范围，class 批量修改减少回流次数；每帧读 offsetWidth 会反复强制回流。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些变化会影响几何布局从而触发回流？（多选）',
+        options: ['浏览器窗口尺寸发生变化', '元素内文字增多导致换行', '修改元素的 padding', '修改元素的 color'],
+        answer: [0, 1, 2],
+        explanation: '窗口尺寸、内容换行、padding 都会改变元素几何信息，触发回流；color 只影响外观，只触发重绘。'
       }
     ]
   },
@@ -358,6 +470,34 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。await 会挂起 async 函数的后续执行，后续代码相当于被包装进 Promise.then，按微任务规则调度。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nconsole.log('A');\nPromise.resolve().then(function () {\n  console.log('B');\n  setTimeout(function () { console.log('C'); }, 0);\n});\nsetTimeout(function () {\n  console.log('D');\n  Promise.resolve().then(function () { console.log('E'); });\n}, 0);\nconsole.log('F');",
+        options: ['A F B D E C', 'A F B D C E', 'A B F D E C', 'A F D B E C'],
+        answer: 0,
+        explanation: '同步打印 A、F；清空微任务打印 B 并注册宏任务 C；执行宏任务 D 后产生的微任务 E 立即执行；最后执行宏任务 C，输出 A F B D E C。'
+      },
+      {
+        type: 'judge',
+        question: '同步代码整体作为第一个宏任务执行，执行完后会先清空微任务队列，再执行下一个宏任务。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。script 整体代码就是第一个宏任务，它执行完后先清空所有微任务，再取下一个宏任务，如此循环。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些属于宏任务（macrotask）？（多选）',
+        options: ['setInterval 的回调', 'script 标签中的整体代码', 'I/O 操作完成后的回调', 'MutationObserver 的回调'],
+        answer: [0, 1, 2],
+        explanation: 'setInterval、script 整体代码、I/O 回调都是宏任务；MutationObserver 是微任务。'
+      },
+      {
+        type: 'multiple',
+        question: '关于事件循环的执行规则，下列说法正确的有？（多选）',
+        options: ['调用栈为空后才会去任务队列取任务执行', '每执行完一个宏任务就会清空微任务队列', '微任务全部清空后浏览器才可能进行页面渲染', 'Promise 的 executor 函数也是异步执行的'],
+        answer: [0, 1, 2],
+        explanation: '事件循环在调用栈空时取任务；每轮宏任务后清空微任务，之后才可能渲染；Promise 的 executor 是同步执行的，只有 then 回调进微任务。'
       }
     ]
   },
@@ -482,6 +622,48 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。URL 中省略端口时，HTTP 默认走 80，HTTPS 默认走 443。'
+      },
+      {
+        type: 'single',
+        question: '以下哪个 HTTP 方法用于对资源进行部分更新？',
+        options: ['PUT', 'PATCH', 'POST', 'HEAD'],
+        answer: 1,
+        explanation: 'PATCH 表示部分更新；PUT 是整体更新替换；POST 一般用于提交创建；HEAD 只获取响应头。'
+      },
+      {
+        type: 'judge',
+        question: 'GET 请求的参数拼在 URL 中，因此会受到 URL 长度限制，不适合传递大量数据。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。浏览器和服务器对 URL 长度有限制，GET 参数受其约束；大量数据应放在 POST 的请求体中。'
+      },
+      {
+        type: 'judge',
+        question: '状态码 401 表示用户已经登录但没有访问权限。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。401 是未认证（未登录或凭证失效）；已登录但没权限应返回 403。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些信息通常出现在 HTTP 请求头中？（多选）',
+        options: ['Host', 'Content-Type', 'Cookie', '状态码 200'],
+        answer: [0, 1, 2],
+        explanation: 'Host、Content-Type、Cookie 都是常见请求头字段；状态码出现在响应报文的状态行中，不属于请求头。'
+      },
+      {
+        type: 'multiple',
+        question: '关于常见状态码的含义，下列对应关系正确的有？（多选）',
+        options: ['500 服务器内部错误', '302 临时重定向', '400 请求报文有误', '404 网关超时'],
+        answer: [0, 1, 2],
+        explanation: '500 是服务器内部错误，302 是临时重定向，400 是请求错误；404 是资源不存在，网关超时是 504。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 POST 请求，下列说法正确的有？（多选）',
+        options: ['提交的数据放在请求体中', '理论上不受 URL 长度限制', '不是幂等操作', '参数一定会留在浏览器历史记录中'],
+        answer: [0, 1, 2],
+        explanation: 'POST 数据在请求体中、不受 URL 长度限制、不幂等；留在历史记录中的是 URL 上的 GET 参数，POST 参数不会。'
       }
     ]
   },
@@ -606,6 +788,48 @@ export default [
         options: ['强缓存未过期', '强缓存已过期且本地存有 ETag/Last-Modified 标识', '服务器响应为 no-store', '首次访问没有任何缓存'],
         answer: 1,
         explanation: '强缓存过期后，浏览器会带上 If-None-Match / If-Modified-Since 发起协商请求；未过期直接用缓存，no-store 和首次访问则走正常完整请求。'
+      },
+      {
+        type: 'single',
+        question: 'HTML 页面文件本身推荐的缓存策略是？',
+        options: ['设置超长 max-age 长期强缓存', 'Cache-Control: no-cache，每次走协商缓存保证拿到最新页面', 'Cache-Control: no-store', '只设置 Expires 即可'],
+        answer: 1,
+        explanation: 'HTML 是入口文件，必须保证用户能拿到最新版本，用 no-cache 走协商缓存最稳妥；静态资源才用超长 max-age。'
+      },
+      {
+        type: 'single',
+        question: '服务器响应中带了 Last-Modified 后，浏览器下次请求时会通过哪个请求头回传该时间？',
+        options: ['If-None-Match', 'If-Modified-Since', 'ETag', 'Cache-Control'],
+        answer: 1,
+        explanation: 'Last-Modified 对应 If-Modified-Since；ETag 对应的是 If-None-Match。'
+      },
+      {
+        type: 'judge',
+        question: '当 ETag 与 Last-Modified 同时存在时，服务器判断协商缓存命中时 ETag 的优先级更高。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。ETag 基于内容生成指纹，比秒级精度的 Last-Modified 更精确，优先级更高。'
+      },
+      {
+        type: 'judge',
+        question: 'Ctrl+F5 强制刷新时，浏览器会跳过所有缓存，直接向服务器请求最新资源。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。强制刷新会让请求跳过强缓存和协商缓存，完整重新下载资源。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 ETag 与 Last-Modified，下列说法正确的有？（多选）',
+        options: ['ETag 是由资源内容生成的唯一指纹', 'Last-Modified 的最小精度是秒', '文件改了又改回来，Last-Modified 会变化但 ETag 可能不变', 'If-Modified-Since 是与 ETag 配对使用的请求头'],
+        answer: [0, 1, 2],
+        explanation: 'ETag 是内容指纹，Last-Modified 精确到秒且有改回问题；与 ETag 配对的是 If-None-Match，If-Modified-Since 配对 Last-Modified。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于前端工程化中利用浏览器缓存的常见策略？（多选）',
+        options: ['静态资源文件名携带内容 hash', '静态资源设置超长 max-age 并交给 CDN', 'HTML 文件设置 no-cache 走协商缓存', '所有资源统一设置 no-store'],
+        answer: [0, 1, 2],
+        explanation: 'hash 文件名 + 超长 max-age 让静态资源长期命中强缓存，HTML 用 no-cache 保证最新；全部 no-store 等于放弃缓存，会拖慢页面。'
       }
     ]
   },
@@ -718,6 +942,62 @@ export default [
         options: ['HttpOnly', 'Secure', 'SameSite', 'Max-Age'],
         answer: [0, 1, 2],
         explanation: 'HttpOnly 防止 JS 读取 Cookie（防 XSS 窃取），Secure 限定仅 HTTPS 传输，SameSite 限制跨站携带（防 CSRF）；Max-Age 只是过期时间，与安全无直接关系。'
+      },
+      {
+        type: 'single',
+        question: 'HTTPS 握手阶段使用非对称加密的主要目的是？',
+        options: ['直接加密所有传输数据', '安全地交换后续通信使用的对称会话密钥', '压缩传输的数据', '验证客户端的登录密码'],
+        answer: 1,
+        explanation: '非对称加密慢但安全，用来交换会话密钥；之后的数据传输全部使用对称加密，兼顾安全与效率。'
+      },
+      {
+        type: 'single',
+        question: '要防止攻击者通过 XSS 脚本读取用户 Cookie，最有效的做法是？',
+        options: ['给 Cookie 设置 HttpOnly', '给 Cookie 设置较长的 Max-Age', '把 Cookie 改存到 localStorage', '给页面开启 Gzip 压缩'],
+        answer: 0,
+        explanation: 'HttpOnly 让 document.cookie 读不到该 Cookie，即使页面被注入脚本也无法窃取；localStorage 反而更容易被 XSS 读取。'
+      },
+      {
+        type: 'single',
+        question: '防御 CSRF 时，给 Cookie 设置 SameSite=Strict 的作用是？',
+        options: ['禁止 JavaScript 读取该 Cookie', '跨站发起的请求不再携带该 Cookie', '让 Cookie 只通过 HTTPS 传输', '对 Cookie 内容进行加密'],
+        answer: 1,
+        explanation: 'SameSite=Strict 表示只有同站请求才携带该 Cookie，跨站请求（CSRF 的来源）不会带登录态，从而防御 CSRF。'
+      },
+      {
+        type: 'judge',
+        question: '对称加密的运算速度比非对称加密快，因此 HTTPS 在数据传输阶段使用对称加密。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。对称加密效率高，适合大量数据传输；非对称加密只在握手阶段用于交换会话密钥。'
+      },
+      {
+        type: 'judge',
+        question: '把用户输入直接通过 innerHTML 插入页面是安全的，因为现代浏览器会自动过滤恶意脚本。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。浏览器不会替你过滤恶意脚本，直接 innerHTML 渲染用户输入是典型 XSS 漏洞，应转义或使用 textContent。'
+      },
+      {
+        type: 'judge',
+        question: '配置 CSP（内容安全策略）可以通过限制脚本的加载来源来缓解 XSS 攻击。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。CSP 可以声明允许加载和执行的脚本来源，即使恶意脚本被注入也无法执行或加载。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 XSS 与 CSRF 的区别，下列说法正确的有？（多选）',
+        options: ['XSS 是恶意脚本在目标页面中执行，窃取数据', 'CSRF 是利用用户的登录态冒充用户发请求', 'CSRF 必须先在目标页面注入脚本才能生效', 'XSS 可以通过输出转义和 CSP 等手段防御'],
+        answer: [0, 1, 3],
+        explanation: 'XSS 是脚本注入窃取数据，CSRF 是借登录态伪造请求、不需要注入脚本；转义和 CSP 是 XSS 的常见防御手段。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 HTTPS 的数字证书，下列说法正确的有？（多选）',
+        options: ['证书由受信任的 CA 机构签发', '证书中包含服务器的公钥', '浏览器验证证书可以防止中间人攻击', '有了证书后通信就不需要加密了'],
+        answer: [0, 1, 2],
+        explanation: '证书由 CA 签发并包含服务器公钥，浏览器验证证书能确认对方身份、防中间人；证书解决的是身份与密钥交换，数据仍需加密传输。'
       }
     ]
   },
@@ -844,6 +1124,48 @@ export default [
         options: ['AJAX 读取跨域接口的响应', '跨域读写 localStorage', '跨域操作 iframe 中的 DOM', 'img 标签加载跨域图片'],
         answer: 3,
         explanation: '同源策略限制 AJAX 读响应、跨域存储和 DOM 访问；img/script/link 等标签加载跨域资源是允许的，这也是 JSONP 能工作的前提。'
+      },
+      {
+        type: 'single',
+        question: '页面 https://a.com 向 https://a.com:8443/api 发起请求，该请求？',
+        options: ['属于同源请求', '因端口不同属于跨域请求', '只要路径相同就不跨域', '域名相同所以一定不跨域'],
+        answer: 1,
+        explanation: '同源要求协议、域名、端口三者完全一致；8443 与默认的 443 端口不同，因此属于跨域。'
+      },
+      {
+        type: 'single',
+        question: 'Nginx 反向代理解决跨域的原理是？',
+        options: ['让浏览器关闭同源策略', '浏览器访问同源的 Nginx，由 Nginx 把请求转发到后端服务', '利用 script 标签不受跨域限制', '修改 DNS 解析结果指向后端'],
+        answer: 1,
+        explanation: '反向代理让浏览器始终访问同源地址，由 Nginx 在服务器端转发到真实后端，服务器之间通信不受同源策略限制。'
+      },
+      {
+        type: 'judge',
+        question: '不同源的两个窗口或 iframe 之间，可以使用 window.postMessage 安全地进行跨窗口通信。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。postMessage 是浏览器提供的官方跨窗口通信机制，配合 origin 校验可以在不同源页面间安全传数据。'
+      },
+      {
+        type: 'judge',
+        question: '同源策略只限制 AJAX 请求，对跨域的 Cookie、localStorage 和 DOM 访问不做任何限制。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。同源策略同样限制跨域读写 Cookie、localStorage 以及跨域 iframe 的 DOM 操作，这些都是它的核心保护范围。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些 URL 与 https://shop.a.com 不同源？（多选）',
+        options: ['http://shop.a.com', 'https://a.com', 'https://shop.a.com:8443', 'https://shop.a.com/cart/list'],
+        answer: [0, 1, 2],
+        explanation: '协议不同（http）、域名不同（缺少 shop 子域）、端口不同（8443）都跨域；只有路径不同的 URL 与它是同源的。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 CORS 的 OPTIONS 预检请求，下列说法正确的有？（多选）',
+        options: ['非简单请求会在正式请求前先发预检', '服务器在预检响应头中声明允许的方法和请求头', '预检通过后浏览器才会发送正式请求', '预检请求中会携带完整的业务请求体数据'],
+        answer: [0, 1, 2],
+        explanation: '预检只是询问服务器是否允许该跨域请求，响应头中声明允许的来源、方法和头部，不携带业务数据；通过后才发正式请求。'
       }
     ]
   },
@@ -954,6 +1276,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。UDP 首部只有 8 字节，无连接管理、确认重传等机制，开销远小于 TCP（首部至少 20 字节），因此更快但不可靠。'
+      },
+      {
+        type: 'single',
+        question: 'TCP 三次握手中，第一次握手客户端发送的标志位是？',
+        options: ['ACK', 'SYN', 'FIN', 'RST'],
+        answer: 1,
+        explanation: '第一次握手客户端发送 SYN 表示请求建立连接；ACK 是确认标志，FIN 用于断开连接，RST 用于复位异常连接。'
+      },
+      {
+        type: 'single',
+        question: '下列关于 TCP 可靠性的描述，错误的是？',
+        options: ['通过确认与重传机制保证数据不丢失', '保证数据按顺序到达', '具备拥塞控制机制', '不需要建立连接就能直接发送数据'],
+        answer: 3,
+        explanation: 'TCP 是面向连接的协议，必须先三次握手建立连接才能传数据；确认重传、按序到达、拥塞控制都是它的可靠性保障。'
+      },
+      {
+        type: 'single',
+        question: 'DNS 域名查询通常使用 UDP 而不是 TCP，主要原因是？',
+        options: ['DNS 数据必须加密传输', 'UDP 开销小、速度快，少量丢包可接受', 'TCP 不支持传输短报文', 'UDP 能保证数据绝不丢失'],
+        answer: 1,
+        explanation: 'DNS 查询报文小、对实时性要求高，UDP 无需建立连接、开销小，偶尔丢包重发一次即可，因此通常使用 UDP。'
+      },
+      {
+        type: 'judge',
+        question: '如果 TCP 只进行两次握手，服务器将无法确认客户端是否能收到自己发送的消息。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。第三次握手（客户端的 ACK）让服务器确认客户端的接收能力正常；缺了它，失效的连接请求会让服务器白白等待浪费资源。'
+      },
+      {
+        type: 'judge',
+        question: '四次挥手中，主动关闭连接的一方在发送最后一个 ACK 后会进入 TIME_WAIT 状态等待 2MSL。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。等待 2MSL 是为了确保最后一个 ACK 能到达对方，若丢失还可处理对方重传的 FIN，之后才真正关闭。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些特点属于 UDP？（多选）',
+        options: ['无连接，拿到数据直接发送', '不保证数据按顺序到达', '首部开销小、传输速度快', '自带确认与丢包重传机制'],
+        answer: [0, 1, 2],
+        explanation: 'UDP 无连接、不保证可靠与顺序、首部只有 8 字节开销小；确认重传是 TCP 的机制，UDP 没有。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 TCP 三次握手，下列说法正确的有？（多选）',
+        options: ['目的是确认双方的发送和接收能力都正常', '第二次握手服务器回复 SYN+ACK', '两次握手可能让服务器因失效的连接请求白等而浪费资源', '握手过程中双方已经开始传输业务数据'],
+        answer: [0, 1, 2],
+        explanation: '三次握手确认双方收发能力、避免失效连接浪费资源，第二次是 SYN+ACK；握手完成后才开始传输业务数据。'
+      },
+      {
+        type: 'multiple',
+        question: '关于四次挥手中的 2MSL 等待，下列说法正确的有？（多选）',
+        options: ['发生在主动关闭方发送最后一个 ACK 之后', '若最后一个 ACK 丢失，还能处理服务器重传的 FIN', '可让本次连接的旧报文在网络中自然消失，避免影响后续新连接', '等待期间客户端仍可以向服务器发送新的业务数据'],
+        answer: [0, 1, 2],
+        explanation: '2MSL 等待保证最后一个 ACK 能被确认、旧报文自然消亡；等待期间连接处于关闭流程中，不能再发送新业务数据。'
       }
     ]
   }

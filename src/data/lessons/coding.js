@@ -122,6 +122,48 @@ export default [
         options: ['Date 可用 new Date(target.getTime()) 重建', 'RegExp 可用 new RegExp(target) 重建', '函数属性一般直接保留原引用', 'Symbol 键靠 for in 就能完整遍历'],
         answer: [0, 1, 2],
         explanation: 'Date 和 RegExp 需要用各自的方式重建，函数直接保留引用；for in 遍历不到 Symbol 键，第四项错误。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar re = /ab+c/gi;\nvar copy = new RegExp(re);\nconsole.log(copy.source);',
+        options: ['"ab+c"', '"/ab+c/gi"', '"gi"', '报错'],
+        answer: 0,
+        explanation: '用 new RegExp(re) 重建得到独立的正则实例，source 属性是正则的文本部分 "ab+c"，不含斜杠和修饰符。'
+      },
+      {
+        type: 'judge',
+        question: '深拷贝用 WeakMap 做缓存时，键是原对象，值是对应拷贝出来的新容器。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。映射关系是“原对象 -> 拷贝结果”，命中缓存说明该对象正在或已被拷贝，直接取出对应的新容器返回。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar proto = { p: 1 };\nvar obj = Object.create(proto);\nobj.own = 2;\nvar copy = deepClone(obj);\nconsole.log(copy.p);',
+        options: ['1', 'undefined', '2', '报错'],
+        answer: 1,
+        explanation: 'for in 虽能遍历到原型链上的 p，但 hasOwnProperty 过滤后只拷贝自身属性 own，copy 的原型是 Object.prototype，访问 copy.p 为 undefined。'
+      },
+      {
+        type: 'multiple',
+        question: '关于递归深拷贝的局限与改进，以下说法正确的有哪些？（多选）',
+        options: ['递归层级过深时可能栈溢出', '可以改用栈或队列迭代实现来避免栈溢出', 'JSON.parse(JSON.stringify(obj)) 遇到循环引用会抛错', '递归版天然支持任意深度的嵌套，无需担心'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；递归遇到极深嵌套同样会调用栈溢出，需要迭代版规避，第四项错误。'
+      },
+      {
+        type: 'single',
+        question: '补全深拷贝中处理 RegExp 的第 2 行，应该选哪段？\n1: if (target instanceof RegExp) {\n2:   __________\n3: }',
+        options: ['return new RegExp(target);', 'return target.source;', 'return { source: target.source };', 'return target;'],
+        answer: 0,
+        explanation: 'RegExp 要重建一个新实例而不是复用原引用；new RegExp(target) 会保留 source 和修饰符，返回 source 字符串或原引用都不符合深拷贝语义。'
+      },
+      {
+        type: 'multiple',
+        question: '关于深拷贝缓存选用 WeakMap，以下说法正确的有哪些？（多选）',
+        options: ['WeakMap 的键可以是对象', 'WeakMap 的弱引用不阻碍垃圾回收', '缓存中保存的是“原对象到拷贝结果”的映射', 'WeakMap 可以用 forEach 遍历所有缓存项'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；WeakMap 不可遍历（没有 forEach、keys 等方法），这正是弱引用设计带来的限制，第四项错误。'
       }
     ]
   },
@@ -248,6 +290,48 @@ export default [
         options: ['能把基本类型的 context 包装成对象，才能挂载临时属性', 'context 是基本类型时不包装，直接挂属性会静默失败或报错', '它与 null 回退全局对象的判断配合，覆盖各种入参情况', '它的作用是把要执行的函数本身转成对象'],
         answer: [0, 1, 2],
         explanation: 'Object(context) 是包装调用方传入的 context，让基本类型也能作为挂载点；它与函数本身无关，第四项错误。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nfunction add(a, b, c) {\n  return a + b + c;\n}\nvar addOne = add.myBind(null, 1);\nconsole.log(addOne(2, 3));',
+        options: ['3', '6', 'NaN', '报错'],
+        answer: 1,
+        explanation: 'bind 预设参数 1，调用时再传 2、3，拼接后为 add(1, 2, 3)，结果为 6，这就是 bind 的柯里化能力。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar a = { x: 1 };\nvar b = { x: 2 };\nfunction fn() { return this.x; }\nvar bound = fn.bind(a).bind(b);\nconsole.log(bound());',
+        options: ['1', '2', 'undefined', '报错'],
+        answer: 0,
+        explanation: 'bind 绑定的 this 是永久的，第一次 bind(a) 已固定 this，第二次 bind(b) 无法覆盖，输出 1。'
+      },
+      {
+        type: 'judge',
+        question: '手写 myCall 时若用固定字符串（如 "fn"）作为临时属性键，可能覆盖 context 上的同名属性，用 Symbol 可以彻底避免冲突。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。Symbol 每次创建都是唯一值，不会与 context 上已有的任何键冲突，这是使用 Symbol 做临时键的原因。'
+      },
+      {
+        type: 'judge',
+        question: '非严格模式下用 call 传入基本类型作为 this 时，函数内部拿到的 this 是被 Object() 包装后的对象。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。原生 call 与规范实现都会把基本类型 context 包装成对象，所以手写实现里用 Object(context) 与原生行为保持一致。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 bind 返回的函数被 new 调用，以下说法正确的有哪些？（多选）',
+        options: ['new 的优先级高于 bind，this 指向新创建的实例', '规范实现需判断 this 是否为绑定函数的实例', 'new 调用时 bind 预设的参数仍会拼在实参前面', 'new 调用时 this 仍指向 bind 绑定的对象'],
+        answer: [0, 1, 2],
+        explanation: 'new 绑定函数时 this 指向新实例，实现上通过 this instanceof 绑定函数来判断；预设参数依然有效并拼在前面；第四项与 new 的优先级矛盾，错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 apply 的第二个参数，以下说法正确的有哪些？（多选）',
+        options: ['应是一个数组或类数组', '其元素会按顺序作为函数的实参', '传 null 或 undefined 时按无参调用处理', '第二个参数必须像 call 一样逐个列出实参'],
+        answer: [0, 1, 2],
+        explanation: 'apply 的第二参数是数组或类数组，元素按序展开为实参，传 null 或 undefined 等价于不传参；逐个列参是 call 的形式，第四项错误。'
       }
     ]
   },
@@ -374,6 +458,48 @@ export default [
         options: ['pending 状态下 then 的回调会存入数组等待', '状态改变时统一遍历执行数组中已存的回调', '同一个 Promise 多次调用 then，各回调都会被执行', 'pending 状态下 then 的回调会被直接丢弃'],
         answer: [0, 1, 2],
         explanation: 'pending 时回调入数组、状态改变时统一执行、多次 then 各自注册回调都会执行；回调被保存而不是丢弃，第四项错误。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nnew MyPromise(function (resolve) {\n  resolve(7);\n})\n  .then()\n  .then(function (v) {\n    console.log(v);\n  });',
+        options: ['undefined', '7', 'pending', '报错'],
+        answer: 1,
+        explanation: '值穿透：第一个 then 没传回调，值 7 会原样透传给下一个 then，最终输出 7。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nnew MyPromise(function (resolve) {\n  resolve(1);\n})\n  .then(function (v) { throw "boom"; })\n  .then(null, function (err) {\n    console.log(err);\n  });',
+        options: ['1', 'boom', 'undefined', '同步报错终止脚本'],
+        answer: 1,
+        explanation: '回调抛错会被 run 内的 try catch 捕获并 reject 新 Promise，错误沿链传递，被下一个 then 的 onRejected 接住，输出 boom。'
+      },
+      {
+        type: 'single',
+        question: '这段代码（真实 Promise）的输出顺序是什么？\nconsole.log("sync");\nPromise.resolve().then(function () {\n  console.log("micro");\n});\nsetTimeout(function () {\n  console.log("macro");\n}, 0);',
+        options: ['sync micro macro', 'sync macro micro', 'micro macro sync', 'macro sync micro'],
+        answer: 0,
+        explanation: '同步代码先执行，then 的回调是微任务，优先于 setTimeout 的宏任务执行，所以顺序是 sync、micro、macro。'
+      },
+      {
+        type: 'judge',
+        question: 'then 的回调返回一个普通值时，then 返回的新 Promise 会以这个值进入 fulfilled 状态。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。回调返回值 x 会作为新 Promise 的 resolve 值，对应实现里 run 函数中的 resolve(x)。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 Promise 解析过程（回调返回 Promise 的情况），以下说法正确的有哪些？（多选）',
+        options: ['新 Promise 会等待返回的 Promise 落定后再决定自己的状态', '返回 thenable 对象同样会被展开处理', '需要递归解析直到拿到非 Promise 的值', '新 Promise 直接把返回的 Promise 当普通值 resolve'],
+        answer: [0, 1, 2],
+        explanation: '前三项是规范要求；若直接把 Promise 当普通值 resolve，下一个 then 拿到的将是 Promise 对象本身而不是其结果，第四项错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于手写 Promise 中的错误与 reject，以下说法正确的有哪些？（多选）',
+        options: ['executor 同步抛错时应自动 reject', 'then 回调抛错会 reject 该 then 返回的新 Promise', '错误被 onRejected 处理后，后续的 then 还能正常拿到其返回值', '状态变为 rejected 后还能再调用 resolve 改成 fulfilled'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；状态不可逆，rejected 之后 resolve 无效，第四项错误。'
       }
     ]
   },
@@ -494,6 +620,48 @@ export default [
         options: ['用闭包中的 timer 标记是否存在计时器', '计时器存在期间的触发会被忽略', '第一次触发会延迟一个间隔才执行', '每次触发都重新创建计时器并立即执行'],
         answer: [0, 1, 2],
         explanation: '定时器版靠 timer 是否存在来拦截触发，计时期间触发被忽略，首次执行要等定时器到点；第四项描述的不是节流。'
+      },
+      {
+        type: 'single',
+        question: '假设使用定时器版节流（timer 存在期间触发被忽略），这段代码的输出是什么？\nvar count = 0;\nvar fn = throttleByTimer(function () { count++; }, 100);\nfn();\nconsole.log(count);',
+        options: ['0', '1', '100', '报错'],
+        answer: 0,
+        explanation: '定时器版第一次触发只是启动计时器，要等 100ms 到点才执行，同步输出时 count 还是 0，这与时间戳版首次立即执行形成对比。'
+      },
+      {
+        type: 'single',
+        question: '补全定时器版节流的第 6 行，应该选哪段？\n1: function throttle(fn, interval) {\n2:   var timer = null;\n3:   return function () {\n4:     var context = this;\n5:     var args = arguments;\n6:     __________\n7:     timer = setTimeout(function () {\n8:       fn.apply(context, args);\n9:       timer = null;\n10:     }, interval);\n11:   };\n12: }',
+        options: ['if (timer) return;', 'if (!timer) return;', 'clearTimeout(timer);', 'timer = 0;'],
+        answer: 0,
+        explanation: '定时器版的拦截方式是 timer 存在期间直接 return 忽略触发，等定时器到点执行后把 timer 置回 null，才允许下一轮；clearTimeout 是防抖的思路。'
+      },
+      {
+        type: 'judge',
+        question: '防抖返回的函数中如果不先保存 arguments，定时器回调里就拿不到触发时传入的参数（如事件对象）。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。setTimeout 回调执行时外层函数的 arguments 已不可用，必须用闭包变量保存后通过 apply 传给原函数。'
+      },
+      {
+        type: 'judge',
+        question: '时间戳版节流在触发停止后，不会再补执行最后一次被忽略的触发（缺少 trailing 效果）。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。时间戳版只在触发瞬间判断间隔，间隔内的触发直接被丢弃且不会安排补执行；想要尾部补执行需要结合定时器做 trailing 变体。'
+      },
+      {
+        type: 'multiple',
+        question: '关于防抖中 this 与参数的处理，以下说法正确的有哪些？（多选）',
+        options: ['setTimeout 的普通回调中 this 默认指向全局对象', '需要用闭包变量提前保存返回函数的 this', '用 fn.apply(context, args) 执行可还原 this 与参数', '定时器回调里直接使用 this 也能拿到正确的上下文'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；普通函数形式的定时器回调 this 会丢失，直接使用 this 是防抖实现的经典 bug，第四项错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于时间戳版与定时器版节流的区别，以下说法正确的有哪些？（多选）',
+        options: ['时间戳版第一次触发立即执行', '定时器版第一次触发会延迟一个间隔才执行', '时间戳版停止触发后没有尾部补执行', '两种实现的行为完全一致，可以互相替换'],
+        answer: [0, 1, 2],
+        explanation: '前三项是两者的经典区别；首尾执行时机不同决定了它们不能完全互换，面试常要求说出这一点，第四项错误。'
       }
     ]
   },
@@ -614,6 +782,48 @@ export default [
         options: ['新建空数组存放结果，不修改原数组', '回调依次收到元素、下标、原数组', '把回调返回值依次 push 进新数组', '用 for in 遍历数组是推荐写法'],
         answer: [0, 1, 2],
         explanation: '前三项正确；数组遍历应使用带下标的 for 循环，for in 会遍历到原型链上的可枚举属性且顺序不保证，不是推荐写法。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log([1, [2, [3]]].myFlat(Infinity));',
+        options: ['[1, 2, 3]', '[1, 2, [3]]', '[1, [2, [3]]]', '报错'],
+        answer: 0,
+        explanation: 'Infinity 减 1 仍是 Infinity，递归条件 d > 0 恒成立，所有嵌套层都会被拍平，结果是 [1, 2, 3]。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nvar arr = [4, 2, 4, 3];\nvar r = arr.filter(function (x, i) {\n  return arr.indexOf(x) === i;\n});\nconsole.log(r);',
+        options: ['[4, 2, 3]', '[4, 2, 4, 3]', '[4, 4]', '[2, 3]'],
+        answer: 0,
+        explanation: 'indexOf 返回元素第一次出现的下标，只有下标与 i 相等的元素被保留，下标为 2 的重复 4 被过滤掉，结果是 [4, 2, 3]。'
+      },
+      {
+        type: 'judge',
+        question: '对空数组调用未传初始值的 myReduce 时，累加器会取到 undefined，原生 reduce 在这种情况会直接抛出 TypeError。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。空数组无初始值时没有任何元素可作为累加器，原生规范要求抛错，手写实现至少要意识到这个边界情况。'
+      },
+      {
+        type: 'judge',
+        question: 'myMap 通过 push 逐个收集回调返回值构造新数组，返回数组的长度与原数组保持一致。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。map 是一对一映射，每个元素都产生一个新元素，长度不变；长度会变化的是 filter 等方法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于使用 Set 去重，以下说法正确的有哪些？（多选）',
+        options: ['Array.from(new Set(arr)) 是最简洁的去重写法', 'Set 的重复判断基于 SameValueZero 比较', '数组中的多个 NaN 用 Set 去重后只保留一个', 'Set 能去掉内容相同但引用不同的对象'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确（SameValueZero 认为 NaN 等于 NaN）；对象按引用比较，内容相同但引用不同的对象不会被去重，第四项错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 myFlat 递归实现的关键点，以下说法正确的有哪些？（多选）',
+        options: ['非数组元素直接 push 进结果数组', '深度 d 减到 0 后子数组不再展开', '每层递归要把 d - 1 传下去', '必须用 JSON.parse(JSON.stringify()) 辅助拍平'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；拍平用递归加 concat 即可，JSON 方式与拍平无关还会丢失 undefined 等数据，第四项错误。'
       }
     ]
   },
@@ -740,6 +950,48 @@ export default [
         options: ['回文判断用左右指针从两端向中间收缩', '双指针常把 O(n^2) 的暴力比较优化到 O(n)', '回文判断的循环条件是 left < right，交错即结束', '回文判断中 left 与 right 每次必须同时移动两位'],
         answer: [0, 1, 2],
         explanation: '前三项正确；每轮 left 加一、right 减一即可，移动两位会跳过中间位置的比较，第四项错误。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log(bubbleSort([5, 3, 8, 1]).join(","));',
+        options: ['"1,3,5,8"', '"5,3,8,1"', '"1,5,3,8"', '报错'],
+        answer: 0,
+        explanation: '冒泡排序逐轮把最大值交换到末尾，最终数组升序排列，join 后输出 "1,3,5,8"；且实现先 slice 拷贝，不影响入参数组。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log(isPalindrome("abca"));',
+        options: ['true', 'false', '"abca"', '报错'],
+        answer: 1,
+        explanation: '两端比较：a 与 a 相等后 left 为 1、right 为 2，b 与 c 不等，立即返回 false。'
+      },
+      {
+        type: 'single',
+        question: '这段代码的输出是什么？\nconsole.log(twoSum([1, 5, 5], 10));',
+        options: ['[0, 1]', '[1, 2]', '[2, 2]', '[]'],
+        answer: 1,
+        explanation: 'i=0 时存入 1->0；i=1 时差值 5 不在表中，存入 5->1；i=2 时差值 5 已存在，返回 [map[5], 2] 即 [1, 2]，先查再存避免了元素复用。'
+      },
+      {
+        type: 'judge',
+        question: '记忆化斐波那契用对象缓存已计算的结果，把时间复杂度从 O(2^n) 降到 O(n)。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。每个 n 只计算一次，后续直接查缓存，计算次数从指数级降到线性。'
+      },
+      {
+        type: 'multiple',
+        question: '关于冒泡排序的实现细节，以下说法正确的有哪些？（多选）',
+        options: ['外层循环需要 n - 1 轮', '内层比较到 length - 1 - i，跳过已排序的末尾', '可以加“本轮无交换则提前退出”的标志来优化几乎有序的数组', '不使用临时变量也能正确完成两元素交换'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；不用临时变量直接赋值会覆盖原值导致交换失败（除非用解构等技巧），第四项错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于哈希法求解两数之和，以下说法正确的有哪些？（多选）',
+        options: ['边遍历边建立“元素到下标”的映射', '对每个元素检查 target 减去它的差值是否已在表中', '必须先查再存，避免同一个元素被使用两次', '整体时间复杂度是 O(n^2)'],
+        answer: [0, 1, 2],
+        explanation: '前三项正确；哈希表把查找降到 O(1)，整体时间复杂度是 O(n)，第四项错误。'
       }
     ]
   }

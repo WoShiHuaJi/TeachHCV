@@ -15,7 +15,7 @@ const lesson = ref(getLesson(route.params.id))
 const ready = ref(false) // 完整题库是否加载完成
 
 /** 每次测验从题库随机抽取的题数 */
-const QUIZ_COUNT = 4
+const QUIZ_COUNT = 10
 const quizCount = computed(() => Math.min(QUIZ_COUNT, lesson.value?.quizCount || QUIZ_COUNT))
 
 const finished = ref(false)

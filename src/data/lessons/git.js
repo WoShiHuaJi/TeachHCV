@@ -114,6 +114,62 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。用户名和邮箱的配置只需要做一次，之后可以用 git config --list 查看。'
+      },
+      {
+        type: 'single',
+        question: '要设置全局的用户名，让每次提交都记录作者信息，该用哪条命令？',
+        options: ['git config --global user.name "张三"', 'git config --global user.email "zhangsan@example.com"', 'git init --global', 'git add --global'],
+        answer: 0,
+        explanation: 'git config --global user.name 设置用户名，user.email 设置邮箱，两者通常一起配置一次即可。'
+      },
+      {
+        type: 'single',
+        question: '想把别人在 GitHub 上的项目完整复制到本地，该用哪条命令？',
+        options: ['git init', 'git clone 仓库地址', 'git add .', 'git status'],
+        answer: 1,
+        explanation: 'git clone 会把远程仓库完整复制到本地，包括全部代码和历史，并自动连好远程。'
+      },
+      {
+        type: 'single',
+        question: '提交之前想确认哪些文件已暂存、哪些还没被跟踪，该用哪条命令？',
+        options: ['git status', 'git log', 'git commit', 'git config --list'],
+        answer: 0,
+        explanation: 'git status 会显示文件被修改、已暂存、未跟踪等状态，新手建议每操作一步就 status 一下。'
+      },
+      {
+        type: 'judge',
+        question: 'git add 把文件放入暂存区后，改动就已经永久保存到本地仓库历史中了。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。add 只是放进暂存区，还需要 git commit 才会保存到本地仓库的历史里。'
+      },
+      {
+        type: 'judge',
+        question: '提交说明写清楚这次改了什么（比如"修复登录页按钮样式"）是值得提倡的习惯。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。清晰的提交说明方便自己和同事理解历史，出问题时也容易定位和回退。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 git init 和 git clone，以下说法正确的有？（多选）',
+        options: ['git init 用于从零初始化本地仓库', 'git clone 会复制完整的代码和历史', 'git init 后目录里会出现隐藏的 .git 文件夹', 'git clone 只能拿到最新代码，拿不到历史'],
+        answer: [0, 1, 2],
+        explanation: 'init 从零建仓库并生成 .git 文件夹；clone 复制完整仓库包括历史。'
+      },
+      {
+        type: 'multiple',
+        question: '把改动从工作区提交进本地仓库，正确的流程包含哪些命令？（多选）',
+        options: ['git add 文件名', 'git commit -m "说明"', 'git log --oneline', 'git config --list'],
+        answer: [0, 1],
+        explanation: '标准流程是先 git add 放入暂存区，再 git commit 提交；log 和 config 与提交流程无关。'
+      },
+      {
+        type: 'multiple',
+        question: '关于暂存区，以下说法正确的有？（多选）',
+        options: ['git add 可以把文件放入暂存区', 'commit 时只提交暂存区里的内容', 'git restore --staged 可以把文件撤出暂存区', '放入暂存区会自动推送到远程仓库'],
+        answer: [0, 1, 2],
+        explanation: '暂存区是提交前的准备区，add 放入、commit 提交、restore --staged 撤出；推送远程需要单独的 push。'
       }
     ]
   },
@@ -226,6 +282,62 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: '错误。Git 无法自动决定时会报冲突，需要手动编辑文件、删掉冲突标记后再提交。'
+      },
+      {
+        type: 'single',
+        question: '要切换到已经存在的分支 dev（不新建），该用哪条命令？',
+        options: ['git switch dev', 'git switch -c dev', 'git branch dev', 'git merge dev'],
+        answer: 0,
+        explanation: 'git switch dev 用于切换到已存在的分支；git switch -c 才是创建并切换。'
+      },
+      {
+        type: 'single',
+        question: '想查看本地目前有哪些分支，该用哪条命令？',
+        options: ['git branch', 'git switch', 'git merge', 'git status'],
+        answer: 0,
+        explanation: '不带参数执行 git branch 会列出所有本地分支，当前所在分支会有标记。'
+      },
+      {
+        type: 'single',
+        question: '合并时 Git 提示发生冲突，接下来第一步应该做什么？',
+        options: ['打开冲突文件，查看冲突标记并手动编辑', '直接 git push 到远程', '删除整个仓库重新克隆', '无视提示直接 git commit'],
+        answer: 0,
+        explanation: '冲突发生后先打开文件，根据 <<<<<<<、=======、>>>>>>> 标记手动取舍代码，然后再 add 和 commit。'
+      },
+      {
+        type: 'judge',
+        question: 'git switch 是切换分支的新命令，对应的旧命令是 git checkout。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。新版本 Git 推荐用 git switch 切换分支，旧命令是 git checkout。'
+      },
+      {
+        type: 'judge',
+        question: 'git branch -d 只能删除已经合并过的分支，未合并的分支会被它拒绝删除。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。-d 是安全删除，分支未合并时会被拒绝，防止误删还没合并的工作。'
+      },
+      {
+        type: 'multiple',
+        question: '使用分支开发新功能的好处包括以下哪些？（多选）',
+        options: ['新功能在独立分支开发，不影响主代码', '主分支保持稳定可随时发布', '功能写好测完再合并回主分支', '有了分支就不需要提交代码了'],
+        answer: [0, 1, 2],
+        explanation: '分支让新功能开发不影响主分支，主分支保持稳定，完成后再合并；分支上同样需要提交。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些命令与分支的创建或切换有关？（多选）',
+        options: ['git branch dev', 'git switch dev', 'git switch -c dev', 'git merge dev'],
+        answer: [0, 1, 2],
+        explanation: 'git branch 创建分支，git switch 切换分支，git switch -c 创建并切换；merge 是合并分支。'
+      },
+      {
+        type: 'multiple',
+        question: '关于合并冲突，以下说法正确的有？（多选）',
+        options: ['两个分支改了同一文件同一部分容易冲突', '解决冲突后要 git add 再 git commit', '冲突标记需要手动删除', '冲突一旦出现就无法解决，只能放弃合并'],
+        answer: [0, 1, 2],
+        explanation: '冲突是日常，手动编辑删除标记后 add、commit 即可完成合并，并不是无法解决。'
       }
     ]
   },
@@ -338,6 +450,62 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '正确。PR 流程的最后一步就是合并后删除功能分支，避免分支越积越多。'
+      },
+      {
+        type: 'single',
+        question: '想查看本地仓库关联了哪些远程仓库地址，该用哪条命令？',
+        options: ['git remote -v', 'git branch', 'git log', 'git status'],
+        answer: 0,
+        explanation: 'git remote -v 会列出远程仓库的别名和对应地址，方便确认 push、pull 的目标。'
+      },
+      {
+        type: 'single',
+        question: '每天开始写代码前，为了同步同事推送的最新代码，建议先执行哪条命令？',
+        options: ['git pull', 'git push', 'git commit', 'git clone'],
+        answer: 0,
+        explanation: '每天开工前先 git pull 拉取远程更新，能减少后续冲突，是多人协作的好习惯。'
+      },
+      {
+        type: 'single',
+        question: '同事在 PR 里提了修改意见，正确的处理方式是？',
+        options: ['在功能分支上修改并提交，再推送到远程更新 PR', '无视意见直接自己合并', '删掉 PR 不再提交这个功能', '强制推送到主分支绕过审查'],
+        answer: 0,
+        explanation: '收到审查意见后，在功能分支上改好再 push，PR 会自动更新，等审查通过后再合并。'
+      },
+      {
+        type: 'judge',
+        question: '团队走 Pull Request 流程时，直接往主分支推代码是推荐的做法。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。团队里一般不直接推主分支，而是在功能分支开发，通过 PR 审查后再合并。'
+      },
+      {
+        type: 'judge',
+        question: '如果远程仓库已有别人的新提交，本地直接 push 会被拒绝。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。这时需要先 git pull 合并远程更新，再重新 push，即先拉再推。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 git fetch 与 git pull，以下说法正确的有？（多选）',
+        options: ['fetch 只下载远程信息，不改动工作区', 'pull 相当于 fetch 加 merge', '每天开工前先 pull 是好习惯', 'fetch 会自动把更新合并进当前分支'],
+        answer: [0, 1, 2],
+        explanation: 'fetch 只下载供查看，pull 才会合并；自动合并进当前分支的是 pull 而不是 fetch。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些做法符合 Pull Request 协作规范？（多选）',
+        options: ['从主分支切出功能分支开发', '把分支推送后在 GitHub 上发起 PR', '根据审查意见修改后再合并', '审查不通过也强行合并到主分支'],
+        answer: [0, 1, 2],
+        explanation: 'PR 流程是切分支、推送、发起 PR、审查修改、通过后合并；强行合并违背协作规范。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些场景需要先 git pull 再操作？（多选）',
+        options: ['每天开始工作前', 'push 之前发现远程有别人的新提交', '本地与远程提交出现分叉时', '刚 git init 完的本地空仓库'],
+        answer: [0, 1, 2],
+        explanation: '先拉再推、勤同步能减少冲突；刚 init 的空仓库还没有远程内容可拉。'
       }
     ]
   }
