@@ -164,6 +164,76 @@ export default [
         options: ['"5" + 3', '5 + "3"', '"2" + "3"', '5 + 3'],
         answer: [0, 1, 2],
         explanation: '只要 + 有一边是字符串就发生拼接；5 + 3 两边都是数字，正常相加得 8。'
+      },
+      {
+        type: 'single',
+        question: 'console.log(1 + 2 + "3"); 输出什么？',
+        options: ['"123"', '"33"', '6', 'NaN'],
+        answer: 1,
+        explanation: '加法从左到右计算，1 + 2 得 3，再与字符串 "3" 拼接得到 "33"。'
+      },
+      {
+        type: 'single',
+        question: 'console.log("3" * "2"); 输出什么？',
+        options: ['"32"', '6', 'NaN', '报错'],
+        answer: 1,
+        explanation: '乘法没有拼接歧义，两个字符串都被转成数字，3 * 2 等于 6。'
+      },
+      {
+        type: 'judge',
+        question: 'NaN 与任何值比较（包括它自己）结果都是 false。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'NaN 不等于任何值，NaN === NaN 也是 false，判断 NaN 要用 isNaN。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些值经 Number() 转换后不是 NaN？（多选）',
+        options: ['"12"', '""', '"abc"', 'true'],
+        answer: [0, 1, 3],
+        explanation: 'Number("") 是 0，Number(true) 是 1，只有 "abc" 无法转换得到 NaN。'
+      },
+      {
+        type: 'single',
+        question: 'let x = 5; let y = x; x = 10; console.log(y); 输出什么？',
+        options: ['10', '5', 'undefined', '报错'],
+        answer: 1,
+        explanation: '基本类型按值复制，y 拿到的是当时 x 的副本 5，之后修改 x 不影响 y。'
+      },
+      {
+        type: 'judge',
+        question: '直接读取一个从未声明过的变量会报错。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '读取未声明的变量会抛出 ReferenceError；只有 typeof 检测未声明变量是安全的。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些声明或赋值会报错？（多选）',
+        options: ['const a;（只声明不赋值）', 'const b = 1; b = 2;', 'let c = 1; c = 2;', 'let d = 1; let d = 2;（同一作用域重复声明）'],
+        answer: [0, 1, 3],
+        explanation: 'const 必须初始化且不能重新赋值；let 可以重新赋值；同一作用域用 let 重复声明同名变量会报语法错误。'
+      },
+      {
+        type: 'single',
+        question: '输入框拿到的值是 "3.5"，想与 0.5 相加得到 4，正确写法是？',
+        options: ['"3.5" + 0.5', 'Number("3.5") + 0.5', '"3.5" - 0.5', 'String("3.5") + 0.5'],
+        answer: 1,
+        explanation: '先用 Number 转成数字再相加；直接 + 会拼接成 "3.50.5"，减法得到的是 3。'
+      },
+      {
+        type: 'judge',
+        question: 'typeof NaN 的结果是 "number"。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'NaN 虽然表示"不是一个数字"，但它的类型仍然是 number。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些写法能把字符串 "42" 变成数字 42？（多选）',
+        options: ['Number("42")', '+"42"', 'String("42")', '"42" - 0'],
+        answer: [0, 1, 3],
+        explanation: 'String("42") 结果仍是字符串；一元加号和减法都会触发数字转换。'
       }
     ]
   },
@@ -332,6 +402,76 @@ export default [
         options: ['初始化部分只在循环开始前执行一次', '条件一开始为 false 时循环体一次也不执行', '每次循环体执行完后先执行 i++ 之类的操作再判断条件', 'continue 会直接结束整个循环'],
         answer: [0, 1, 2],
         explanation: '直接结束整个循环的是 break，continue 只跳过本次。'
+      },
+      {
+        type: 'single',
+        question: 'console.log(0 || "hello"); 输出什么？',
+        options: ['true', '"hello"', '0', 'false'],
+        answer: 1,
+        explanation: '|| 返回第一个真值，0 是假值所以返回后面的 "hello"。'
+      },
+      {
+        type: 'single',
+        question: 'console.log(2 ** 3); 的结果是？',
+        options: ['6', '8', '9', '报错'],
+        answer: 1,
+        explanation: '** 是幂运算符，2 的 3 次方等于 8。'
+      },
+      {
+        type: 'judge',
+        question: '表达式 null == undefined 的结果是 true。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '== 比较时 null 和 undefined 被视为相等，这是 == 的一条特殊规则；用 === 则不相等。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些表达式的结果是 false？（多选）',
+        options: ['3 < 2', '![]', '1 === 1', 'NaN === NaN'],
+        answer: [0, 1, 3],
+        explanation: '空数组是真值所以 ![] 为 false；NaN 不等于它自己；只有 1 === 1 为 true。'
+      },
+      {
+        type: 'single',
+        question: '下面代码输出什么？let n = 0; for (let i = 1; i <= 10; i++) { if (i % 2 === 0) { n++; } } console.log(n);',
+        options: ['4', '5', '6', '10'],
+        answer: 1,
+        explanation: '循环统计 1 到 10 中偶数的个数：2、4、6、8、10，共 5 个。'
+      },
+      {
+        type: 'judge',
+        question: '逻辑表达式 A || B 中，若 A 为真值，则不会再去计算 B（这称为短路）。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '|| 和 && 都有短路特性：结果一旦确定，右侧表达式就不再求值。'
+      },
+      {
+        type: 'multiple',
+        question: '想用 for 循环计算 1 到 100 的和，以下哪些写法思路是正确的？（多选）',
+        options: ['先初始化 let sum = 0，循环中累加 sum += i', '循环条件写 i <= 100 可以把 100 也算进去', '用 if/else 写 100 个分支逐个相加', '循环变量 i 从 1 开始刚好对应要加的数'],
+        answer: [0, 1, 3],
+        explanation: '累加求和用循环即可，写 100 个 if/else 分支既不现实也违背了循环的意义。'
+      },
+      {
+        type: 'single',
+        question: 'console.log(7 % 2 === 1 && 7 > 5); 的结果是？',
+        options: ['true', 'false', '1', '报错'],
+        answer: 0,
+        explanation: '7 % 2 得 1，7 > 5 为 true，两个条件都成立，&& 结果为 true。'
+      },
+      {
+        type: 'judge',
+        question: '逻辑表达式 true && "你好" 的结果是 "你好"。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '&& 左边为真值时返回右边的值，这里是字符串 "你好"。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些 for 循环写法能依次输出 0 到 9？（多选）',
+        options: ['for (let i = 0; i < 10; i++)', 'for (let i = 0; i <= 9; i++)', 'for (let i = 10; i > 0; i--)', 'for (let i = 0; i < 10; i = i + 1)'],
+        answer: [0, 1, 3],
+        explanation: '第三种写法输出的是 10 到 1；i++ 与 i = i + 1 效果相同。'
       }
     ]
   },
@@ -500,6 +640,76 @@ export default [
         options: ['少传的参数值为 undefined', '多传的参数会被忽略', '实参按位置依次对应形参', '实参可以打乱顺序传入，靠参数名自动匹配'],
         answer: [0, 1, 2],
         explanation: 'JavaScript 的参数按位置对应，没有按名字匹配的机制，顺序不能乱。'
+      },
+      {
+        type: 'single',
+        question: 'function add(a, b) { return a + b; } console.log(typeof add); 输出什么？',
+        options: ['"object"', '"function"', '"undefined"', '"string"'],
+        answer: 1,
+        explanation: '函数在 JavaScript 中是一种值，typeof 函数名得到 "function"。'
+      },
+      {
+        type: 'single',
+        question: 'const f = () => { return 42; }; const g = f; console.log(g()); 输出什么？',
+        options: ['undefined', '42', '报错', '函数本身'],
+        answer: 1,
+        explanation: '函数是值，可以赋给另一个变量，g 和 f 指向同一个函数，调用结果为 42。'
+      },
+      {
+        type: 'judge',
+        question: '没有名字的匿名函数也可以直接作为参数传给其他函数。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '回调经常用匿名函数，比如 arr.forEach(function(n) { ... }) 里的函数就没有名字。'
+      },
+      {
+        type: 'multiple',
+        question: '把代码封装成函数有哪些好处？（多选）',
+        options: ['让代码可以重复使用', '把复杂逻辑拆分成小块便于维护', '函数越多程序运行一定越快', '给一段逻辑起个名字提高可读性'],
+        answer: [0, 1, 3],
+        explanation: '函数解决的是复用、组织和可读性问题，与运行速度没有必然关系。'
+      },
+      {
+        type: 'single',
+        question: 'function outer() { function inner() { return 7; } return inner(); } console.log(outer()); 输出什么？',
+        options: ['undefined', '7', '报错', 'inner'],
+        answer: 1,
+        explanation: '函数内部可以再定义函数，outer 调用 inner 并返回其结果 7。'
+      },
+      {
+        type: 'judge',
+        question: '调用函数时圆括号不能省略，即使函数没有参数也要写 f()。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '圆括号表示"执行这个函数"，只写函数名 f 拿到的是函数本身而不是执行结果。'
+      },
+      {
+        type: 'multiple',
+        question: '关于"函数也是一种值"，以下哪些说法是正确的？（多选）',
+        options: ['函数可以赋给变量', '函数可以作为参数传给其他函数（回调）', '函数必须先起名字才能使用', '同一个函数可以在不同地方多次调用'],
+        answer: [0, 1, 3],
+        explanation: '匿名函数（如箭头函数、函数表达式）不起名字也能定义和使用。'
+      },
+      {
+        type: 'single',
+        question: '下面代码输出什么？function f(a) { return a; } function g(a) { return f(a) + 1; } console.log(g(4));',
+        options: ['4', '5', 'undefined', '报错'],
+        answer: 1,
+        explanation: '函数里可以调用其他函数，f(4) 返回 4，g 再加 1 返回 5。'
+      },
+      {
+        type: 'judge',
+        question: '函数表达式 const f = function() {}; 的结尾要写分号，因为它本质上是一条赋值语句。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '函数表达式是把函数赋值给变量，属于赋值语句，结尾分号不能少；function 声明则不需要。'
+      },
+      {
+        type: 'multiple',
+        question: '一个写得好的函数通常具备哪些特点？（多选）',
+        options: ['只做一件事，职责单一', '名字能说明它的用途', '通过参数接收输入、用 return 返回结果', '把尽可能多的逻辑塞进一个函数里'],
+        answer: [0, 1, 2],
+        explanation: '超长函数难以阅读和维护，应该拆分成多个职责清晰的小函数。'
       }
     ]
   },
@@ -668,6 +878,76 @@ export default [
         options: ['数组下标从 0 开始', 'length 属性会随元素的增删自动更新', '访问越界下标 a[10] 会直接报错', 'shift 会删除并返回数组开头的元素'],
         answer: [0, 1, 3],
         explanation: '访问越界下标得到 undefined 而非报错；其余三项说法正确。'
+      },
+      {
+        type: 'single',
+        question: 'let a = [1, 2, 3, 4]; console.log(a.slice(1, 3)); 输出什么？',
+        options: ['[1, 2]', '[2, 3]', '[2, 3, 4]', '[1, 2, 3]'],
+        answer: 1,
+        explanation: 'slice(1, 3) 取下标 1 到 2（不含 3）的元素，得到 [2, 3]，且不修改原数组。'
+      },
+      {
+        type: 'single',
+        question: 'let a = ["a", "b", "c"]; console.log(a.join("-")); 输出什么？',
+        options: ['"abc"', '"a-b-c"', '"a,b,c"', '["a-b-c"]'],
+        answer: 1,
+        explanation: 'join 用指定分隔符把数组元素拼成一个字符串，这里用 "-" 连接。'
+      },
+      {
+        type: 'single',
+        question: 'let a = [1, 2, 3]; a.reverse(); console.log(a); 输出什么？',
+        options: ['[1, 2, 3]', '[1, 3, 2]', '[3, 2, 1]', '报错'],
+        answer: 2,
+        explanation: 'reverse 会把原数组就地反转，直接修改原数组为 [3, 2, 1]。'
+      },
+      {
+        type: 'single',
+        question: 'let a = [1, 2, 3]; let b = [...a, 4]; console.log(b); 输出什么？',
+        options: ['[1, 2, 3, 4]', '[4, 1, 2, 3]', '[[1, 2, 3], 4]', '报错'],
+        answer: 0,
+        explanation: '展开语法 ...a 把 a 的元素逐个展开，再追加 4，得到新数组 [1, 2, 3, 4]。'
+      },
+      {
+        type: 'judge',
+        question: 'splice 方法会直接修改原数组，可用于删除或插入元素。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'splice 是修改原数组的方法，可按位置删除、插入元素。'
+      },
+      {
+        type: 'judge',
+        question: 'join 方法拼接字符串时会修改原数组。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'join 只返回拼接好的字符串，不会修改原数组。'
+      },
+      {
+        type: 'judge',
+        question: 'typeof [1, 2, 3] 的结果是 "array"。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'typeof 数组得到 "object"，判断数组应该用 Array.isArray。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些方法会直接修改原数组？（多选）',
+        options: ['sort', 'splice', 'reverse', 'slice'],
+        answer: [0, 1, 2],
+        explanation: 'sort、splice、reverse 都会就地修改原数组；slice 返回新数组。'
+      },
+      {
+        type: 'multiple',
+        question: '判断一个变量 v 是否为数组，以下哪些写法是正确的？（多选）',
+        options: ['Array.isArray(v)', 'v instanceof Array', 'typeof v === "array"', 'typeof v === "object"'],
+        answer: [0, 1],
+        explanation: 'typeof 无法区分数组和普通对象；Array.isArray 和 instanceof 是常用判断方式。'
+      },
+      {
+        type: 'multiple',
+        question: '想复制数组 a 得到副本后再修改、不影响原数组，以下哪些写法可行？（多选）',
+        options: ['let b = a.slice()', 'let b = [...a]', 'let b = a', 'let b = a.concat()'],
+        answer: [0, 1, 3],
+        explanation: 'let b = a 只是复制引用，改 b 等于改 a；其余三种都会生成新数组。'
       }
     ]
   },
@@ -836,6 +1116,76 @@ export default [
         options: ['对象可以嵌套对象', '对象里的函数称为方法', '调用对象的方法写作 obj.greet()', '嵌套对象最多只能嵌一层'],
         answer: [0, 1, 2],
         explanation: '对象嵌套没有层数限制，可以逐级深入访问。'
+      },
+      {
+        type: 'single',
+        question: 'let name = "小明"; let u = { name }; console.log(u.name); 输出什么？',
+        options: ['undefined', '"小明"', '"name"', '报错'],
+        answer: 1,
+        explanation: '{ name } 是属性简写，等价于 { name: name }，值为变量 name 的值。'
+      },
+      {
+        type: 'single',
+        question: 'Object.entries({ a: 1, b: 2 }) 的返回值是？',
+        options: ['["a", "b"]', '[1, 2]', '[["a", 1], ["b", 2]]', '报错'],
+        answer: 2,
+        explanation: 'Object.entries 返回键值对组成的二维数组，每个元素是 [键, 值]。'
+      },
+      {
+        type: 'single',
+        question: 'let u = {}; console.log(u.missing); 输出什么？',
+        options: ['undefined', 'null', '报错', '0'],
+        answer: 0,
+        explanation: '读取对象上不存在的属性得到 undefined，不会报错。'
+      },
+      {
+        type: 'single',
+        question: 'JSON.parse("abc") 会发生什么？',
+        options: ['返回 "abc"', '返回 undefined', '返回 null', '抛出异常'],
+        answer: 3,
+        explanation: '"abc" 不是合法的 JSON，JSON.parse 会抛出 SyntaxError，可用 try/catch 捕获。'
+      },
+      {
+        type: 'judge',
+        question: '对象字面量支持动态属性名，比如 let k = "x"; let o = { [k]: 1 }。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '方括号包裹的表达式会作为计算属性名，o 最终是 { x: 1 }。'
+      },
+      {
+        type: 'judge',
+        question: 'for...in 循环可以遍历对象的属性名。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'for (let key in obj) 会依次拿到对象的每个属性名。'
+      },
+      {
+        type: 'judge',
+        question: 'JSON.stringify([1, 2, 3]) 的结果是字符串 "[1,2,3]"。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'stringify 同样适用于数组，结果是紧凑的 JSON 字符串。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是合法的 JSON 文本？（多选）',
+        options: ['{"a": 1}', '"hello"', '[1, 2, 3]', "{\'a\': 1}"],
+        answer: [0, 1, 2],
+        explanation: 'JSON 的属性名必须用双引号，单引号不合法；字符串、数组、数字也都是合法 JSON。'
+      },
+      {
+        type: 'multiple',
+        question: '想复制对象 a 的顶层属性得到互不影响的副本，以下哪些写法可行？（多选）',
+        options: ['let b = Object.assign({}, a)', 'let b = { ...a }', 'let b = a', 'let b = JSON.parse(JSON.stringify(a))'],
+        answer: [0, 1, 3],
+        explanation: 'let b = a 只是复制引用；前两者是浅拷贝，JSON 转换可实现深拷贝（不含函数时）。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 Object.keys、Object.values、Object.entries，以下哪些说法是正确的？（多选）',
+        options: ['Object.keys 返回属性名数组', 'Object.values 返回属性值数组', 'Object.entries 返回键值对数组', '三者返回的都是 JSON 字符串'],
+        answer: [0, 1, 2],
+        explanation: '这三个方法都返回数组，只是元素内容不同，配合遍历很方便。'
       }
     ]
   },
@@ -1004,6 +1354,76 @@ export default [
         options: ['事件是用户在页面上的动作，如点击、输入、滚动', 'addEventListener 的第一个参数是事件类型', '事件发生时处理函数会被自动调用', '处理函数必须命名为 handleClick 才能生效'],
         answer: [0, 1, 2],
         explanation: '处理函数的名字随意，甚至可以传匿名函数，与命名无关。'
+      },
+      {
+        type: 'single',
+        question: '想给元素添加一个 class 而不覆盖原有 class，正确写法是？',
+        options: ['el.class = "active"', 'el.classList.add("active")', 'el.addClass("active")', 'el.style.class = "active"'],
+        answer: 1,
+        explanation: 'classList.add 只追加 class，不会覆盖已有 class；JavaScript 原生没有 addClass 方法。'
+      },
+      {
+        type: 'single',
+        question: '想读取输入框当前的值，应使用哪个属性？',
+        options: ['input.textContent', 'input.innerHTML', 'input.value', 'input.content'],
+        answer: 2,
+        explanation: '输入框的值通过 value 属性读写，textContent 和 innerHTML 对它不适用。'
+      },
+      {
+        type: 'single',
+        question: 'el.setAttribute("data-id", "5") 的作用是？',
+        options: ['给元素设置 id 为 5', '给元素设置 data-id 属性的值为 "5"', '删除 data-id 属性', '创建一个 data-id 子元素'],
+        answer: 1,
+        explanation: 'setAttribute 设置任意属性，data-* 是常用的自定义数据属性。'
+      },
+      {
+        type: 'single',
+        question: '下面代码输出什么？el.className = "a b"; el.classList.remove("a"); console.log(el.className);',
+        options: ['"a b"', '"a"', '"b"', '""'],
+        answer: 2,
+        explanation: 'classList.remove 只移除指定的 class，className 剩下 "b"。'
+      },
+      {
+        type: 'judge',
+        question: 'el.classList.toggle("on") 会在有该 class 时移除、没有时添加。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'toggle 常用于开关类效果，如点击切换深色模式。'
+      },
+      {
+        type: 'judge',
+        question: 'document.querySelectorAll(".item") 返回的是真正的数组，可以直接调用 map。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '它返回 NodeList，自带 forEach 但没有 map；需要时可先转成数组 [...list]。'
+      },
+      {
+        type: 'judge',
+        question: '用 addEventListener 绑定的监听器，之后还可以用 removeEventListener 移除。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '前提是移除时传入同一个函数引用，匿名函数则无法移除。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 classList 提供的方法？（多选）',
+        options: ['add', 'remove', 'toggle', 'push'],
+        answer: [0, 1, 2],
+        explanation: 'push 是数组方法；classList 提供 add、remove、toggle、contains 等。'
+      },
+      {
+        type: 'multiple',
+        question: '点击按钮把页面上显示的计数加一，以下哪些步骤是必要的？（多选）',
+        options: ['获取显示数字的元素和按钮元素', '给按钮绑定 click 事件', '读取当前数值、加一后写回元素', '刷新整个页面'],
+        answer: [0, 1, 2],
+        explanation: '无需刷新页面，直接操作 DOM 更新文字即可。'
+      },
+      {
+        type: 'multiple',
+        question: '动态创建一个带文字的 li 并加入已有的 ul，以下哪些操作会用到？（多选）',
+        options: ['document.createElement("li")', 'li.textContent = "新闻标题"', 'ul.appendChild(li)', 'document.appendChild(ul)'],
+        answer: [0, 1, 2],
+        explanation: 'ul 已在页面上，不需要也不能再 append 到 document；前三步是标准流程。'
       }
     ]
   },
@@ -1172,6 +1592,76 @@ export default [
         options: ['"hello".toUpperCase()', '"HELLO world".slice(0, 5)', '"HE" + "LLO"', '"hello".replace("h", "H")'],
         answer: [0, 1, 2],
         explanation: 'replace 只替换第一处匹配，"hello".replace("h", "H") 得到的是 "Hello"。'
+      },
+      {
+        type: 'single',
+        question: '"a,b,c".split(",") 的结果是？',
+        options: ['"abc"', '["a", "b", "c"]', '["a,b,c"]', '报错'],
+        answer: 1,
+        explanation: 'split 按分隔符把字符串拆成数组，这里按逗号拆成三个元素。'
+      },
+      {
+        type: 'single',
+        question: '"hello".startsWith("he") 的返回值是？',
+        options: ['true', 'false', '"he"', '0'],
+        answer: 0,
+        explanation: 'startsWith 判断字符串是否以指定子串开头，返回布尔值。'
+      },
+      {
+        type: 'single',
+        question: '"ab".repeat(3) 的结果是？',
+        options: ['"abab"', '"ababab"', '"ab3"', '报错'],
+        answer: 1,
+        explanation: 'repeat 把字符串重复指定次数后拼接返回，"ab" 重复 3 次得到 "ababab"。'
+      },
+      {
+        type: 'single',
+        question: '"hello".endsWith("lo") 的返回值是？',
+        options: ['false', 'true', '"lo"', '3'],
+        answer: 1,
+        explanation: 'endsWith 判断字符串是否以指定子串结尾，"hello" 以 "lo" 结尾。'
+      },
+      {
+        type: 'judge',
+        question: '"hello".split("") 可以得到字符数组 ["h", "e", "l", "l", "o"]。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'split 传空字符串时按每个字符拆分，这是字符串转字符数组的常用写法。'
+      },
+      {
+        type: 'judge',
+        question: '"Hello".indexOf("h")（小写 h）的返回值是 0。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'indexOf 区分大小写，"Hello" 中没有小写 h，返回 -1。'
+      },
+      {
+        type: 'judge',
+        question: '字符串的 split 方法会修改原字符串。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '字符串是不可变的，split 只返回新数组，原字符串不变。'
+      },
+      {
+        type: 'multiple',
+        question: '判断文件名 "report.pdf" 是否以 ".pdf" 结尾，以下哪些写法可行？（多选）',
+        options: ['"report.pdf".endsWith(".pdf")', '"report.pdf".slice(-4) === ".pdf"', '"report.pdf".includes(".pdf")', '"report.pdf".startsWith(".pdf")'],
+        answer: [0, 1, 2],
+        explanation: 'includes 也能判断出结尾情况（该串只含一个 .pdf）；startsWith 是判断开头，方向反了。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些表达式的结果是数组？（多选）',
+        options: ['"a-b".split("-")', '"abc".split("")', '"abc".slice(1)', '"abc".indexOf("b")'],
+        answer: [0, 1],
+        explanation: 'slice 返回字符串，indexOf 返回数字；只有 split 返回数组。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 split 方法，以下哪些说法是正确的？（多选）',
+        options: ['返回值是数组', '不会修改原字符串', 'split("") 可得到字符数组', '只能按逗号拆分'],
+        answer: [0, 1, 2],
+        explanation: 'split 可以按任意分隔符拆分，包括空字符串、斜杠、空格等。'
       }
     ]
   },
@@ -1340,6 +1830,76 @@ export default [
         options: ['每次调用通常返回不同的值', 'Math.floor(Math.random() * 10) 得到 0 到 9 的整数', '它有可能返回负数', '它返回的是字符串类型'],
         answer: [0, 1],
         explanation: 'Math.random() 返回 0 到 1 之间的随机小数，不会是负数，类型是 number。'
+      },
+      {
+        type: 'single',
+        question: 'Math.min(3, 9, 5) 的返回值是？',
+        options: ['3', '5', '9', '报错'],
+        answer: 0,
+        explanation: 'Math.min 返回所有参数中的最小值。'
+      },
+      {
+        type: 'single',
+        question: '(3.14159).toFixed(2) 的返回值是？',
+        options: ['数字 3.14', '字符串 "3.14"', '数字 3.14159', '字符串 "3.14159"'],
+        answer: 1,
+        explanation: 'toFixed 保留指定小数位，但返回值是字符串，常用于价格展示。'
+      },
+      {
+        type: 'single',
+        question: 'parseInt("12px") 的结果是？',
+        options: ['NaN', '12', '"12px"', '报错'],
+        answer: 1,
+        explanation: 'parseInt 从开头解析，遇到非数字字符停止，"12px" 解析出 12。'
+      },
+      {
+        type: 'single',
+        question: 'Math.abs(-7) 的结果是？',
+        options: ['-7', '7', '0', 'NaN'],
+        answer: 1,
+        explanation: 'Math.abs 返回绝对值，-7 的绝对值是 7。'
+      },
+      {
+        type: 'judge',
+        question: 'Date 对象的 getMonth() 返回的月份从 0 开始，1 月返回 0。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '月份是 0 到 11，显示给用户时通常要加 1，这是常见易错点。'
+      },
+      {
+        type: 'judge',
+        question: 'parseInt("abc") 的结果是 0。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '开头就无法解析出数字时返回 NaN，而不是 0。'
+      },
+      {
+        type: 'judge',
+        question: 'Math.pow(2, 10) 和 2 ** 10 的结果相同。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '两者都表示 2 的 10 次方，结果是 1024。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些方法可以从 Date 对象获取时间信息？（多选）',
+        options: ['getFullYear()', 'getDate()', 'getHours()', 'getRandom()'],
+        answer: [0, 1, 2],
+        explanation: 'Date 提供年、月、日、时、分、秒等一系列 get 方法；getRandom 不存在。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些表达式能把 "3.5" 变成数字 3.5？（多选）',
+        options: ['Number("3.5")', 'parseFloat("3.5")', 'parseInt("3.5")', '"3.5" * 1'],
+        answer: [0, 1, 3],
+        explanation: 'parseInt 只取整数部分得到 3；其余三种都能得到 3.5。'
+      },
+      {
+        type: 'multiple',
+        question: '想把价格保留两位小数显示，以下哪些做法可行？（多选）',
+        options: ['num.toFixed(2)', 'Math.round(num * 100) / 100', 'parseInt(num)', '直接显示 0.1 + 0.2 的结果'],
+        answer: [0, 1],
+        explanation: 'parseInt 会丢掉小数；直接相加受浮点精度影响，可能显示一长串小数。'
       }
     ]
   },
@@ -1508,6 +2068,76 @@ export default [
         options: ['函数内部可以访问外部的变量', '函数外部可以直接访问函数内的局部变量', '查找变量沿作用域链从内层逐层向外进行', 'for 循环花括号里用 let 声明的变量，出了循环就访问不到'],
         answer: [0, 2, 3],
         explanation: '局部变量只在函数内有效，外部访问不到；其余三项说法正确。'
+      },
+      {
+        type: 'single',
+        question: '下面代码输出什么？for (let i = 0; i < 3; i++) { setTimeout(function(){ console.log(i); }, 0); }',
+        options: ['3 3 3', '0 1 2', '报错', 'undefined undefined undefined'],
+        answer: 1,
+        explanation: 'let 每次循环都创建新的变量绑定，每个定时器回调记住自己那一次的 i。'
+      },
+      {
+        type: 'single',
+        question: 'let n = 0; function add(){ n++; } add(); add(); console.log(n); 输出什么？',
+        options: ['0', '1', '2', '报错'],
+        answer: 2,
+        explanation: '函数内部可以修改外层作用域的变量，两次调用让 n 从 0 变成 2。'
+      },
+      {
+        type: 'single',
+        question: 'const fns = []; for (let i = 0; i < 3; i++) { fns.push(function(){ return i; }); } console.log(fns[1]()); 输出什么？',
+        options: ['0', '1', '3', '报错'],
+        answer: 1,
+        explanation: '每个函数通过闭包记住自己那次循环的 i，fns[1] 记住的是 1。'
+      },
+      {
+        type: 'single',
+        question: 'const app = (function(){ let count = 0; return { add: function(){ count++; return count; } }; })(); app.add(); console.log(app.add()); 输出什么？',
+        options: ['1', '2', '0', '报错'],
+        answer: 1,
+        explanation: '立即执行函数创建私有变量 count，两次调用 add 后 count 为 2。'
+      },
+      {
+        type: 'judge',
+        question: '闭包可以用来创建私有变量，使外部无法直接访问或修改它。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '外部只能通过返回的函数间接操作内部变量，这是闭包的经典用途。'
+      },
+      {
+        type: 'judge',
+        question: '每次调用外层函数，都会创建一份全新的内部变量，不同调用返回的闭包互不影响。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '每次调用产生独立的作用域，两个计数器各自计数互不干扰。'
+      },
+      {
+        type: 'judge',
+        question: '只要函数内部没有用到外层变量，闭包依然会保留外层的所有变量。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '闭包保留的是被引用的变量；没有被引用的变量可以被正常回收。'
+      },
+      {
+        type: 'multiple',
+        question: '关于作用域链，以下哪些说法是正确的？（多选）',
+        options: ['内层作用域可以访问外层变量', '外层作用域可以访问内层变量', '变量的可访问范围在写代码时就已确定', '函数每调用一次，作用域规则就变化一次'],
+        answer: [0, 2],
+        explanation: '作用域是词法的（静态的），由代码书写位置决定；外层访问不到内层变量。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些写法会产生闭包？（多选）',
+        options: ['函数内部再定义并返回一个函数', '把引用了外层变量的函数作为事件回调', '在全局直接执行 console.log("hi")', '返回一个对象，其方法引用了外层变量'],
+        answer: [0, 1, 2],
+        explanation: '只要内部函数被保留下来且引用了外层变量，就形成闭包；单纯的 console.log 不涉及。'
+      },
+      {
+        type: 'multiple',
+        question: '关于代码 function makeCounter(){ let n = 0; return function(){ return ++n; }; }，以下哪些说法是正确的？（多选）',
+        options: ['外部无法直接读取或修改 n', '多次调用返回的函数，n 会持续递增', '两次调用 makeCounter 得到的计数器共享同一个 n', '返回的函数通过闭包记住了 n'],
+        answer: [0, 1, 3],
+        explanation: '每次调用 makeCounter 都会创建独立的 n，两个计数器互不影响。'
       }
     ]
   },
@@ -1676,6 +2306,76 @@ export default [
         options: ['call 和 apply 会立即调用函数', 'bind 返回一个 this 被固定的新函数', 'apply 把参数放在数组中传入', '三者都能改变箭头函数的 this'],
         answer: [0, 1, 2],
         explanation: '箭头函数没有自己的 this，call、apply、bind 对它都无效。'
+      },
+      {
+        type: 'single',
+        question: 'function P(){ this.x = 1; } const p = new P(); console.log(p.x); 输出什么？',
+        options: ['undefined', '1', '报错', 'null'],
+        answer: 1,
+        explanation: 'new 调用时 this 指向新创建的实例，this.x = 1 给实例添加了属性 x。'
+      },
+      {
+        type: 'single',
+        question: '严格模式下直接调用普通函数 fn()，函数内的 this 是？',
+        options: ['window', 'undefined', 'null', '函数自身'],
+        answer: 1,
+        explanation: '严格模式下独立调用的函数 this 为 undefined，而非严格模式下是全局对象。'
+      },
+      {
+        type: 'single',
+        question: '已有 function sum(a, b){ return a + b; }，想用 apply 传入参数 3 和 4，正确写法是？',
+        options: ['sum.apply(null, [3, 4])', 'sum.apply([3, 4])', 'sum.call(null, [3, 4])', 'sum.apply(3, 4)'],
+        answer: 0,
+        explanation: 'apply 第一个参数是 this，第二个参数是参数数组；call 才是逐个传参。'
+      },
+      {
+        type: 'single',
+        question: 'btn.addEventListener("click", function(){ console.log(this); }) 中使用普通函数时，this 指向？',
+        options: ['window', 'undefined', '被点击的 btn 元素', 'document'],
+        answer: 2,
+        explanation: '事件监听里的普通函数，this 指向绑定监听器的元素本身。'
+      },
+      {
+        type: 'judge',
+        question: '用 new 调用构造函数时，函数内的 this 指向新创建的实例。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'new 会创建空对象、把 this 指向它、执行函数并返回该对象。'
+      },
+      {
+        type: 'judge',
+        question: 'setTimeout(function(){ console.log(this); }, 100) 中普通函数的 this 通常指向全局对象。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '定时器回调相当于独立调用，非严格模式下 this 是 window，可用箭头函数避免。'
+      },
+      {
+        type: 'judge',
+        question: 'apply 的第二个参数必须一个一个单独传入，不能是数组。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '恰恰相反，apply 的第二个参数就是数组；逐个传参的是 call。'
+      },
+      {
+        type: 'multiple',
+        question: '已知 f 是普通函数，以下哪些调用方式会让 f 内的 this 指向 obj？（多选）',
+        options: ['obj.f()（f 是 obj 的方法）', 'f.call(obj)', 'const g = f.bind(obj); g()', 'f()（直接调用）'],
+        answer: [0, 1, 2],
+        explanation: '直接调用时 this 是全局对象或 undefined；其余三种都显式或隐式指定了 obj。'
+      },
+      {
+        type: 'multiple',
+        question: '关于箭头函数的 this，以下哪些说法是正确的？（多选）',
+        options: ['继承定义时所在外层作用域的 this', '不受 call、apply、bind 影响', '适合用在需要沿用外层 this 的回调中', '每次调用时 this 都会重新绑定'],
+        answer: [0, 1, 2],
+        explanation: '箭头函数没有自己的 this，定义时就确定，之后不会再变。'
+      },
+      {
+        type: 'multiple',
+        question: '想让 fn(a, b) 以 this 为 obj 立即执行并传入 1 和 2，以下哪些写法正确？（多选）',
+        options: ['fn.call(obj, 1, 2)', 'fn.apply(obj, [1, 2])', 'fn.bind(obj, 1, 2)()', 'fn(obj, 1, 2)'],
+        answer: [0, 1, 2],
+        explanation: 'bind 返回新函数需再调用一次才执行；fn(obj, 1, 2) 只是把 obj 当普通参数。'
       }
     ]
   },
@@ -1844,6 +2544,76 @@ export default [
         options: ['extends 用于声明继承关系', '子类中可以用 super 调用父类的构造函数或方法', '子类重写的方法优先于父类同名方法被找到', 'class 继承与原型机制毫无关系'],
         answer: [0, 1, 2],
         explanation: 'class 是原型的语法糖，extends 底层正是通过原型链实现继承。'
+      },
+      {
+        type: 'single',
+        question: 'function A() {} const a = new A(); console.log(a.__proto__ === A.prototype); 输出什么？',
+        options: ['true', 'false', 'undefined', '报错'],
+        answer: 0,
+        explanation: '实例的 __proto__ 指向其构造函数的 prototype，这是原型链的连接点。'
+      },
+      {
+        type: 'single',
+        question: 'const arr = []; console.log(arr instanceof Array); 输出什么？',
+        options: ['true', 'false', '"object"', '报错'],
+        answer: 0,
+        explanation: 'instanceof 沿原型链检查，arr 的原型链上有 Array.prototype，结果为 true。'
+      },
+      {
+        type: 'single',
+        question: '下面代码输出什么？function A(){} A.prototype.x = 1; const a = new A(); A.prototype.x = 2; console.log(a.x);',
+        options: ['1', '2', 'undefined', '报错'],
+        answer: 1,
+        explanation: '实例自身没有 x，每次访问都沿原型链实时查找，所以读到的是修改后的 2。'
+      },
+      {
+        type: 'single',
+        question: 'Object.create(null) 创建的对象有什么特点？',
+        options: ['拥有全部默认方法', '没有任何原型，是一个"纯净"的空对象', '会报错', '与 {} 完全等价'],
+        answer: 1,
+        explanation: '它连 toString 都没有，常用来做空映射表，避免原型上的属性干扰。'
+      },
+      {
+        type: 'judge',
+        question: 'instanceof 会沿原型链向上查找，而不仅仅是直接原型。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '例如子类实例 instanceof 父类也为 true，因为原型链上有父类的 prototype。'
+      },
+      {
+        type: 'judge',
+        question: '修改构造函数的 prototype 后，之前已创建的实例访问对应属性时也会读到新值。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '实例与原型是引用关系，查找是实时的，修改原型对所有实例立即生效。'
+      },
+      {
+        type: 'judge',
+        question: '实例的 constructor 属性通常指向创建它的构造函数。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'constructor 来自构造函数的 prototype，沿原型链被实例继承。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 prototype 与 __proto__，以下哪些说法是正确的？（多选）',
+        options: ['函数拥有 prototype 属性', '实例的 __proto__ 指向其构造函数的 prototype', 'a = new A() 时 a.__proto__ === A.prototype 为 true', '实例自身也有一个 prototype 属性'],
+        answer: [0, 1, 2],
+        explanation: 'prototype 是函数的属性，__proto__ 是实例指向原型的链接，不要混淆。'
+      },
+      {
+        type: 'multiple',
+        question: '想让所有数组都能调用 last() 返回末尾元素，以下哪些做法可行？（多选）',
+        options: ['Array.prototype.last = function(){ return this[this.length - 1]; }', '给需要的数组逐个添加 arr.last = function(){...}', '修改 Array 构造函数本身', '数组自带 last 方法，无需任何操作'],
+        answer: [0, 1],
+        explanation: '挂到 Array.prototype 上可全局共享；逐个添加只对单个数组有效，通常更推荐前者之外的安全做法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于原型链的查找顺序，以下哪些说法是正确的？（多选）',
+        options: ['先查对象自身的属性', '自身没有再沿原型向上查找', '查找到 Object.prototype 再往上是 null 时结束', '整条链都找不到时会抛出异常'],
+        answer: [0, 1, 2],
+        explanation: '找不到时返回 undefined，不会报错；只有继续访问 undefined 的属性才会报错。'
       }
     ]
   },
@@ -2012,6 +2782,76 @@ export default [
         options: ['event.target 是实际触发的最内层元素', 'event.currentTarget 是绑定监听器的元素', 'event.preventDefault() 可以阻止默认行为', '处理函数必须先手动 new 一个 event 对象才能使用'],
         answer: [0, 1, 2],
         explanation: 'event 对象由浏览器自动创建并作为参数传给处理函数，无需手动创建。'
+      },
+      {
+        type: 'single',
+        question: '事件委托中，想从 e.target 向上找到最近的 li 祖先元素，最适合用？',
+        options: ['e.target.parent("li")', 'e.target.closest("li")', 'e.target.find("li")', 'e.target.child("li")'],
+        answer: 1,
+        explanation: 'closest 从元素自身开始向上匹配选择器，是事件委托中的常用方法。'
+      },
+      {
+        type: 'single',
+        question: '想判断被点击的元素本身是否匹配 ".del" 选择器，可以调用？',
+        options: ['e.target.matches(".del")', 'e.target.includes(".del")', 'e.target.contains(".del")', 'e.target.equals(".del")'],
+        answer: 0,
+        explanation: 'matches 判断元素是否匹配指定选择器，返回布尔值。'
+      },
+      {
+        type: 'single',
+        question: '事件对象上的 event.type 返回的是？',
+        options: ['触发事件的元素', '事件类型字符串，如 "click"', '绑定监听器的元素', '鼠标的坐标'],
+        answer: 1,
+        explanation: 'event.type 是事件类型字符串，同一个处理函数可借此区分不同事件。'
+      },
+      {
+        type: 'single',
+        question: '结构为 ul > li > span，监听器绑在 ul 上。点击 span 时，e.target 是？',
+        options: ['ul', 'li', 'span', 'document'],
+        answer: 2,
+        explanation: 'e.target 始终是实际被点击的最内层元素，这里是 span。'
+      },
+      {
+        type: 'judge',
+        question: 'event.preventDefault() 可以阻止元素的默认行为，但不会阻止事件冒泡。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '阻止冒泡要用 stopPropagation，两者作用不同。'
+      },
+      {
+        type: 'judge',
+        question: 'event.stopPropagation() 会阻止事件继续传播，但不会阻止链接跳转等默认行为。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '默认行为要用 preventDefault 阻止，两者各司其职，可同时调用。'
+      },
+      {
+        type: 'judge',
+        question: '使用事件委托时，仍需要给列表里的每一个 li 单独绑定监听器。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '事件委托恰恰是把监听器绑在公共父元素上，利用冒泡统一处理。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些情况用事件委托比逐个绑定更合适？（多选）',
+        options: ['列表项会动态增删', '列表项数量非常多', '只需处理页面上一个固定按钮', '想统一处理所有子元素的点击'],
+        answer: [0, 1, 3],
+        explanation: '单个固定按钮直接绑定更简单；动态、大量、统一处理的场景委托优势明显。'
+      },
+      {
+        type: 'multiple',
+        question: '在委托处理函数中，以下哪些是常见的目标判断方式？（多选）',
+        options: ['用 e.target.tagName 判断标签名', '用 e.target.closest("li") 向上查找目标 li', '用 e.target.matches(".btn") 判断是否匹配', '直接修改 e.currentTarget 的 innerHTML'],
+        answer: [0, 1, 2],
+        explanation: '前三种都用于确认"点的是不是我们关心的元素"；直接改父元素内容不是判断方式。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 preventDefault 和 stopPropagation，以下哪些说法是正确的？（多选）',
+        options: ['preventDefault 阻止默认行为', 'stopPropagation 阻止事件传播', '两者作用相同，可以互换使用', '两者可以在同一个处理函数中一起调用'],
+        answer: [0, 1, 3],
+        explanation: '两者作用不同但互不冲突，想既不跳转也不冒泡时就需要同时调用。'
       }
     ]
   },
@@ -2180,6 +3020,76 @@ export default [
         options: ['"1" 最先输出', '"4" 在两个定时器回调之前输出', '"3" 先于 "2" 输出', '"2" 先于 "4" 输出'],
         answer: [0, 1, 2],
         explanation: '同步代码先执行完，定时器回调按延迟排队，延迟 0 的 "3" 排在延迟 100 的 "2" 前面。'
+      },
+      {
+        type: 'single',
+        question: '想让某个函数每隔 1 秒反复执行，应该使用？',
+        options: ['setTimeout', 'setInterval', 'clearTimeout', 'debounce'],
+        answer: 1,
+        explanation: 'setInterval 按固定间隔循环执行；setTimeout 只执行一次。'
+      },
+      {
+        type: 'single',
+        question: '搜索框做防抖 wait 为 500，用户每 200 毫秒输入一次、连续输入 4 次后停止，fn 实际执行几次？',
+        options: ['4 次', '1 次', '2 次', '0 次'],
+        answer: 1,
+        explanation: '每次输入都重置计时，只有停止输入满 500 毫秒后才执行一次。'
+      },
+      {
+        type: 'single',
+        question: '节流间隔设为 1000 毫秒，用户在 3 秒内持续高频触发，处理函数大约执行几次？',
+        options: ['约 3 次', '无数次', '1 次', '0 次'],
+        answer: 0,
+        explanation: '节流按固定节奏执行，持续触发时每 1 秒执行一次，3 秒约执行 3 次。'
+      },
+      {
+        type: 'single',
+        question: '下面代码的输出顺序是？setTimeout(function(){ console.log("X"); }, 100); setTimeout(function(){ console.log("Y"); }, 50); console.log("Z");',
+        options: ['X Y Z', 'Z X Y', 'Z Y X', 'X Z Y'],
+        answer: 2,
+        explanation: '同步的 Z 先输出，定时器按延迟排队，延迟 50 的 Y 先于延迟 100 的 X。'
+      },
+      {
+        type: 'judge',
+        question: '防抖的效果是事件停止触发后，等待指定时间再执行一次。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '防抖不断重置计时，直到触发停止并超过等待时间才真正执行。'
+      },
+      {
+        type: 'judge',
+        question: '页面滚动监听想按固定节奏更新（如每 200 毫秒一次），用节流比防抖更合适。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '滚动过程需要持续响应，节流保证匀速执行；防抖会等到滚动停止才执行。'
+      },
+      {
+        type: 'judge',
+        question: 'clearTimeout 传入 setInterval 返回的编号，也能取消这个循环定时器。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '虽然编号机制类似，但规范上应分别使用 clearTimeout 和 clearInterval。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些属于防抖函数的典型实现要点？（多选）',
+        options: ['每次触发先 clearTimeout 取消上一个计时', '重新 setTimeout 开始新的计时', '用时间戳判断距上次执行的间隔', '返回一个新函数供外部使用'],
+        answer: [0, 1, 3],
+        explanation: '时间戳判断间隔是节流的实现思路，防抖靠清除和重建定时器。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些场景适合用防抖而不是节流？（多选）',
+        options: ['搜索联想，停止输入后再发请求', '窗口 resize 结束后重新计算一次布局', '按钮防重复提交', '滚动到底部时加载更多'],
+        answer: [0, 1, 2],
+        explanation: '滚动加载需要过程中持续响应，适合节流；其余三个都只需"最后一次生效"。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 setTimeout(fn, 0)，以下哪些说法是正确的？（多选）',
+        options: ['回调不会立刻同步执行', '会等当前同步代码全部执行完再执行', '能保证回调在 0 毫秒后精确执行', '常用于把任务推迟到下一轮再执行'],
+        answer: [0, 1, 3],
+        explanation: '延迟 0 也要排队等同步代码执行完，且实际延迟可能略大于设定值。'
       }
     ]
   },
@@ -2348,6 +3258,76 @@ export default [
         options: ['back() 后退一页', 'forward() 前进一页', 'go(-2) 后退两页', '调用 go(0) 会直接报错'],
         answer: [0, 1, 2],
         explanation: 'go(0) 不会报错，它的效果是重新加载当前页面；其余三项正确。'
+      },
+      {
+        type: 'single',
+        question: '当前网址为 https://a.com:8080/list?page=2 时，location.pathname 的值是？',
+        options: ['"https://a.com:8080"', '"/list"', '"?page=2"', '"a.com"'],
+        answer: 1,
+        explanation: 'pathname 是域名之后、问号之前的路径部分，即 "/list"。'
+      },
+      {
+        type: 'single',
+        question: 'window.navigator.userAgent 主要用于获取什么信息？',
+        options: ['当前页面网址', '浏览器和系统的标识信息', '窗口的尺寸', '历史记录长度'],
+        answer: 1,
+        explanation: 'userAgent 是浏览器标识字符串，可粗略判断浏览器类型和设备。'
+      },
+      {
+        type: 'single',
+        question: 'window.innerWidth 表示的是？',
+        options: ['屏幕的物理宽度', '浏览器视口的宽度', '整个文档的总高度', '页面已滚动的距离'],
+        answer: 1,
+        explanation: 'innerWidth 是可视区域宽度，常用于响应式判断；屏幕宽度用 screen.width。'
+      },
+      {
+        type: 'single',
+        question: 'location.assign("https://b.com") 的作用是？',
+        options: ['刷新当前页面', '跳转到新地址，且可以后退回来', '替换地址且无法后退', '打开一个新标签页'],
+        answer: 1,
+        explanation: 'assign 跳转后会在历史记录中留下记录，用户可以点后退返回。'
+      },
+      {
+        type: 'judge',
+        question: 'history.back() 的效果等价于 history.go(-1)。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '两者都是后退一页；同理 forward() 等价于 go(1)。'
+      },
+      {
+        type: 'judge',
+        question: 'screen.width 返回的是浏览器视口的宽度。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'screen.width 是屏幕分辨率宽度，视口宽度要用 window.innerWidth。'
+      },
+      {
+        type: 'judge',
+        question: '全局函数 alert 实际上是 window 对象的方法，可以写作 window.alert()。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '浏览器中全局函数都挂在 window 上，confirm、prompt 同理。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 location 对象的属性？（多选）',
+        options: ['href', 'pathname', 'hash', 'userAgent'],
+        answer: [0, 1, 2],
+        explanation: 'userAgent 属于 navigator 对象；href、pathname、hash 都是 location 的属性。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 window.open，以下哪些说法是正确的？（多选）',
+        options: ['可以打开新窗口或新标签页', '非用户主动触发时可能被浏览器拦截', '与 location.href 赋值完全等价', '可以指定窗口名称和尺寸等特性'],
+        answer: [0, 1, 3],
+        explanation: 'window.open 打开新窗口，location.href 是在当前页跳转，两者不等价。'
+      },
+      {
+        type: 'multiple',
+        question: '想实现"点击按钮返回上一页"，以下哪些写法可行？（多选）',
+        options: ['history.back()', 'history.go(-1)', 'history.forward()', 'location.reload()'],
+        answer: [0, 1],
+        explanation: 'forward 是前进，reload 是刷新；back 和 go(-1) 都是后退一页。'
       }
     ]
   },
@@ -2516,6 +3496,76 @@ export default [
         options: ['正则带上 g 全局标志', '传入匹配后要替换成的新内容', '正则必须加上 ^ 和 $ 锚点', '使用字符串的 replace 方法'],
         answer: [0, 1, 3],
         explanation: '全局替换只需要 g 标志，与 ^ 和 $ 无关；锚点是做整体校验时才需要的。'
+      },
+      {
+        type: 'single',
+        question: '/\d+/.test("a12b") 的返回值是？',
+        options: ['true', 'false', '"12"', '["12"]'],
+        answer: 0,
+        explanation: 'test 只关心是否存在匹配，"a12b" 中包含连续数字 12，返回 true。'
+      },
+      {
+        type: 'single',
+        question: '"2026-08-25".replace(/-/g, "/") 的结果是？',
+        options: ['"2026/08-25"', '"2026/08/25"', '"2026-08-25"', '报错'],
+        answer: 1,
+        explanation: '带 g 标志会替换所有匹配，两个连字符都被替换成斜杠。'
+      },
+      {
+        type: 'single',
+        question: '/^[a-z]+$/.test("Hello") 的返回值是？',
+        options: ['true', 'false', '"Hello"', '报错'],
+        answer: 1,
+        explanation: '锚点要求整个字符串都是小写字母，大写 H 不在 [a-z] 范围内，返回 false。'
+      },
+      {
+        type: 'single',
+        question: '"a2b3c4".match(/\d/g) 的结果是？',
+        options: ['["2", "3", "4"]', '"234"', '["234"]', '报错'],
+        answer: 0,
+        explanation: 'match 加 g 标志返回所有匹配组成的数组，每个数字单独成为一项。'
+      },
+      {
+        type: 'judge',
+        question: '正则中的 [abc] 表示匹配 a、b、c 中的任意一个字符。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '方括号是字符集合，匹配其中任意一个字符，如 [abc] 能匹配 "b"。'
+      },
+      {
+        type: 'judge',
+        question: '正则标志 i 表示忽略大小写，如 /abc/i 可以匹配 "ABC"。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'i 是 ignoreCase 标志，加在正则末尾如 /abc/i。'
+      },
+      {
+        type: 'judge',
+        question: '/\d/.test("123") 返回 false，因为 \d 只能匹配一个数字。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'test 只要找到一处匹配就返回 true；"123" 中每个数字都能被 \d 匹配。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些字符串能通过 /^[a-z0-9]+$/ 的校验？（多选）',
+        options: ['"abc123"', '"hello"', '"Hello"', '"a-b"'],
+        answer: [0, 1],
+        explanation: '"Hello" 含大写字母、"a-b" 含连字符，都不在 [a-z0-9] 范围内。'
+      },
+      {
+        type: 'multiple',
+        question: '想匹配一个或多个连续数字，以下哪些正则可行？（多选）',
+        options: ['/\d+/', '/[0-9]+/', '/\d{1,}/', '/\d*/'],
+        answer: [0, 1, 2],
+        explanation: '\d* 允许匹配 0 次，即空字符串也算匹配，不符合"一个或多个"的要求。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 test 和 match 的区别，以下哪些说法是正确的？（多选）',
+        options: ['test 是正则的方法，返回布尔值', 'match 是字符串的方法', 'match 加 g 标志返回所有匹配组成的数组', 'test 返回匹配到的内容数组'],
+        answer: [0, 1, 2],
+        explanation: 'test 只返回 true 或 false，想拿到匹配内容要用 match。'
       }
     ]
   },
@@ -2684,6 +3734,76 @@ export default [
         options: ['message 属性保存错误描述信息', '带有调用栈信息便于定位问题', '可以用 new Error("...") 手动创建', 'Error 对象只能由系统产生，不能手动创建'],
         answer: [0, 1, 2],
         explanation: '开发者可以 new Error 并 throw 主动抛出错误，这是参数校验的常见做法。'
+      },
+      {
+        type: 'single',
+        question: 'console.error("出错了") 与 console.log 的主要区别是？',
+        options: ['功能完全相同', '以错误样式高亮显示，便于区分严重程度', '会中断代码执行', '会自动抛出异常'],
+        answer: 1,
+        explanation: 'console.error 只是输出级别不同、显示为红色错误样式，不会影响代码执行。'
+      },
+      {
+        type: 'single',
+        question: 'console.table([{ name: "小明" }, { name: "小红" }]) 的效果是？',
+        options: ['报错', '以表格形式展示数据', '清空控制台', '输出 JSON 字符串'],
+        answer: 1,
+        explanation: 'console.table 把数组或对象以表格形式展示，查看结构化数据时非常直观。'
+      },
+      {
+        type: 'single',
+        question: 'catch 到异常后，想查看完整的调用栈信息，应读取哪个属性？',
+        options: ['e.msg', 'e.stack', 'e.line', 'e.code'],
+        answer: 1,
+        explanation: 'Error 对象的 stack 属性记录了错误发生时的调用栈，是定位问题的重要依据。'
+      },
+      {
+        type: 'single',
+        question: '下面代码输出什么？function f(){ throw new Error("x"); } try { f(); console.log("A"); } catch (e) { console.log("B"); }',
+        options: ['A', 'B', 'A B', '无输出'],
+        answer: 1,
+        explanation: 'f 抛错后 try 中剩余代码被跳过，直接进入 catch 输出 "B"。'
+      },
+      {
+        type: 'judge',
+        question: 'console.warn 输出的内容会以警告样式（通常为黄色）显示。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'warn 的级别介于 log 和 error 之间，常用于提示不严重但值得关注的问题。'
+      },
+      {
+        type: 'judge',
+        question: '在断点暂停时，可以在开发者工具中查看当前作用域内变量的值。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这是断点调试的核心价值：暂停后可以检查变量、单步执行观察代码走向。'
+      },
+      {
+        type: 'judge',
+        question: 'catch 块中再次抛出的异常，可以被更外层的 try/catch 捕获。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '异常会向外层传播，外层有 try/catch 就能继续捕获。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是 console 提供的调试输出方法？（多选）',
+        options: ['console.log', 'console.warn', 'console.table', 'console.popup'],
+        answer: [0, 1, 2],
+        explanation: 'console 没有 popup 方法；弹窗是 alert 等 window 方法。'
+      },
+      {
+        type: 'multiple',
+        question: '一段代码偶发报错，以下哪些排查手段是合理的？（多选）',
+        options: ['在关键位置加 console.log 观察变量变化', '在开发者工具打断点逐步执行', '用 try/catch 包裹并打印错误信息', '不做定位，直接删除整段代码重写'],
+        answer: [0, 1, 2],
+        explanation: '先定位再修复是基本原则，盲目重写往往会引入新问题。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 throw 抛出的值，以下哪些说法是正确的？（多选）',
+        options: ['可以抛出任意类型的值', '推荐抛出 Error 对象便于追踪调用栈', '抛出后若无人捕获会导致程序中断', 'throw 只能写在函数内部'],
+        answer: [0, 1, 2],
+        explanation: 'throw 可以出现在任何可执行语句的位置，不局限于函数内部。'
       }
     ]
   },
@@ -2852,6 +3972,76 @@ export default [
         options: ['按域名保存，不同域名互不影响', '写入时可以设置 path 路径', '单个域名下容量约 4KB', '适合存放大文件'],
         answer: [0, 1, 2],
         explanation: 'Cookie 容量小且每次请求都会携带，绝不能存放大体积数据。'
+      },
+      {
+        type: 'single',
+        question: 'localStorage 的容量上限大约是？',
+        options: ['4KB', '5MB 左右', '50MB', '无限制'],
+        answer: 1,
+        explanation: 'localStorage 一般约 5MB，远大于 Cookie 的 4KB。'
+      },
+      {
+        type: 'single',
+        question: 'localStorage.setItem("a", "1"); localStorage.setItem("a", "2"); 之后 getItem("a") 的值是？',
+        options: ['"1"', '"2"', '["1", "2"]', '报错'],
+        answer: 1,
+        explanation: '同名键会被覆盖，后写入的 "2" 替代了之前的 "1"。'
+      },
+      {
+        type: 'single',
+        question: 'localStorage 中的数据在什么范围内共享？',
+        options: ['仅当前标签页', '同一域名（同源）下的所有页面', '整个浏览器里所有网站', '仅当前窗口的一次会话'],
+        answer: 1,
+        explanation: 'localStorage 按源（协议+域名+端口）隔离，同源页面共享，且长期保留。'
+      },
+      {
+        type: 'single',
+        question: '想把数组 ["a", "b"] 存入 localStorage 并原样读出，正确的做法是？',
+        options: ['直接 localStorage.setItem("arr", ["a", "b"])', 'JSON.stringify 存入，读取时 JSON.parse', '用 toString 存入，读取时直接使用', '直接赋值 localStorage.arr = ["a", "b"]'],
+        answer: 1,
+        explanation: 'localStorage 只能存字符串，数组和对象需要先 stringify，读取时再 parse。'
+      },
+      {
+        type: 'judge',
+        question: 'sessionStorage 的数据在同一标签页内刷新后仍然保留。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '刷新不会清除 sessionStorage，只有关闭标签页才会清除。'
+      },
+      {
+        type: 'judge',
+        question: 'localStorage.setItem("age", 18) 存入数字时，会被自动转成字符串 "18"。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '存储的值最终都是字符串，读取时是 "18" 而不是数字 18。'
+      },
+      {
+        type: 'judge',
+        question: '在新标签页打开同一网站，可以读到原标签页 sessionStorage 里的数据。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'sessionStorage 不跨标签页共享，每个标签页有独立的一份。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些是操作 localStorage 的正确写法？（多选）',
+        options: ['localStorage.setItem("k", "v")', 'localStorage.getItem("k")', 'localStorage.removeItem("k")', 'localStorage.delete("k")'],
+        answer: [0, 1, 2],
+        explanation: 'localStorage 没有 delete 方法，删除用 removeItem。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些数据适合放在 localStorage？（多选）',
+        options: ['用户的主题偏好设置', '不敏感的界面状态', '登录密码的明文', '草稿箱中未提交的文章内容'],
+        answer: [0, 1, 3],
+        explanation: 'localStorage 是明文存储且易被脚本读取，绝不能存密码等敏感信息。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 Cookie 的自动携带，以下哪些说法是正确的？（多选）',
+        options: ['每次请求同域名接口时会自动带上', '会增加每次请求的体积', '适合存放大体积数据', '常用于维持登录状态'],
+        answer: [0, 1, 3],
+        explanation: 'Cookie 自动携带的特性适合放登录凭证，但也因此不宜放大数据。'
       }
     ]
   },
@@ -3020,6 +4210,76 @@ export default [
         options: ['PUT 通常用于更新数据', 'DELETE 用于删除数据', '请求方法通过 fetch 第二个参数的 method 配置', 'fetch 只支持 GET 和 POST 两种方法'],
         answer: [0, 1, 2],
         explanation: 'fetch 的 method 支持 GET、POST、PUT、DELETE 等各种 HTTP 方法。'
+      },
+      {
+        type: 'single',
+        question: 'const res = await fetch(url); 想读取 HTTP 状态码（如 200），应使用？',
+        options: ['res.code', 'res.status', 'res.statusCode', 'res.ok'],
+        answer: 1,
+        explanation: 'response.status 是数字状态码，response.ok 是由它派生的布尔值。'
+      },
+      {
+        type: 'single',
+        question: 'res.json() 返回的是？',
+        options: ['解析好的对象', '一个 Promise，解析完成后得到数据', 'JSON 字符串', '同步返回的数组'],
+        answer: 1,
+        explanation: 'res.json() 是异步的，需要配合 await 或 then 才能拿到解析后的数据。'
+      },
+      {
+        type: 'single',
+        question: '想同时请求两个接口、都返回后一起处理，最合适的写法是？',
+        options: ['await Promise.all([fetch(a), fetch(b)])', 'fetch(a, b)', 'await Promise.race([fetch(a), fetch(b)])', '两个接口无法同时请求'],
+        answer: 0,
+        explanation: 'Promise.all 并发执行多个 Promise，全部完成后统一拿到结果。'
+      },
+      {
+        type: 'single',
+        question: '下面代码在服务器返回 404 时会怎样？const res = await fetch("/api"); if (!res.ok) { throw new Error("HTTP " + res.status); }',
+        options: ['正常继续往下执行', '抛出错误 "HTTP 404"', '自动重试请求', '返回 undefined'],
+        answer: 1,
+        explanation: 'res.ok 为 false 时主动 throw，这样 404 也能进入 catch 被统一处理。'
+      },
+      {
+        type: 'judge',
+        question: '发送 GET 请求获取数据时，通常不需要配置 body。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'GET 请求的参数一般拼在网址查询串里，没有请求体。'
+      },
+      {
+        type: 'judge',
+        question: 'response.json() 对同一个响应只能有效调用一次，重复调用会出错。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '响应体是流，只能被读取一次，需要多次使用时先保存解析结果。'
+      },
+      {
+        type: 'judge',
+        question: 'fetch 的第二个参数中，请求头必须写成全大写的 HEADERS。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '配置项是小写的 headers，其中的字段名不区分大小写。'
+      },
+      {
+        type: 'multiple',
+        question: '一个完整的 POST JSON 请求配置通常包含哪些内容？（多选）',
+        options: ['method: "POST"', 'headers: { "Content-Type": "application/json" }', 'body: JSON.stringify(data)', 'body: data（直接传入对象）'],
+        answer: [0, 1, 2],
+        explanation: 'body 必须是字符串，直接传对象会变成 "[object Object]"，必须先 stringify。'
+      },
+      {
+        type: 'multiple',
+        question: '拿到响应 res 后，以下哪些步骤是合理的？（多选）',
+        options: ['检查 res.ok 或 res.status', '状态异常时抛出错误或提示用户', '不做任何判断直接 res.json()', '成功时解析数据并更新页面'],
+        answer: [0, 1, 3],
+        explanation: 'fetch 不会因 4xx/5xx 自动报错，不做判断会把错误响应当成功处理。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 Promise 与 async/await，以下哪些说法是正确的？（多选）',
+        options: ['fetch 返回一个 Promise', 'await 会暂停当前 async 函数直到拿到结果', 'async 函数总是返回一个 Promise', 'await 可以写在普通函数内部'],
+        answer: [0, 1, 2],
+        explanation: 'await 只能用在 async 函数中；async 函数的返回值会被自动包装成 Promise。'
       }
     ]
   }

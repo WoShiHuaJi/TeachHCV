@@ -170,6 +170,76 @@ export default [
         options: ['git add 可以把文件放入暂存区', 'commit 时只提交暂存区里的内容', 'git restore --staged 可以把文件撤出暂存区', '放入暂存区会自动推送到远程仓库'],
         answer: [0, 1, 2],
         explanation: '暂存区是提交前的准备区，add 放入、commit 提交、restore --staged 撤出；推送远程需要单独的 push。'
+      },
+      {
+        type: 'single',
+        question: '工作区的文件改乱了，想丢弃还没暂存的修改、恢复到上次提交的状态，该用哪条命令？',
+        options: ['git restore <file>', 'git add <file>', 'git stash pop', 'git log --oneline'],
+        answer: 0,
+        explanation: 'git restore <file>（旧命令 git checkout -- <file>）会丢弃工作区的修改，把文件恢复到最后提交的状态。'
+      },
+      {
+        type: 'single',
+        question: '刚提交完发现提交说明写错了，想修改上一次提交的说明，该用哪条命令？',
+        options: ['git commit --amend -m "新说明"', 'git reset --hard HEAD', 'git push --force', 'git config --amend'],
+        answer: 0,
+        explanation: 'git commit --amend 可以修改上一次提交的说明（或补漏提交的文件），适合刚提交就发现笔误的场景。'
+      },
+      {
+        type: 'single',
+        question: '功能改到一半，领导让你先去修个紧急 bug，想临时保存当前未提交的改动，该用哪条命令？',
+        options: ['git stash', 'git commit -m "临时"', 'git reset --hard', 'git log'],
+        answer: 0,
+        explanation: 'git stash 会把当前未提交的改动临时收起来，工作区恢复干净，处理完急事后用 git stash pop 恢复。'
+      },
+      {
+        type: 'single',
+        question: '想查看某一次具体提交到底改了哪些内容，该用哪条命令？',
+        options: ['git show 提交号', 'git status', 'git add 提交号', 'git config --list'],
+        answer: 0,
+        explanation: 'git show 提交号 会显示该次提交的说明和具体改动内容，提交号可以从 git log --oneline 里复制。'
+      },
+      {
+        type: 'judge',
+        question: 'git revert 会创建一个新的提交来抵消之前的提交，而不是把历史提交删掉。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。revert 用新提交做反向修改，历史保持完整，适合撤销已经推送出去的提交。'
+      },
+      {
+        type: 'judge',
+        question: 'git reset --hard 会丢弃所有未提交的改动，执行前需要谨慎确认。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。--hard 会把工作区和暂存区都强制回退，未提交的改动会直接丢失，属于高风险操作。'
+      },
+      {
+        type: 'judge',
+        question: 'git stash 保存起来的改动，之后可以用 git stash pop 恢复到工作区。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。stash 像一个临时抽屉，git stash pop 会把最近保存的改动取回来继续开发。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 git reset 与 git revert，以下说法正确的有？（多选）',
+        options: ['reset 会让分支指针回退到指定提交', 'revert 通过一个新的提交来抵消旧提交', '已推送到共享远程的提交更适合用 revert 撤销', 'revert 会把历史提交直接从记录中删除'],
+        answer: [0, 1, 2],
+        explanation: 'reset 移动指针改写历史，revert 新增提交抵消改动；共享分支上改写历史会影响别人，应优先用 revert。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些场景适合使用 git stash？（多选）',
+        options: ['改到一半需要临时切换到别的任务', '想拉取远程更新但本地有未提交的改动想先收起来', '想把当前改动永久删除不再需要', '想临时保存未提交改动，稍后再恢复继续'],
+        answer: [0, 1, 3],
+        explanation: 'stash 用于临时保存和稍后恢复；要永久丢弃改动应该用 git restore 或 reset，而不是 stash。'
+      },
+      {
+        type: 'multiple',
+        question: '关于查看提交历史，以下说法正确的有？（多选）',
+        options: ['git log 会列出每次提交的作者、时间和说明', 'git log --oneline 会把每次提交压缩成一行', 'git show 提交号 可查看某次提交的具体改动', 'git log 会修改仓库里的历史记录'],
+        answer: [0, 1, 2],
+        explanation: 'log 和 show 都是只读的查看命令，不会修改仓库；log 看列表，show 看单次提交的详情。'
       }
     ]
   },
@@ -338,6 +408,76 @@ export default [
         options: ['两个分支改了同一文件同一部分容易冲突', '解决冲突后要 git add 再 git commit', '冲突标记需要手动删除', '冲突一旦出现就无法解决，只能放弃合并'],
         answer: [0, 1, 2],
         explanation: '冲突是日常，手动编辑删除标记后 add、commit 即可完成合并，并不是无法解决。'
+      },
+      {
+        type: 'single',
+        question: '想以图形方式查看各分支的合并关系和提交历史，该用哪条命令？',
+        options: ['git log --oneline --graph --all', 'git status --graph', 'git branch -d', 'git merge --graph'],
+        answer: 0,
+        explanation: 'git log --oneline --graph --all 会用字符画出分支合并图，是观察分支结构的常用组合。'
+      },
+      {
+        type: 'single',
+        question: '只想把另一个分支上的某一个提交单独应用到当前分支（不合并整个分支），该用哪条命令？',
+        options: ['git cherry-pick 提交号', 'git merge 分支名', 'git branch 提交号', 'git stash 提交号'],
+        answer: 0,
+        explanation: 'git cherry-pick 会把指定提交的改动复制成一个新提交应用到当前分支，适合只挑个别提交的场景。'
+      },
+      {
+        type: 'single',
+        question: '合并发生冲突后决定放弃这次合并、回到合并之前的状态，该用哪条命令？',
+        options: ['git merge --abort', 'git push --force', 'git branch -d', 'git clone'],
+        answer: 0,
+        explanation: 'git merge --abort 会中止进行中的合并，把仓库恢复到合并前的状态，适合发现合并方向搞错时使用。'
+      },
+      {
+        type: 'single',
+        question: '误删了一个分支，想通过操作记录找回它最后的提交号，该用哪条命令？',
+        options: ['git reflog', 'git status', 'git remote -v', 'git stash list'],
+        answer: 0,
+        explanation: 'git reflog 记录了 HEAD 的每一次移动，包括切换分支和提交，是找回误删分支的救命工具。'
+      },
+      {
+        type: 'judge',
+        question: 'git rebase 可以把当前分支的提交搬到目标分支的最新提交之后，让历史更线性。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。rebase 会逐个重放当前分支的提交，得到一条直线式的历史，常用于合并前整理分支。'
+      },
+      {
+        type: 'judge',
+        question: 'git branch -D 会强制删除分支，即使该分支还没有被合并。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。大写 -D 是强制删除，不做合并检查，使用前要确认分支上的工作确实不要了。'
+      },
+      {
+        type: 'judge',
+        question: 'cherry-pick 会把指定提交的改动复制成一个新的提交应用到当前分支。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。cherry-pick 不是移动原提交，而是在当前分支上创建一个内容相同的新提交。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 merge 与 rebase，以下说法正确的有？（多选）',
+        options: ['merge 会保留分支的合并记录', 'rebase 能让提交历史更线性整洁', '对已推送到共享远程的提交随意 rebase 可能影响同事', 'rebase 和 merge 的效果完全一样没有区别'],
+        answer: [0, 1, 2],
+        explanation: 'merge 保留合并节点，rebase 得到线性历史；rebase 会改写提交，共享分支上使用需谨慎。'
+      },
+      {
+        type: 'multiple',
+        question: '关于删除分支，以下说法正确的有？（多选）',
+        options: ['git branch -d 只能删除已合并的分支', 'git branch -D 可以强制删除未合并的分支', '删除分支前最好确认上面的工作已合并或不再需要', '删除本地分支会同时自动删除远程同名分支'],
+        answer: [0, 1, 2],
+        explanation: '本地分支和远程分支互不影响，删除远程分支需要用 git push origin --delete 或在网页上操作。'
+      },
+      {
+        type: 'multiple',
+        question: '关于用 git log 查看分支历史，以下说法正确的有？（多选）',
+        options: ['git log 默认查看当前分支的提交历史', '加 --graph 能以图形方式显示分支与合并', '加 --all 可以查看所有分支的提交', 'git log 只能显示最近一次提交'],
+        answer: [0, 1, 2],
+        explanation: 'git log 默认列出当前分支历史，--graph 画图、--all 覆盖所有分支，常和 --oneline 组合使用。'
       }
     ]
   },
@@ -506,6 +646,76 @@ export default [
         options: ['每天开始工作前', 'push 之前发现远程有别人的新提交', '本地与远程提交出现分叉时', '刚 git init 完的本地空仓库'],
         answer: [0, 1, 2],
         explanation: '先拉再推、勤同步能减少冲突；刚 init 的空仓库还没有远程内容可拉。'
+      },
+      {
+        type: 'single',
+        question: '本地的 dev 分支被误删了但远程还有，想基于远程分支在本地重建并切换过去，该用哪条命令？',
+        options: ['git switch -c dev origin/dev', 'git push origin dev', 'git remote add dev 地址', 'git stash dev'],
+        answer: 0,
+        explanation: 'git switch -c dev origin/dev 会基于远程跟踪分支 origin/dev 创建本地 dev 并切换过去。'
+      },
+      {
+        type: 'single',
+        question: '想查看本地记录的远程跟踪分支有哪些，该用哪条命令？',
+        options: ['git branch -r', 'git branch', 'git remote add', 'git log --oneline'],
+        answer: 0,
+        explanation: 'git branch -r 列出远程跟踪分支（如 origin/main）；加 -a 可以同时看到本地和远程分支。'
+      },
+      {
+        type: 'single',
+        question: '远程上某些分支已被删除，但本地还留着它们的远程跟踪引用，想清理掉，该用哪条命令？',
+        options: ['git fetch --prune', 'git push --force', 'git reset --hard', 'git stash'],
+        answer: 0,
+        explanation: 'git fetch --prune 会在拉取远程信息的同时，清理本地已失效的远程跟踪分支引用。'
+      },
+      {
+        type: 'single',
+        question: '功能分支 feature-x 的 PR 已合并，想在命令行删除远程上的这个分支，该用哪条命令？',
+        options: ['git push origin --delete feature-x', 'git branch -d feature-x', 'git fetch origin feature-x', 'git pull origin feature-x'],
+        answer: 0,
+        explanation: 'git push origin --delete 分支名 删除远程分支；git branch -d 删的只是本地分支，两者互不影响。'
+      },
+      {
+        type: 'judge',
+        question: 'git push --force 会用本地历史覆盖远程历史，在共享分支上使用可能毁掉同事的工作。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。强推会让远程丢掉本地没有的提交，共享分支（尤其是主分支）上绝对不要强推。'
+      },
+      {
+        type: 'judge',
+        question: 'fork 是把别人的仓库复制一份到自己账号下，常用于给开源项目贡献代码。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。没有原仓库的写权限时，先 fork 到自己账号，改完后向原仓库发起 Pull Request。'
+      },
+      {
+        type: 'judge',
+        question: 'PR 合并后，远程的功能分支可以直接在 GitHub 页面上一键删除。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。PR 合并页面会提供 Delete branch 按钮，当然也可以用 git push origin --delete 删除。'
+      },
+      {
+        type: 'multiple',
+        question: '关于强制推送（git push --force），以下说法正确的有？（多选）',
+        options: ['会用本地历史覆盖远程历史', '在共享分支上使用可能导致同事丢失提交', '在只有自己使用的个人分支上风险相对较小', '任何时候都可以放心强推主分支'],
+        answer: [0, 1, 2],
+        explanation: '强推覆盖远程历史，共享分支上危害极大；个人独立分支上相对可控，但也要确认没有别人在用。'
+      },
+      {
+        type: 'multiple',
+        question: '给开源项目贡献代码的常见流程包括以下哪些？（多选）',
+        options: ['fork 原仓库到自己的账号', '在自己 fork 的仓库中新建分支修改', '向原仓库发起 Pull Request', '直接强制推送到原仓库的主分支'],
+        answer: [0, 1, 2],
+        explanation: '没有写权限时走 fork 流程：fork、改、提 PR；强推别人仓库的主分支既无权限也不合规范。'
+      },
+      {
+        type: 'multiple',
+        question: '关于远程分支与本地分支，以下说法正确的有？（多选）',
+        options: ['git push -u 可建立本地与远程分支的跟踪关系', 'git branch -r 可查看远程跟踪分支', '远程分支被删后可用 git fetch --prune 清理本地引用', '删除本地分支会自动删除远程同名分支'],
+        answer: [0, 1, 2],
+        explanation: '本地分支与远程分支独立管理，删除远程分支需要 git push origin --delete 或在网页上操作。'
       }
     ]
   }

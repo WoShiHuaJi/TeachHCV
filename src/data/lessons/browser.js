@@ -162,6 +162,76 @@ export default [
         options: ['在 head 中引入体积很大的同步 JS', 'CSS 文件加载缓慢迟迟未完成', '给所有 script 加上 defer', '首屏 CSS 依赖一个不可用的 CDN'],
         answer: [0, 1, 3],
         explanation: '大体积同步 JS 阻塞解析、CSS 阻塞渲染都会拖长白屏；defer 不阻塞解析，是优化手段而非问题。'
+      },
+      {
+        type: 'single',
+        question: '将 CSS 放在 head 中尽早加载，主要是为了？',
+        options: ['避免 JS 无法执行', '尽早构建 CSSOM，避免页面出现无样式内容闪烁', '让 HTML 解析速度更快', '减少 DOM 树的节点数量'],
+        answer: 1,
+        explanation: 'CSS 放头部可尽早构建 CSSOM 和渲染树，避免先渲染出无样式内容再闪烁（FOUC）；CSS 本身不阻塞 HTML 解析。'
+      },
+      {
+        type: 'single',
+        question: '为什么浏览器在执行 script 前，通常要先等它前面的 CSSOM 构建完成？',
+        options: ['CSS 文件体积太大下载慢', '因为 JS 可能读取或修改样式，必须拿到最新的样式计算结果', '浏览器单线程无法同时处理', '规范强制要求，没有实际意义'],
+        answer: 1,
+        explanation: 'JS 可能读取元素的样式信息，浏览器为保证 JS 拿到正确结果，会让脚本执行等待其前面的 CSSOM 就绪，即 CSS 会阻塞 JS 的执行。'
+      },
+      {
+        type: 'single',
+        question: '关于 DOMContentLoaded 与 load 事件，下列说法正确的是？',
+        options: ['两者在同一时刻触发', 'DOMContentLoaded 在 DOM 解析完成时触发，load 要等图片等所有资源加载完', 'load 先于 DOMContentLoaded 触发', 'DOMContentLoaded 必须等所有图片加载完才触发'],
+        answer: 1,
+        explanation: 'DOMContentLoaded 只要 DOM 解析完成即触发（defer 脚本执行完之后）；load 要等样式、图片等所有资源加载完毕，更晚触发。'
+      },
+      {
+        type: 'single',
+        question: 'defer 脚本的执行时机是？',
+        options: ['下载完成后立即执行', 'HTML 解析完成后、DOMContentLoaded 事件之前按顺序执行', 'load 事件之后才执行', '页面首次渲染完成后执行'],
+        answer: 1,
+        explanation: 'defer 脚本在后台并行下载，等 HTML 解析完成后按书写顺序执行，执行完才触发 DOMContentLoaded。'
+      },
+      {
+        type: 'judge',
+        question: '首屏内联少量关键 CSS，可以减少关键请求数量、缩短首屏渲染时间。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。内联少量首屏关键样式可以省去一次 CSS 请求，让渲染树尽快构建；但大量内联会撑大 HTML，需控制体积。'
+      },
+      {
+        type: 'judge',
+        question: 'async 适合彼此之间有依赖关系、必须保证执行顺序的脚本。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。async 下载完立即执行、顺序不保证，适合独立脚本（如统计代码）；有依赖关系、需要按顺序执行的脚本应使用 defer。'
+      },
+      {
+        type: 'judge',
+        question: '渲染树包含 DOM 树中的所有节点，包括 head 和 script 标签。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。渲染树只包含可见节点，head、script、display:none 等非可见节点都不会进入渲染树。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 defer 脚本，下列说法正确的有？（多选）',
+        options: ['下载阶段不阻塞 HTML 解析', '在文档解析完成后按书写顺序执行', '只对外部脚本（带 src）生效', '执行顺序不保证'],
+        answer: [0, 1, 2],
+        explanation: 'defer 并行下载不阻塞解析，文档解析完后按顺序执行，且只对外部脚本生效；顺序不保证是 async 的特点。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些情况会阻塞页面的首次渲染？（多选）',
+        options: ['首屏所需的外部 CSS 尚未加载完成', 'head 中体积较大的同步 script 正在执行', '带 defer 的脚本还在后台下载', 'CSSOM 尚未构建完成'],
+        answer: [0, 1, 3],
+        explanation: 'CSS 阻塞渲染，同步 JS 阻塞解析进而阻塞渲染；defer 脚本下载和执行都不阻塞解析，不影响首屏渲染。'
+      },
+      {
+        type: 'multiple',
+        question: '关于浏览器渲染流程，下列说法正确的有？（多选）',
+        options: ['DOM 树与 CSSOM 树合并生成渲染树', '布局阶段负责计算节点的位置和大小', 'transform 动画可以只在合成阶段完成', 'display:none 的元素仍会进入渲染树'],
+        answer: [0, 1, 2],
+        explanation: 'DOM 与 CSSOM 合并成渲染树，布局计算几何信息，transform 动画由合成线程处理；display:none 不进入渲染树。'
       }
     ]
   },
@@ -330,6 +400,76 @@ export default [
         options: ['浏览器窗口尺寸发生变化', '元素内文字增多导致换行', '修改元素的 padding', '修改元素的 color'],
         answer: [0, 1, 2],
         explanation: '窗口尺寸、内容换行、padding 都会改变元素几何信息，触发回流；color 只影响外观，只触发重绘。'
+      },
+      {
+        type: 'single',
+        question: '只修改元素的 color 属性，浏览器会触发？',
+        options: ['只触发回流', '只触发重绘', '同时触发回流和重绘', '回流和重绘都不触发'],
+        answer: 1,
+        explanation: 'color 只改变外观、不影响几何布局，因此只触发重绘；凡是影响布局的修改才会触发回流。'
+      },
+      {
+        type: 'single',
+        question: '浏览器通常会把连续的样式修改放入渲染队列，下列哪种情况会迫使它立即清空队列执行回流？',
+        options: ['继续修改另一个样式属性', '读取 offsetWidth 等布局信息', '修改元素的背景颜色', '给元素切换一个 class'],
+        answer: 1,
+        explanation: '读取布局信息时浏览器必须返回最新值，会强制清空渲染队列、同步执行回流；普通样式修改可以批量排队处理。'
+      },
+      {
+        type: 'single',
+        question: '关于回流波及的范围，下列说法正确的是？',
+        options: ['元素回流只影响它自身', '回流可能波及父元素乃至整棵渲染树', '绝对定位元素的回流一定会影响整个页面', '回流只影响它的兄弟节点'],
+        answer: 1,
+        explanation: '回流会沿渲染树向上向下波及，开销远大于重绘；让动画元素脱离文档流可以缩小回流影响的范围。'
+      },
+      {
+        type: 'single',
+        question: '循环中一边读布局属性一边改样式导致每轮都强制回流，这种现象被称为？',
+        options: ['事件冒泡', '布局抖动（Layout Thrashing）', '内存泄漏', '事件循环阻塞'],
+        answer: 1,
+        explanation: '读写交替导致浏览器反复强制同步回流，称为布局抖动；应先集中读取、再集中写入来避免。'
+      },
+      {
+        type: 'judge',
+        question: '修改元素的 background-color 会触发回流。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。background-color 只改变外观、不影响布局，只触发重绘，不触发回流。'
+      },
+      {
+        type: 'judge',
+        question: '对 display:none 的元素批量修改样式后再显示，通常只会产生一次回流。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。display:none 的元素不在渲染树中，修改其样式不触发回流；恢复显示时统一计算，只产生一次回流。'
+      },
+      {
+        type: 'judge',
+        question: '通过 will-change 或 transform 把动画元素提升为独立合成层可缩小回流重绘影响范围，但合成层过多会占用更多内存。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。合成层能让元素独立绘制合成，但每个合成层都占用显存/内存，不能无节制地创建。'
+      },
+      {
+        type: 'multiple',
+        question: '下列关于回流与重绘的说法正确的有？（多选）',
+        options: ['回流必定引起重绘', '读取 getComputedStyle 的结果可能强制回流', '重绘的开销通常小于回流', '修改 color 会触发回流'],
+        answer: [0, 1, 2],
+        explanation: '回流后必然重绘；读取计算样式需要最新布局信息会强制回流；重绘只改外观开销更小；color 只触发重绘不触发回流。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些操作可能触发回流？（多选）',
+        options: ['修改元素的高度', '页面初始化渲染', '查询元素的 offsetTop', '修改元素的背景颜色'],
+        answer: [0, 1, 2],
+        explanation: '页面首次渲染必有一次布局；修改几何属性和读取布局信息都会触发回流；背景色只触发重绘。'
+      },
+      {
+        type: 'multiple',
+        question: '优化动画渲染性能的手段包括？（多选）',
+        options: ['使用 transform/opacity 实现动画', '用 will-change 提示浏览器提升合成层', '避免在动画帧回调中读取布局属性', '每帧都修改元素的 width 和 height'],
+        answer: [0, 1, 2],
+        explanation: 'transform/opacity 只触发合成，will-change 可提前提升合成层，帧回调中读布局属性会反复强制回流；每帧改宽高会每帧都回流。'
       }
     ]
   },
@@ -498,6 +638,76 @@ export default [
         options: ['调用栈为空后才会去任务队列取任务执行', '每执行完一个宏任务就会清空微任务队列', '微任务全部清空后浏览器才可能进行页面渲染', 'Promise 的 executor 函数也是异步执行的'],
         answer: [0, 1, 2],
         explanation: '事件循环在调用栈空时取任务；每轮宏任务后清空微任务，之后才可能渲染；Promise 的 executor 是同步执行的，只有 then 回调进微任务。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nconsole.log('a');\nsetTimeout(function () { console.log('b'); }, 0);\nsetTimeout(function () { console.log('c'); }, 0);\nconsole.log('d');",
+        options: ['a b c d', 'a d b c', 'a d c b', 'd a b c'],
+        answer: 1,
+        explanation: '同步代码先打印 a、d；两个 setTimeout 回调是宏任务，按注册顺序依次执行，输出 a d b c。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nPromise.resolve().then(function () {\n  console.log('1');\n}).then(function () {\n  console.log('2');\n});\nconsole.log('3');",
+        options: ['1 2 3', '3 1 2', '3 2 1', '1 3 2'],
+        answer: 1,
+        explanation: '同步先打印 3；第一个 then 进微任务，执行后链式 then 也进微任务并继续在本轮清空，输出 3 1 2。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nsetTimeout(function () { console.log('timeout'); }, 0);\nPromise.resolve().then(function () {\n  console.log('p1');\n}).then(function () {\n  console.log('p2');\n});",
+        options: ['timeout p1 p2', 'p1 p2 timeout', 'p1 timeout p2', 'p2 p1 timeout'],
+        answer: 1,
+        explanation: '同步代码执行完后先清空微任务：p1 打印后链式微任务 p2 也在本轮执行；最后才执行宏任务 timeout，输出 p1 p2 timeout。'
+      },
+      {
+        type: 'single',
+        question: "执行下列代码，输出顺序是？\nasync function a() {\n  console.log('1');\n  await console.log('2');\n  console.log('3');\n}\na();\nconsole.log('4');",
+        options: ['1 2 3 4', '1 4 2 3', '1 2 4 3', '4 1 2 3'],
+        answer: 2,
+        explanation: 'a() 同步打印 1；await 后面的表达式 console.log("2") 立即同步执行打印 2；await 之后的打印 3 进微任务；继续同步打印 4，最后清空微任务打印 3，输出 1 2 4 3。'
+      },
+      {
+        type: 'judge',
+        question: "代码 console.log('x'); Promise.resolve().then(function(){ console.log('y'); }); console.log('z'); 的输出是 x y z。",
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。同步代码先打印 x、z，then 回调是微任务最后执行，输出应为 x z y。'
+      },
+      {
+        type: 'judge',
+        question: '在某个宏任务中注册的微任务，会在该宏任务执行结束后、下一个宏任务开始前执行。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。每执行完一个宏任务就会立即清空微任务队列，其中包含该宏任务执行期间新产生的微任务。'
+      },
+      {
+        type: 'judge',
+        question: 'queueMicrotask(fn) 与 Promise.resolve().then(fn) 一样，都是把 fn 放入微任务队列。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。queueMicrotask 是专门用于注册微任务的 API，与 Promise.then 回调同属微任务队列，按先进先出执行。'
+      },
+      {
+        type: 'multiple',
+        question: "下列代码中，哪些输出发生在同步执行阶段（第一个宏任务内）？（多选）\nconsole.log('1');\nnew Promise(function (resolve) {\n  console.log('2');\n  resolve();\n}).then(function () { console.log('3'); });\nsetTimeout(function () { console.log('4'); }, 0);",
+        options: ["console.log('1')", "console.log('2')", "console.log('3')", "console.log('4')"],
+        answer: [0, 1],
+        explanation: '最外层同步代码和 new Promise 的 executor 都是同步执行的；then 回调进微任务，setTimeout 回调进宏任务队列。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 async/await 的执行机制，下列说法正确的有？（多选）',
+        options: ['await 之前的代码在函数调用时同步执行', 'await 之后的代码进入微任务队列', 'async 函数总是返回一个 Promise', 'await 会阻塞整个主线程直到异步完成'],
+        answer: [0, 1, 2],
+        explanation: 'await 前同步执行，await 后挂起进入微任务，async 函数返回值被包装成 Promise；await 只挂起当前 async 函数，不会阻塞主线程。'
+      },
+      {
+        type: 'multiple',
+        question: '关于微任务与页面渲染，下列说法正确的有？（多选）',
+        options: ['微任务全部清空后浏览器才可能进行页面渲染', '微任务中不断新增微任务会导致页面迟迟无法渲染', '长时间的同步任务会阻塞页面渲染', '微任务执行期间浏览器可以随时穿插进行渲染'],
+        answer: [0, 1, 2],
+        explanation: '每轮宏任务后要清空微任务才可能渲染；微任务无限新增或长同步任务都会卡住渲染；微任务执行期间不会穿插渲染。'
       }
     ]
   },
@@ -664,6 +874,76 @@ export default [
         options: ['提交的数据放在请求体中', '理论上不受 URL 长度限制', '不是幂等操作', '参数一定会留在浏览器历史记录中'],
         answer: [0, 1, 2],
         explanation: 'POST 数据在请求体中、不受 URL 长度限制、不幂等；留在历史记录中的是 URL 上的 GET 参数，POST 参数不会。'
+      },
+      {
+        type: 'single',
+        question: '状态码 504 的含义是？',
+        options: ['网关超时', '资源不存在', '永久重定向', '未认证'],
+        answer: 0,
+        explanation: '504 Gateway Timeout 表示网关或代理等待上游服务响应超时；502 是网关错误，404 是资源不存在。'
+      },
+      {
+        type: 'single',
+        question: '关于 PUT 与 PATCH 的区别，下列说法正确的是？',
+        options: ['PUT 是部分更新，PATCH 是整体替换', 'PUT 是整体替换更新，PATCH 是部分更新', '两者完全相同，可以互换', 'PATCH 只能用于查询操作'],
+        answer: 1,
+        explanation: 'PUT 语义是用提交的内容整体替换目标资源，PATCH 只修改部分字段；两者都是幂等性常考点，PUT 幂等。'
+      },
+      {
+        type: 'single',
+        question: 'HTTP 协议在传输层通常基于哪种协议？',
+        options: ['UDP', 'TCP', '直接基于 IP', 'ICMP'],
+        answer: 1,
+        explanation: 'HTTP/1.1 和 HTTP/2 都基于 TCP，利用其可靠传输能力；HTTP/3 才改用基于 UDP 的 QUIC。'
+      },
+      {
+        type: 'single',
+        question: 'HTTP 请求报文中空行的作用是？',
+        options: ['没有作用，可以省略', '分隔请求头与请求体', '表示整个请求结束', '用于加密请求数据'],
+        answer: 1,
+        explanation: '请求报文结构为：请求行、请求头、空行、请求体，空行是请求头与请求体之间的分隔标志。'
+      },
+      {
+        type: 'judge',
+        question: '301 永久重定向后，搜索引擎通常会把原地址的权重转移到新地址。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。301 表示资源永久迁移，搜索引擎会更新收录地址并转移权重；302 临时重定向则不会。'
+      },
+      {
+        type: 'judge',
+        question: 'GET 请求可以被浏览器缓存，而 POST 请求通常不会被缓存。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。GET 是幂等的查询操作，浏览器会缓存；POST 每次都可能产生副作用，默认不缓存。'
+      },
+      {
+        type: 'judge',
+        question: 'HTTP 响应报文由状态行、响应头、空行、响应体四部分组成。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。状态行包含协议版本、状态码和状态描述，之后是响应头、空行和响应体，与请求报文结构对应。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些状态码属于 5xx 服务器错误？（多选）',
+        options: ['500 服务器内部错误', '502 网关错误', '504 网关超时', '404 资源不存在'],
+        answer: [0, 1, 2],
+        explanation: '500、502、504 都属于 5xx 服务器错误；404 是 4xx 客户端错误。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 HTTP 请求方法，下列说法正确的有？（多选）',
+        options: ['HEAD 只返回响应头不返回响应体', 'DELETE 是幂等操作', 'PATCH 用于部分更新', 'POST 是幂等操作'],
+        answer: [0, 1, 2],
+        explanation: 'HEAD 只取响应头，DELETE 多次执行结果相同（幂等），PATCH 部分更新；POST 每次调用都可能创建新资源，不幂等。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 HTTP 无状态及状态保持机制，下列说法正确的有？（多选）',
+        options: ['无状态指服务器默认不记得之前的请求来自谁', 'Cookie 会随同源请求自动携带到服务器', 'Session、Token 可用于维持用户登录状态', 'HTTP 协议本身能记住用户的登录状态'],
+        answer: [0, 1, 2],
+        explanation: 'HTTP 本身无状态，需借助 Cookie/Session/Token 维持状态；Cookie 会随同源请求自动发送。'
       }
     ]
   },
@@ -830,6 +1110,76 @@ export default [
         options: ['静态资源文件名携带内容 hash', '静态资源设置超长 max-age 并交给 CDN', 'HTML 文件设置 no-cache 走协商缓存', '所有资源统一设置 no-store'],
         answer: [0, 1, 2],
         explanation: 'hash 文件名 + 超长 max-age 让静态资源长期命中强缓存，HTML 用 no-cache 保证最新；全部 no-store 等于放弃缓存，会拖慢页面。'
+      },
+      {
+        type: 'single',
+        question: '当响应中同时存在 Cache-Control: max-age 和 Expires 时，以哪个为准？',
+        options: ['Expires', 'Cache-Control', '两者中过期时间更长的那个', '随机生效'],
+        answer: 1,
+        explanation: 'Cache-Control 是 HTTP/1.1 的方案，优先级高于 Expires；max-age 用相对秒数，不受本地时间不准的影响。'
+      },
+      {
+        type: 'single',
+        question: 'Cache-Control: max-age=0 的效果是？',
+        options: ['完全不缓存任何内容', '强缓存立即过期，每次请求都向服务器发起协商验证', '缓存永久有效', '禁用协商缓存'],
+        answer: 1,
+        explanation: 'max-age=0 表示强缓存立即过期，浏览器每次都要带缓存标识向服务器验证（协商缓存）；完全不缓存应使用 no-store。'
+      },
+      {
+        type: 'single',
+        question: '协商缓存请求中 If-None-Match 的值来源于？',
+        options: ['浏览器随机生成', '上一次响应头中的 ETag', '上一次响应头中的 Last-Modified', '请求体内容的 hash'],
+        answer: 1,
+        explanation: '服务器响应时下发 ETag，浏览器缓存后在协商请求中通过 If-None-Match 回传该指纹供服务器比对。'
+      },
+      {
+        type: 'single',
+        question: '浏览器判断强缓存是否过期，主要依据的是？',
+        options: ['If-Modified-Since 的值', 'Cache-Control 的 max-age 与资源被缓存的时间', 'ETag 的对比结果', '服务器是否返回 304'],
+        answer: 1,
+        explanation: '强缓存不发请求，浏览器在本地根据 max-age 和资源缓存时间判断是否过期；ETag/If-Modified-Since 属于协商缓存。'
+      },
+      {
+        type: 'judge',
+        question: 'max-age 使用的是相对秒数，不受客户端本地时间不准的影响。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。max-age 表示从响应时间起算的相对秒数；受本地时间影响的是 Expires 这种绝对时间点方案。'
+      },
+      {
+        type: 'judge',
+        question: '强缓存过期后，浏览器一定会重新下载完整资源。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。强缓存过期后进入协商缓存，若服务器验证资源未变化会返回 304，浏览器继续使用本地缓存，不重新下载。'
+      },
+      {
+        type: 'judge',
+        question: '在地址栏回车访问页面与按 F5 刷新，浏览器对缓存的处理方式完全相同。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。地址栏回车可以直接使用强缓存；F5 刷新会让强缓存失效，转而发起协商缓存验证。'
+      },
+      {
+        type: 'multiple',
+        question: '关于协商缓存的标识配对，下列说法正确的有？（多选）',
+        options: ['ETag 与 If-None-Match 配对', 'Last-Modified 与 If-Modified-Since 配对', '协商缓存命中时服务器返回 304', 'ETag 的优先级低于 Last-Modified'],
+        answer: [0, 1, 2],
+        explanation: '两对标识分别是 ETag/If-None-Match、Last-Modified/If-Modified-Since，命中返回 304；ETag 精度更高、优先级更高。'
+      },
+      {
+        type: 'multiple',
+        question: '强缓存命中的特点包括？（多选）',
+        options: ['浏览器不向服务器发送请求', '状态码显示 200 (from cache)', '直接使用本地缓存的资源', '服务器返回 304 状态码'],
+        answer: [0, 1, 2],
+        explanation: '强缓存命中不发请求、直接用本地缓存、显示 200 (from cache)；304 是协商缓存命中时服务器的返回。'
+      },
+      {
+        type: 'multiple',
+        question: '关于浏览器不同操作对缓存的影响，下列说法正确的有？（多选）',
+        options: ['地址栏回车访问可以直接使用强缓存', 'F5 刷新通常跳过强缓存走协商验证', 'Ctrl+F5 强制刷新会跳过所有缓存重新请求', 'F5 刷新会清空浏览器的全部缓存'],
+        answer: [0, 1, 2],
+        explanation: '回车可用强缓存，F5 走协商缓存（多返回 304），Ctrl+F5 完全不用缓存；F5 不会清空缓存。'
       }
     ]
   },
@@ -998,6 +1348,76 @@ export default [
         options: ['证书由受信任的 CA 机构签发', '证书中包含服务器的公钥', '浏览器验证证书可以防止中间人攻击', '有了证书后通信就不需要加密了'],
         answer: [0, 1, 2],
         explanation: '证书由 CA 签发并包含服务器公钥，浏览器验证证书能确认对方身份、防中间人；证书解决的是身份与密钥交换，数据仍需加密传输。'
+      },
+      {
+        type: 'single',
+        question: 'HTTPS 相比 HTTP 多出的一层是？',
+        options: ['FTP 层', 'TLS/SSL 加密层', 'DNS 层', '数据压缩层'],
+        answer: 1,
+        explanation: 'HTTPS = HTTP + TLS/SSL，在 HTTP 与 TCP 之间加入加密层，提供加密、身份验证和完整性保护。'
+      },
+      {
+        type: 'single',
+        question: 'CSP（内容安全策略）缓解 XSS 的原理是？',
+        options: ['对所有用户输入自动加密', '通过声明可信的脚本来源白名单，阻止不可信脚本的加载和执行', '自动删除页面中所有 script 标签', '禁止页面使用任何 JavaScript'],
+        answer: 1,
+        explanation: 'CSP 通过响应头声明允许加载执行的脚本来源，即使恶意脚本被注入，不在白名单内也无法执行。'
+      },
+      {
+        type: 'single',
+        question: 'CSRF Token 能防御 CSRF 的原理是？',
+        options: ['Token 可以加密请求数据', '攻击者的恶意页面无法获取和伪造正确的 Token', 'Token 能让跨站请求变成同源请求', 'Token 会阻止浏览器自动携带 Cookie'],
+        answer: 1,
+        explanation: 'CSRF Token 由服务器下发并校验，攻击者的页面拿不到 Token，伪造的请求会因校验失败被拒绝。'
+      },
+      {
+        type: 'single',
+        question: 'Cookie 的 Secure 属性的作用是？',
+        options: ['禁止 JavaScript 读取该 Cookie', '让 Cookie 仅通过 HTTPS 加密连接传输', '限制跨站请求携带该 Cookie', '对 Cookie 内容进行加密'],
+        answer: 1,
+        explanation: 'Secure 限定 Cookie 只在 HTTPS 下传输，防止明文被窃听；防 JS 读取用 HttpOnly，限制跨站携带用 SameSite。'
+      },
+      {
+        type: 'judge',
+        question: 'HTTPS 能加密传输内容，但无法验证通信对方的身份。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。HTTPS 握手中浏览器会验证 CA 签发的数字证书，确认服务器身份、防止中间人攻击，身份验证是其核心能力之一。'
+      },
+      {
+        type: 'judge',
+        question: '反射型 XSS 通常需要诱导用户点击带有恶意参数的链接才能触发。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。反射型 XSS 把恶意脚本藏在 URL 参数中，服务器未转义直接输出到页面而执行，常通过钓鱼链接诱导点击。'
+      },
+      {
+        type: 'judge',
+        question: 'CSRF 攻击中，攻击者能够直接读取到用户 Cookie 的具体内容。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。CSRF 只是利用浏览器自动携带 Cookie 的机制冒充用户发请求，攻击者看不到 Cookie 内容；能读到 Cookie 的是 XSS。'
+      },
+      {
+        type: 'multiple',
+        question: 'XSS 的常见类型包括？（多选）',
+        options: ['存储型 XSS', '反射型 XSS', 'DOM 型 XSS', 'CSRF 型 XSS'],
+        answer: [0, 1, 2],
+        explanation: 'XSS 分为存储型、反射型和 DOM 型三种；CSRF 是另一种攻击方式，与 XSS 并列而非其子类。'
+      },
+      {
+        type: 'multiple',
+        question: 'HTTPS 握手阶段发生的事情包括？（多选）',
+        options: ['服务器向客户端发送数字证书', '客户端验证证书的合法性', '双方通过非对称加密交换会话密钥', '开始传输对称加密的业务数据'],
+        answer: [0, 1, 2],
+        explanation: '握手阶段完成证书下发与验证、用非对称加密交换会话密钥；业务数据的对称加密传输发生在握手完成之后。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 XSS 攻击，下列说法正确的有？（多选）',
+        options: ['存储型 XSS 的恶意脚本会持久保存在服务器端', '反射型 XSS 常需要诱导用户点击恶意链接', '对输出进行转义是重要的防御手段', 'XSS 只能通过 GET 请求发起'],
+        answer: [0, 1, 2],
+        explanation: '存储型脚本入库持久危害，反射型依赖诱导点击，输出转义可阻止脚本执行；XSS 与请求方法无关，POST 同样可能触发。'
       }
     ]
   },
@@ -1166,6 +1586,76 @@ export default [
         options: ['非简单请求会在正式请求前先发预检', '服务器在预检响应头中声明允许的方法和请求头', '预检通过后浏览器才会发送正式请求', '预检请求中会携带完整的业务请求体数据'],
         answer: [0, 1, 2],
         explanation: '预检只是询问服务器是否允许该跨域请求，响应头中声明允许的来源、方法和头部，不携带业务数据；通过后才发正式请求。'
+      },
+      {
+        type: 'single',
+        question: '同源策略中的“同源”要求下列哪三项完全相同？',
+        options: ['协议、IP、路径', '协议、域名、端口', '域名、路径、参数', '协议、端口、文件后缀'],
+        answer: 1,
+        explanation: '同源要求协议、域名、端口三者完全一致；路径、参数不同不影响同源判定。'
+      },
+      {
+        type: 'single',
+        question: '浏览器是否放行一个跨域 AJAX 响应，主要取决于？',
+        options: ['前端是否设置了自定义请求头', '服务器返回的 CORS 相关响应头', '浏览器用户的手动确认', '请求是否使用 HTTPS'],
+        answer: 1,
+        explanation: 'CORS 的核心在服务器：通过 Access-Control-Allow-Origin 等响应头声明允许的来源，浏览器据此决定是否把响应交给 JS。'
+      },
+      {
+        type: 'single',
+        question: '想减少 OPTIONS 预检请求的发送次数，服务器可以设置哪个响应头来缓存预检结果？',
+        options: ['Access-Control-Allow-Origin', 'Access-Control-Max-Age', 'Cache-Control', 'ETag'],
+        answer: 1,
+        explanation: 'Access-Control-Max-Age 指定预检结果可被缓存的秒数，期间相同请求不再重复预检，可减少请求次数。'
+      },
+      {
+        type: 'single',
+        question: '使用 window.postMessage 进行跨窗口通信时，为保证安全应该？',
+        options: ['在接收方校验 message 事件的 origin 来源', '只要消息加密就不用校验来源', '把 targetOrigin 写死为 * 且不做任何校验', '只允许传输数字类型的数据'],
+        answer: 0,
+        explanation: 'postMessage 应指定明确的 targetOrigin，接收方也要校验 event.origin，防止恶意窗口伪造或窃取消息。'
+      },
+      {
+        type: 'judge',
+        question: '同源策略是浏览器端的安全机制，服务器与服务器之间的直接通信不受其限制。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。同源策略只在浏览器中生效，代理转发方案正是利用服务器之间通信不受限这一点来规避跨域。'
+      },
+      {
+        type: 'judge',
+        question: '配置 devServer.proxy 可以直接解决生产环境中真实用户访问时的跨域问题。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。devServer.proxy 只作用于本地开发服务器；生产环境需要 Nginx 反向代理或服务器配置 CORS 等方案。'
+      },
+      {
+        type: 'judge',
+        question: '前端在请求头中加上 Access-Control-Allow-Origin 就能解决跨域问题。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。Access-Control-Allow-Origin 是响应头，必须由服务器设置；前端在请求头中携带它没有任何作用。'
+      },
+      {
+        type: 'multiple',
+        question: '关于代理方式解决跨域，下列说法正确的有？（多选）',
+        options: ['浏览器访问的是同源的代理服务器地址', '由代理服务器把请求转发到真实后端', '服务器之间的通信不受同源策略限制', '代理方案要求后端必须配置 CORS 响应头'],
+        answer: [0, 1, 2],
+        explanation: '代理方案中浏览器始终访问同源地址，由代理在服务器端转发，天然规避跨域；既然走了代理，后端就不必再配 CORS。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 postMessage 跨窗口通信，下列说法正确的有？（多选）',
+        options: ['可以在不同源的窗口或 iframe 之间通信', '接收方通过监听 message 事件获取数据', '使用时应校验消息来源 origin', '通信双方可以直接读写对方窗口的 DOM'],
+        answer: [0, 1, 2],
+        explanation: 'postMessage 是官方跨窗口通信机制，配合 origin 校验保证安全；跨域窗口之间的 DOM 访问仍被同源策略禁止。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 CORS 响应头，下列说法正确的有？（多选）',
+        options: ['Access-Control-Allow-Origin 指定允许的来源', 'Access-Control-Allow-Methods 声明允许的方法', 'Access-Control-Allow-Headers 声明允许的自定义请求头', '它们需要由前端在请求中携带'],
+        answer: [0, 1, 2],
+        explanation: 'CORS 相关头部都是服务器设置的响应头，浏览器据此决定是否放行跨域响应；前端无法通过请求头解决跨域。'
       }
     ]
   },
@@ -1332,6 +1822,76 @@ export default [
         options: ['发生在主动关闭方发送最后一个 ACK 之后', '若最后一个 ACK 丢失，还能处理服务器重传的 FIN', '可让本次连接的旧报文在网络中自然消失，避免影响后续新连接', '等待期间客户端仍可以向服务器发送新的业务数据'],
         answer: [0, 1, 2],
         explanation: '2MSL 等待保证最后一个 ACK 能被确认、旧报文自然消亡；等待期间连接处于关闭流程中，不能再发送新业务数据。'
+      },
+      {
+        type: 'single',
+        question: '三次握手中第三次（客户端回复 ACK）的作用是？',
+        options: ['请求建立连接', '让服务器确认客户端具备正常的接收能力', '协商传输的数据格式', '关闭历史遗留连接'],
+        answer: 1,
+        explanation: '第三次握手让服务器确认客户端能收到自己的消息，双方的收发能力都得到确认后才建立连接。'
+      },
+      {
+        type: 'single',
+        question: '关于 TCP 与 UDP 的首部开销，下列说法正确的是？',
+        options: ['UDP 首部仅 8 字节，比 TCP（至少 20 字节）开销小', '两者首部大小完全相同', 'TCP 首部比 UDP 更小', 'UDP 首部至少 40 字节'],
+        answer: 0,
+        explanation: 'UDP 首部固定 8 字节，TCP 首部至少 20 字节且包含序列号、确认号等字段，这也是 UDP 更快的原因之一。'
+      },
+      {
+        type: 'single',
+        question: '四次挥手中，主动关闭方发出的第一个报文携带的标志位是？',
+        options: ['SYN', 'ACK', 'FIN', 'RST'],
+        answer: 2,
+        explanation: '主动关闭方先发送 FIN 表示自己的数据已发完；SYN 用于建立连接，RST 用于复位异常连接。'
+      },
+      {
+        type: 'single',
+        question: '若 TCP 只用两次握手，一个失效后被重传的旧 SYN 到达服务器，可能造成什么后果？',
+        options: ['数据传输乱序', '服务器为失效的连接白白分配并占用资源', '客户端永远无法发送数据', 'DNS 解析失败'],
+        answer: 1,
+        explanation: '两次握手下服务器收到 SYN 即建立连接并等待数据，失效的历史 SYN 会让服务器白等浪费资源；第三次握手正是为此而设。'
+      },
+      {
+        type: 'judge',
+        question: 'TCP 提供流量控制与拥塞控制机制，以适应网络状况、避免压垮接收方和网络。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '正确。滑动窗口实现流量控制，慢启动、拥塞避免等算法实现拥塞控制，这是 TCP 可靠传输的重要组成。'
+      },
+      {
+        type: 'judge',
+        question: 'TCP 的四次挥手只能由客户端主动发起。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。通信双方任一方数据发完后都可以主动发送 FIN 发起关闭，主动方最后进入 TIME_WAIT 状态。'
+      },
+      {
+        type: 'judge',
+        question: '要求数据绝不丢失、必须完整按序到达的文件传输场景适合使用 UDP。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '错误。UDP 不保证可靠与顺序，文件传输必须用 TCP；UDP 适合直播、语音、DNS 等允许少量丢包的场景。'
+      },
+      {
+        type: 'multiple',
+        question: 'TCP 保证可靠传输的机制包括？（多选）',
+        options: ['确认应答机制', '超时重传机制', '通过序列号保证数据按序到达', '拿到数据不经确认直接发送'],
+        answer: [0, 1, 2],
+        explanation: '确认应答、超时重传、序列号排序共同保证 TCP 的可靠性；“拿到数据直接发、不管结果”是 UDP 的风格。'
+      },
+      {
+        type: 'multiple',
+        question: '以下哪些场景更适合使用 UDP？（多选）',
+        options: ['视频直播', '实时语音通话', 'DNS 域名查询', '重要文件下载'],
+        answer: [0, 1, 2],
+        explanation: '直播、语音、DNS 对实时性要求高且允许少量丢包，适合 UDP；文件下载要求完整可靠，必须用 TCP。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 TCP 连接管理，下列说法正确的有？（多选）',
+        options: ['通过三次握手建立连接', '通过四次挥手断开连接', '通信双方任一方都可以主动发起关闭', '握手只需两次就足够可靠'],
+        answer: [0, 1, 2],
+        explanation: '三次握手建立、四次挥手断开，任一方都可主动关闭；两次握手无法确认客户端的接收能力，不可靠。'
       }
     ]
   }

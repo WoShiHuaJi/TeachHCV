@@ -163,6 +163,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'Vue3 保留了选项式 API，同时新增组合式 API，开发者可按需选择。'
+      },
+      {
+        type: 'single',
+        question: '通过 CDN 引入 Vue3 后，创建应用实例使用的是哪个全局对象？',
+        options: ['Vue', 'React', 'jQuery', 'Axios'],
+        answer: 0,
+        explanation: 'CDN 引入后全局暴露 Vue 对象，通过 Vue.createApp 创建应用实例。'
+      },
+      {
+        type: 'single',
+        question: 'createApp 传入的配置对象中，data() 方法的作用是？',
+        options: ['返回应用使用的数据对象', '注册全局组件', '配置路由规则', '引入外部样式'],
+        answer: 0,
+        explanation: 'data() 返回一个对象，其中的字段可以在模板中通过插值等方式使用。'
+      },
+      {
+        type: 'judge',
+        question: '模板插值中使用的数据发生变化时，页面会自动更新。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这就是 Vue 的响应式特性：数据驱动视图自动更新。'
+      },
+      {
+        type: 'judge',
+        question: '一个页面上只能创建一个 Vue 应用实例。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '可以多次调用 createApp 创建多个应用实例，分别挂载到不同的节点。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 createApp，下列说法正确的有？（多选）',
+        options: ['用于创建应用实例', '可以传入包含 data 的配置对象', '创建的实例可以调用 mount 挂载', '调用后应用会自动挂载到 body'],
+        answer: [0, 1, 2],
+        explanation: 'createApp 只负责创建实例，必须显式调用 mount 并指定挂载点。'
+      },
+      {
+        type: 'multiple',
+        question: '关于插值语法 {{ }}，下列说法正确的有？（多选）',
+        options: ['用于在模板中显示数据', '数据变化时显示内容自动更新', '属于 Vue 模板语法的一部分', '可以用来绑定元素的属性'],
+        answer: [0, 1, 2],
+        explanation: '绑定元素属性应使用 v-bind，插值语法只用于文本内容。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：Vite 开发服务器运行期间修改了 .vue 文件，浏览器中的页面会？',
+        options: ['自动热更新对应部分', '必须手动刷新才生效', '开发服务器直接退出', '清空页面所有内容'],
+        answer: 0,
+        explanation: 'Vite 支持热更新，修改代码后页面立刻更新对应部分。'
+      },
+      {
+        type: 'judge',
+        question: 'Vue3 只能用于构建完整的单页应用，无法对老页面做局部增强。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '渐进式框架可以从局部小功能开始用起，CDN 引入即可做局部增强。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 CDN 方式与工程化方式的对比，下列说法正确的有？（多选）',
+        options: ['CDN 方式适合快速体验和局部增强', '工程化项目使用 .vue 单文件组件', '工程化代码需经构建工具编译后运行', 'CDN 方式也必须配置路由和构建工具'],
+        answer: [0, 1, 2],
+        explanation: 'CDN 方式零配置即可体验，工程化才涉及构建、路由等完整设施。'
+      },
+      {
+        type: 'single',
+        question: '面试题：被问到「为什么 Vue 适合前端入门」时，合理的回答是？',
+        options: ['语法简单直观、文档友好', '必须精通 TypeScript 才能使用', '只能配合后端框架使用', '社区没有任何学习资料'],
+        answer: 0,
+        explanation: 'Vue 语法简单直观、文档友好，是入门前端框架的绝佳选择。'
       }
     ]
   },
@@ -331,6 +401,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '.lazy 修饰符把同步时机从 input 事件改为 change 事件。'
+      },
+      {
+        type: 'single',
+        question: 'v-for 遍历数组时，除了每一项 item，还可以同时拿到什么？',
+        options: ['索引 index', '父组件实例', '路由对象', '上一个组件的状态'],
+        answer: 0,
+        explanation: 'v-for="(item, index) in list" 可以同时拿到每一项和它的索引。'
+      },
+      {
+        type: 'single',
+        question: '@click 绑定的事件处理方法一般定义在哪里？',
+        options: ['methods 或 setup 中', 'style 标签中', 'template 的注释里', '路由配置中'],
+        answer: 0,
+        explanation: '事件处理方法定义在 methods（选项式）或 setup（组合式）中，模板里通过名字引用。'
+      },
+      {
+        type: 'judge',
+        question: '@click 的值可以直接写内联表达式，例如让计数器自增。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'v-on 的值可以是方法名，也可以是内联表达式，如 @click="count++"。'
+      },
+      {
+        type: 'judge',
+        question: '事件处理需要原生事件对象时，可以写成 @click="fn($event)" 显式传递。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '$event 是 Vue 提供的特殊变量，代表原生事件对象。'
+      },
+      {
+        type: 'multiple',
+        question: 'v-model 可以用在下列哪些表单元素上？（多选）',
+        options: ['文本输入框', '复选框', '下拉选择框', 'div 容器'],
+        answer: [0, 1, 2],
+        explanation: 'v-model 支持 input、textarea、select、checkbox、radio 等表单元素。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些是合法的点击事件绑定写法？（多选）',
+        options: ['v-on:click="fn"', '@click="fn"', '@click="count++"', 'v-on:click-fn'],
+        answer: [0, 1, 2],
+        explanation: 'v-on:click-fn 不是合法写法，事件名与修饰符要通过点号连接。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：v-for 渲染的列表中多个项使用了相同的 :key，可能导致什么问题？',
+        options: ['状态错乱、更新异常', '渲染速度变快', '重复项自动去重', '不会有任何影响'],
+        answer: 0,
+        explanation: ':key 必须唯一，重复的 key 会导致 Vue 复用错误的 DOM，出现状态错乱。'
+      },
+      {
+        type: 'judge',
+        question: ':key 的值应使用唯一且稳定的标识（如 item.id），而不是数组索引。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '索引会随列表顺序变化，使用唯一稳定的 id 才能保证更新正确高效。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 v-model 双向绑定，下列说法正确的有？（多选）',
+        options: ['数据变化时输入框内容会更新', '用户输入时数据会同步变化', '可以用在 textarea 上', '使用后数据的响应式会被禁用'],
+        answer: [0, 1, 2],
+        explanation: 'v-model 是数据与表单控件之间的双向同步，不影响数据本身的响应式。'
+      },
+      {
+        type: 'single',
+        question: '模板插值 {{ }} 中可以编写的内容是？',
+        options: ['简单的 JavaScript 表达式', '多条语句和 for 循环', 'import 导入语句', '会被解析成 DOM 的 HTML 字符串'],
+        answer: 0,
+        explanation: '插值只支持简单表达式；HTML 字符串不会被解析，会按普通文本显示。'
       }
     ]
   },
@@ -498,6 +638,76 @@ export default [
         options: ['声明一个数字计数器', '声明一个字符串标题', '需要把状态解构后传给其他地方使用', '声明一个永不修改的常量配置'],
         answer: [0, 1, 2],
         explanation: '简单值用 ref；reactive 不能解构。常量配置不需要响应式，两者都不必用。'
+      },
+      {
+        type: 'single',
+        question: 'reactive 声明对象后，修改其中属性的正确写法是？',
+        options: ['state.age = 20', 'state.age.value = 20', 'set(state.age, 20)', 'reactive(state.age)'],
+        answer: 0,
+        explanation: 'reactive 对象访问和修改属性都无需 .value，直接 state.age = 20 即可。'
+      },
+      {
+        type: 'single',
+        question: '在工程化项目的 script setup 中引入 ref 的正确方式是？',
+        options: ['import { ref } from \'vue\'', '直接 new ref(0)', '从 window 对象上获取', 'ref 是关键字无需引入'],
+        answer: 0,
+        explanation: 'ref、reactive 等 API 都需要从 vue 中导入后使用。'
+      },
+      {
+        type: 'judge',
+        question: 'reactive 除了包装普通对象，也可以用于数组类型。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'reactive 支持对象类型，数组也属于对象类型。'
+      },
+      {
+        type: 'judge',
+        question: '用 ref 包装对象后，在 script 中访问对象属性要写成 user.value.name 的形式。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'ref 在 script 中必须先通过 .value 拿到包装的值，再访问其属性。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 reactive 的使用限制，下列说法正确的有？（多选）',
+        options: ['只能用于对象类型', '不能整体替换为新对象', '直接解构属性会丢失响应式', '包装的对象中不能包含数组'],
+        answer: [0, 1, 2],
+        explanation: 'reactive 的对象里可以包含数组，数组本身也会是响应式的。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些声明方式能创建出响应式数据？（多选）',
+        options: ['const n = ref(0)', 'const s = reactive({ a: 1 })', 'const list = ref([])', 'let n = 0'],
+        answer: [0, 1, 2],
+        explanation: 'let 声明的普通变量不具备响应式，修改后页面不会更新。'
+      },
+      {
+        type: 'single',
+        question: '面试题：const user = ref({ name: \'小明\' })，在模板中显示名字的正确写法是？',
+        options: ['{{ user.name }}', '{{ user.value.name }}', '{{ name }}', '{{ user(name) }}'],
+        answer: 0,
+        explanation: '模板中 ref 自动解包，直接 {{ user.name }} 即可，不要再写 .value。'
+      },
+      {
+        type: 'judge',
+        question: 'ref 声明的数据在模板中读取时必须写上 .value。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '模板中 ref 会自动解包，直接写变量名即可；.value 只在 script 中需要。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：下列哪些写法能正确触发视图更新？（多选）',
+        options: ['对 ref 执行 count.value++', '对 reactive 执行 state.age++', '修改通过 toRefs 解构出的 ref 的 .value', '给直接解构自 reactive 的普通变量重新赋值'],
+        answer: [0, 1, 2],
+        explanation: '直接解构 reactive 得到的是普通值，修改它与响应式对象已断开连接。'
+      },
+      {
+        type: 'single',
+        question: '关于选择 ref 还是 reactive 的实践建议，正确的是？',
+        options: ['简单值用 ref，复杂状态对象才考虑 reactive', '无论什么数据一律用 reactive', '无论什么数据一律用普通变量', '随机选择即可，没有差别'],
+        answer: 0,
+        explanation: '官方推荐优先使用 ref；reactive 适合管理内聚的复杂状态对象。'
       }
     ]
   },
@@ -665,6 +875,76 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: 'computed 应是同步的纯计算，异步请求等副作用应放在 watch 中。'
+      },
+      {
+        type: 'single',
+        question: 'computed 的返回值是什么？',
+        options: ['一个只读的响应式引用', '一个普通数字', '一个 Promise', '一个 DOM 节点'],
+        answer: 0,
+        explanation: 'computed 返回只读的响应式引用，可以直接在模板中使用。'
+      },
+      {
+        type: 'single',
+        question: '用 watch 监听一个 ref 数据时，数据源的正确写法是？',
+        options: ['watch(count, cb)', 'watch(count.value, cb)', 'watch(\'count\', cb)', 'watch(cb, count)'],
+        answer: 0,
+        explanation: '监听 ref 直接传入 ref 本身即可；监听 reactive 的属性才需要写成函数形式。'
+      },
+      {
+        type: 'judge',
+        question: 'watchEffect 的回调在创建时会立即执行一次。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'watchEffect 创建时立即执行并自动收集依赖，之后依赖变化就重新执行。'
+      },
+      {
+        type: 'judge',
+        question: 'watch 可以把多个数据源放进一个数组中同时监听。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'watch 的第一个参数可以是数组，任一数据源变化都会触发回调。'
+      },
+      {
+        type: 'multiple',
+        question: 'watch 的数据源可以是下列哪些形式？（多选）',
+        options: ['一个 ref', '一个 reactive 对象', '一个返回值的 getter 函数', '一个 DOM 元素'],
+        answer: [0, 1, 2],
+        explanation: '数据源必须是响应式数据或 getter 函数，DOM 元素不能作为数据源。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 computed 的缓存机制，下列说法正确的有？（多选）',
+        options: ['依赖不变时多次访问只计算一次', '依赖变化后会重新计算', '比模板中内联写表达式更省计算', '缓存意味着永远不会重新计算'],
+        answer: [0, 1, 2],
+        explanation: '缓存只在依赖不变时生效，依赖一旦变化就会重新计算。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：表单中「全名」由「姓」和「名」拼接展示，不涉及任何请求，最合适的实现是？',
+        options: ['computed 计算属性', 'watch 侦听器', 'onMounted 中手动拼接', 'setInterval 定时拼接'],
+        answer: 0,
+        explanation: '同步派生数据用 computed，声明式且带缓存，模板也更简洁。'
+      },
+      {
+        type: 'judge',
+        question: 'computed 的依赖数据变化后，下次访问该计算属性时会重新计算。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '依赖变化会使缓存失效，再次访问时重新执行计算函数。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：实现搜索建议功能，合理的做法有？（多选）',
+        options: ['用 watch 监听搜索关键字', '在回调中防抖后再发送请求', '注意处理旧请求覆盖新结果的竞态问题', '在 computed 内部直接发送请求'],
+        answer: [0, 1, 2],
+        explanation: '发请求属于副作用应放在 watch 中；computed 只做同步派生。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：需要在数据变化时对比新旧值来决定后续逻辑，应选择？',
+        options: ['watch', 'computed', 'v-if', '插值表达式'],
+        answer: 0,
+        explanation: 'watch 回调能同时拿到新值和旧值，正好满足对比前后变化的需求。'
       }
     ]
   },
@@ -833,6 +1113,76 @@ export default [
         options: ['大驼峰或短横线形式', '必须全部小写无连字符', '必须以数字开头', '必须使用中文'],
         answer: 0,
         explanation: '组件标签名一般采用大驼峰（如 UserCard）或短横线（如 user-card）形式。'
+      },
+      {
+        type: 'single',
+        question: '父组件向子组件传递动态数据（变量或表达式）时，属性前需要加什么符号？',
+        options: [':', '@', '#', '.'],
+        answer: 0,
+        explanation: '动态绑定属性用 v-bind（缩写 :），如 :count="num"；不加冒号传递的是字符串字面量。'
+      },
+      {
+        type: 'single',
+        question: 'defineProps 除了对象形式，还可以用哪种形式快速声明要接收的 prop 名？',
+        options: ['数组形式', '字符串拼接', 'JSON 文件', '正则表达式'],
+        answer: 0,
+        explanation: 'defineProps([\'title\', \'count\']) 是数组形式，适合不需要校验的简单场景。'
+      },
+      {
+        type: 'single',
+        question: 'defineEmits 调用后的返回值是？',
+        options: ['一个用于触发事件的 emit 函数', '一个响应式 ref', '父组件实例', '当前路由对象'],
+        answer: 0,
+        explanation: 'const emit = defineEmits([\'add\']) 得到 emit 函数，用 emit(\'add\', 数据) 触发事件。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：prop 声明了 default: \'默认标题\'，父组件没有传该 prop 时，子组件拿到的是？',
+        options: ['default 指定的默认值', 'undefined', '直接报错', '空字符串'],
+        answer: 0,
+        explanation: '父组件未传时使用 default 指定的默认值，让组件更健壮。'
+      },
+      {
+        type: 'judge',
+        question: 'defineProps([\'title\']) 这样的数组形式也是合法的 prop 声明方式。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '数组形式只声明 prop 名，不做类型校验；需要校验时用对象形式。'
+      },
+      {
+        type: 'judge',
+        question: '父组件传字符串字面量时属性不加冒号，传变量或表达式时才需要加冒号。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'title="你好" 传的是字符串；:count="num" 传的是变量 num 的值。'
+      },
+      {
+        type: 'judge',
+        question: 'emit 触发事件时最多只能携带一个参数，不能携带多个。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'emit 可以携带多个参数，如 emit(\'change\', a, b)，父组件处理函数按顺序接收。'
+      },
+      {
+        type: 'multiple',
+        question: '把页面拆分成多个组件的好处有？（多选）',
+        options: ['代码更易维护', '组件可以在多处复用', '每个组件职责单一清晰', '拆分后页面加载速度一定翻倍'],
+        answer: [0, 1, 2],
+        explanation: '拆分带来可维护性和复用性，但加载速度取决于资源体积等因素，并非必然翻倍。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些是合法的 prop 声明写法？（多选）',
+        options: ['defineProps([\'title\'])', 'defineProps({ title: String })', 'defineProps({ title: { type: String, default: \'你好\' } })', 'defineProps = [\'title\']'],
+        answer: [0, 1, 2],
+        explanation: 'defineProps 是宏调用，不能用赋值的方式声明。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 emit 自定义事件，下列说法正确的有？（多选）',
+        options: ['事件名可以自定义，如 \'add\'', '触发时可以携带数据给父组件', '父组件用 @事件名 监听', 'emit 可以直接修改父组件的 prop'],
+        answer: [0, 1, 2],
+        explanation: 'emit 只是通知父组件，数据修改由父组件自己完成，prop 依然不可直接改。'
       }
     ]
   },
@@ -1001,6 +1351,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '这正是组合式 API 要改善的问题：让同一功能的代码聚在一起。'
+      },
+      {
+        type: 'single',
+        question: '选项式 API 中 data 里声明的状态，在组合式 API 中通常用什么创建？',
+        options: ['ref 或 reactive', '继续写 data 函数', 'new Object()', 'localStorage'],
+        answer: 0,
+        explanation: '组合式 API 中用 ref 和 reactive 声明响应式状态，替代选项式的 data。'
+      },
+      {
+        type: 'single',
+        question: '选项式 API 的 mounted 钩子，在组合式 API 中对应的是？',
+        options: ['onMounted', 'onCreate', 'onStart', 'onReady'],
+        answer: 0,
+        explanation: '组合式 API 钩子在选项式名称前加 on：mounted 对应 onMounted。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：封装 useCounter 时希望调用方能指定初始值，合理的做法是？',
+        options: ['让函数接收参数，如 useCounter(10)', '把初始值写死不可改', '改用全局变量传值', '通过 localStorage 传入'],
+        answer: 0,
+        explanation: '组合式函数就是普通函数，可以通过参数接收配置，如 useCounter(10)。'
+      },
+      {
+        type: 'single',
+        question: '面试题：相比 Vue2 的 mixin，组合式函数在类型支持上的优势是？',
+        options: ['对 TypeScript 更友好', '完全不支持类型', '必须把所有状态标成 any', '与类型支持无关'],
+        answer: 0,
+        explanation: '组合式函数是普通函数，参数和返回值都可以有明确的类型推导，比 mixin 类型友好。'
+      },
+      {
+        type: 'judge',
+        question: '同一个组件中可以多次注册 onMounted，这些回调会依次执行。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '同一钩子可以注册多次，按注册顺序依次执行，常见于组合式函数各自注册钩子。'
+      },
+      {
+        type: 'judge',
+        question: 'Vue2 的 mixin 存在数据来源不清晰、多个 mixin 之间容易命名冲突的问题。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这正是组合式函数要替代 mixin 的原因：来源清晰、无命名冲突、类型友好。'
+      },
+      {
+        type: 'judge',
+        question: '选项式 API 中 methods 里定义的方法，在组合式 API 中就是普通的函数声明，可直接绑定到模板事件。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'script setup 中顶层声明的 function 可直接在模板中通过 @click 等绑定使用。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 mixin 与组合式函数的对比，下列说法正确的有？（多选）',
+        options: ['mixin 的数据来源不清晰', '多个 mixin 容易产生命名冲突', '组合式函数数据来源清晰、类型友好', 'mixin 与组合式函数在使用体验上没有任何区别'],
+        answer: [0, 1, 2],
+        explanation: '组合式函数正是针对 mixin 的这些痛点设计的复用方案。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 script setup 顶层代码，下列说法正确的有？（多选）',
+        options: ['可以直接声明响应式数据', '顶层声明的函数可直接绑定到模板事件', '可以在顶层调用生命周期钩子', '顶层代码会在每次数据更新时重新执行一遍'],
+        answer: [0, 1, 2],
+        explanation: 'setup 顶层代码只在组件初始化时执行一次，数据更新由响应式系统驱动视图。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 onUpdated，下列说法正确的有？（多选）',
+        options: ['在数据导致页面更新后触发', '可以用于观察更新后的 DOM', '其中的回调会频繁触发时要注意性能', '在组件挂载之前触发'],
+        answer: [0, 1, 2],
+        explanation: 'onUpdated 在挂载后的每次更新时触发，应避免在其中做高开销操作。'
       }
     ]
   },
@@ -1169,6 +1589,76 @@ export default [
         options: ['<template #default="slotProps">', '<template #default :slotProps>', '<slot #default>', '<template props="slotProps">'],
         answer: 0,
         explanation: 'v-slot 的值就是接收插槽属性的对象，常命名为 slotProps，也可直接解构。'
+      },
+      {
+        type: 'single',
+        question: '子组件模板中 <slot> 标签的作用是？',
+        options: ['作为父组件传入内容的占位出口', '声明一个响应式变量', '引入外部样式', '定义一个事件监听器'],
+        answer: 0,
+        explanation: 'slot 是占位符，父组件传入的内容会被渲染到 slot 所在的位置。'
+      },
+      {
+        type: 'single',
+        question: '一个子组件同时有默认插槽和具名插槽，父组件没有包在 template 中的内容会进入？',
+        options: ['默认插槽', '第一个具名插槽', '被丢弃不渲染', '报错'],
+        answer: 0,
+        explanation: '未通过 template #名字 指定的内容默认进入名为 default 的默认插槽。'
+      },
+      {
+        type: 'single',
+        question: 'v-slot 指令可以写在什么位置？',
+        options: ['template 标签或组件标签上', '任意普通 div 上', 'style 标签里', 'script 标签里'],
+        answer: 0,
+        explanation: 'v-slot 只能用在 template 标签上（或直接用在组件标签上），不能用于普通元素。'
+      },
+      {
+        type: 'single',
+        question: '父组件想直接使用作用域插槽传出的 msg 而不写 slotProps.msg，可以怎么做？',
+        options: ['在 v-slot 值中解构，如 #default="{ msg }"', '无法实现，必须用 slotProps', '用 defineProps 接收', '用 emit 接收'],
+        answer: 0,
+        explanation: 'v-slot 的值支持 ES6 解构语法，可以直接解构出需要的插槽属性。'
+      },
+      {
+        type: 'judge',
+        question: '一个组件可以同时拥有一个默认插槽和多个具名插槽。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '默认插槽与具名插槽可以共存，卡片组件的头尾加正文就是典型结构。'
+      },
+      {
+        type: 'judge',
+        question: 'v-slot 可以写在任意普通 HTML 元素上，不限于 template 标签。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'v-slot 只能用于 template 标签或组件标签，写在普通元素上会报错。'
+      },
+      {
+        type: 'judge',
+        question: '插槽内容中绑定的事件处理函数，来自父组件的作用域。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '插槽内容编译在父组件作用域中，数据和方法都来自父组件。'
+      },
+      {
+        type: 'multiple',
+        question: '关于默认插槽，下列说法正确的有？（多选）',
+        options: ['父组件写在子组件标签之间的内容会渲染到 slot 位置', '未传内容时显示 slot 标签内部的后备内容', '未命名插槽的名字是 default', '默认插槽不能与具名插槽共存'],
+        answer: [0, 1, 2],
+        explanation: '默认插槽和具名插槽可以共存于同一个组件。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些场景适合使用插槽来实现？（多选）',
+        options: ['卡片组件的内容区域', '弹窗的标题和底部按钮区', '列表项的自定义渲染结构', '传递一个数字类型的计数'],
+        answer: [0, 1, 2],
+        explanation: '简单值用 props 传递即可；结构化的内容区域适合用插槽。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 <template #header>，下列说法正确的有？（多选）',
+        options: ['# 是 v-slot 的缩写', '表示内容进入名为 header 的插槽', '内容中可以访问父组件的数据', '它会在页面上额外渲染出一个 template 元素'],
+        answer: [0, 1, 2],
+        explanation: 'template 只是分组容器，本身不会被渲染成真实 DOM。'
       }
     ]
   },
@@ -1337,6 +1827,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'defineModel 与 defineProps、defineEmits 一样是编译器宏，可直接使用。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：封装一个评分组件，内部值变化时要把新分数同步给父组件的 v-model，应该？',
+        options: ['触发 update:modelValue 事件并携带新值', '直接修改 modelValue prop', '用 watch 监听自己', '什么都不用做'],
+        answer: 0,
+        explanation: '双向绑定的规则：值变化时触发 update:modelValue，把新值抛给父组件。'
+      },
+      {
+        type: 'single',
+        question: '使用 defineModel 并想为绑定值设置默认值，正确的写法是？',
+        options: ['defineModel({ default: \'默认\' })', 'defineModel(\'默认\')', 'defineModel.default(\'默认\')', 'setDefault(defineModel())'],
+        answer: 0,
+        explanation: 'defineModel 传入选项对象可配置默认值；传入字符串则是给带名字的 v-model 指定名字。'
+      },
+      {
+        type: 'single',
+        question: '组件上 v-model 绑定的值，类型上有什么要求？',
+        options: ['任意类型都可以', '只能是字符串', '只能是数字', '只能是布尔值'],
+        answer: 0,
+        explanation: 'modelValue 可以携带任意类型的值，字符串、数字、对象、数组都行。'
+      },
+      {
+        type: 'single',
+        question: '一个组件同时使用默认 v-model 和 v-model:title，子组件需要调用几次 defineModel？',
+        options: ['两次：defineModel() 和 defineModel(\'title\')', '只能调用一次', '需要调用三次', '零次，自动生效'],
+        answer: 0,
+        explanation: '每个 v-model 对应一次 defineModel 调用，无参对应默认的 modelValue。'
+      },
+      {
+        type: 'judge',
+        question: 'v-model 既可以绑定到自定义组件上，也可以绑定到原生表单元素上。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '原生元素上 v-model 自动选择 value/checked 等绑定方式，组件上则是 prop 加事件的语法糖。'
+      },
+      {
+        type: 'judge',
+        question: '手动实现组件 v-model 时，父组件如果不写 v-model 简写，就需要同时写 :modelValue 和 @update:modelValue。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'v-model="text" 展开后就是 :modelValue="text" 加 @update:modelValue="text = $event"。'
+      },
+      {
+        type: 'judge',
+        question: 'v-model 的修饰符（如 .trim）同样可以应用在自定义组件的 v-model 上。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'defineModel 支持修饰符，自定义组件可以读取并处理父组件传入的修饰符。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 defineModel 的调用形式，下列说法正确的有？（多选）',
+        options: ['defineModel() 对应默认的 v-model', 'defineModel(\'name\') 对应 v-model:name', 'defineModel({ default: \'\' }) 可配置默认值', 'defineModel 必须在 onMounted 中调用'],
+        answer: [0, 1, 2],
+        explanation: 'defineModel 是编译器宏，在 script setup 顶层直接调用，与生命周期钩子无关。'
+      },
+      {
+        type: 'multiple',
+        question: '下列哪些组件适合支持 v-model 双向绑定？（多选）',
+        options: ['自定义输入框组件', '开关切换组件', '评分组件', '纯展示且永远不变的标题组件'],
+        answer: [0, 1, 2],
+        explanation: 'v-model 适合有「值」需要双向同步的组件；纯展示组件用普通 props 即可。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：审查手写 v-model 的代码发现双向绑定不生效，可能的原因有？（多选）',
+        options: ['子组件忘记 emit update:modelValue', '事件名拼写与 update:modelValue 不一致', '子组件只绑定了 :value 却没监听输入事件', '父组件使用了 v-model 简写'],
+        answer: [0, 1, 2],
+        explanation: 'v-model 简写是正确写法；问题多出在子组件没触发或拼错更新事件。'
       }
     ]
   },
@@ -1504,6 +2064,76 @@ export default [
         options: ['不调用 inject', 'inject 时传入第二个参数作为默认值', '用 try-catch 包裹 inject', '改用 props 传参'],
         answer: 1,
         explanation: 'inject(key, 默认值) 让组件在未提供数据时也能正常兜底，更健壮。'
+      },
+      {
+        type: 'single',
+        question: '如果多层祖先都 provide 了同一个 key，后代 inject 拿到的是？',
+        options: ['离自己最近的那个祖先提供的值', '最顶层祖先的值', '所有值组成的数组', '随机一个'],
+        answer: 0,
+        explanation: 'inject 遵循就近原则，向上查找时最近的一层 provide 生效。'
+      },
+      {
+        type: 'single',
+        question: '想让整个应用的所有组件都能 inject 到某份数据，除了在根组件 provide，还可以？',
+        options: ['在 main.js 中调用 app.provide(key, value)', '在每个组件里各 provide 一次', '写进 CSS 文件', '无法实现'],
+        answer: 0,
+        explanation: 'app.provide 在应用层提供数据，对所有组件可见。'
+      },
+      {
+        type: 'single',
+        question: '面试题：为什么推荐把 provide / inject 的 key 定义为 Symbol 或统一常量？',
+        options: ['避免不同模块或组件库之间的 key 字符串冲突', '这是语法强制要求', '可以提升运行性能', '能让数据自动变成响应式'],
+        answer: 0,
+        explanation: '字符串 key 容易撞名，用 Symbol 或统一管理的常量可以避免冲突。'
+      },
+      {
+        type: 'single',
+        question: '后代组件 inject 到一个 ref 后，在模板中显示其值的正确写法是？',
+        options: ['{{ theme }}（ref 自动解包）', '{{ theme.value }}', '{{ theme() }}', '{{ inject(\'theme\') }}'],
+        answer: 0,
+        explanation: '注入的 ref 在模板中同样自动解包，直接写变量名即可。'
+      },
+      {
+        type: 'judge',
+        question: '通过 app.provide 提供的数据，应用中任何组件都可以 inject 到。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'app.provide 在应用层级提供，等价于所有组件的共同祖先。'
+      },
+      {
+        type: 'judge',
+        question: '同一个祖先组件可以多次调用 provide，用不同的 key 提供多份数据。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'provide 可以按 key 调用多次，分别提供主题、用户信息等不同数据。'
+      },
+      {
+        type: 'judge',
+        question: 'inject 的默认值也可以是一个 ref，如 inject(\'theme\', ref(\'light\'))。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '默认值可以是任意值，传 ref 能让兜底数据也保持响应式用法一致。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 inject 的使用，下列说法正确的有？（多选）',
+        options: ['第一个参数是要注入数据的 key', 'key 需与祖先 provide 时使用的 key 一致', '可以传第二个参数作为默认值', 'inject 拿到的数据一定是响应式的'],
+        answer: [0, 1, 2],
+        explanation: '是否响应式取决于 provide 的值本身，普通值注入后不具备响应式。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：用 provide / inject 实现全局主题切换，合理的设计有？（多选）',
+        options: ['祖先 provide 一个主题的 ref', '祖先同时 provide 一个切换主题的方法', '后代通过注入的方法来切换主题', '后代拿到 ref 后各自随意改写主题值'],
+        answer: [0, 1, 2],
+        explanation: '修改入口应收敛在祖先提供的方法里，后代随意改写会让状态难以追踪。'
+      },
+      {
+        type: 'multiple',
+        question: '相比 props 逐层传递，provide / inject 的优势有？（多选）',
+        options: ['中间层无需编写转发代码', '深层后代可以直接取用数据', '适合跨多层共享的数据', '可以在所有场景下完全替代 props'],
+        answer: [0, 1, 2],
+        explanation: '相邻父子通信仍然首选 props / emit，provide / inject 不是万能替代。'
       }
     ]
   },
@@ -1671,6 +2301,76 @@ export default [
         options: ['正确', '错误'],
         answer: 1,
         explanation: 'to 属性接受任意 CSS 选择器，可以传送到页面任何位置。'
+      },
+      {
+        type: 'single',
+        question: 'Transition 进入过渡结束阶段的类名是？',
+        options: ['v-enter-to', 'v-enter-end', 'v-enter-done', 'v-enter-finish'],
+        answer: 0,
+        explanation: '进入阶段类名依次是 v-enter-from、v-enter-active、v-enter-to。'
+      },
+      {
+        type: 'single',
+        question: '编写过渡动画时，transition 属性（如 transition: opacity .5s）一般写在哪个类上？',
+        options: ['v-enter-active 和 v-leave-active', 'v-enter-from', 'v-leave-to', '随便哪个类都行'],
+        answer: 0,
+        explanation: 'active 类贯穿整个过渡过程，transition 定义写在这里才能在进入和离开时都生效。'
+      },
+      {
+        type: 'single',
+        question: 'Transition 离开过渡起始状态的类名是？',
+        options: ['v-leave-from', 'v-leave-start', 'v-leave-active', 'v-leave-to'],
+        answer: 0,
+        explanation: '离开阶段类名依次是 v-leave-from、v-leave-active、v-leave-to。'
+      },
+      {
+        type: 'single',
+        question: 'Transition 可以作用于下列哪种显隐控制方式？',
+        options: ['v-if 和 v-show 都可以', '只能配合 v-if', '只能配合 v-show', '都不支持'],
+        answer: 0,
+        explanation: '元素无论通过 v-if 增删还是 v-show 显隐，Transition 都能触发动画。'
+      },
+      {
+        type: 'judge',
+        question: 'v-enter-to 与 v-leave-from 通常保持元素的正常样式，一般无需额外编写。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这两个类对应元素的正常显示状态，通常只需编写 from/to 的透明度和 active 的 transition。'
+      },
+      {
+        type: 'judge',
+        question: 'TransitionGroup 渲染的列表项需要提供唯一的 key。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'key 帮助 Vue 跟踪每个列表项，增删和移动动画才能正确应用。'
+      },
+      {
+        type: 'judge',
+        question: 'Transition 的离开阶段同样会依次应用 leave-from、leave-active、leave-to 三类名。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '进入和离开是对称的两个阶段，各有 from、active、to 三个类名。'
+      },
+      {
+        type: 'multiple',
+        question: 'Transition 完整的进入阶段涉及的类名有？（多选）',
+        options: ['v-enter-from', 'v-enter-active', 'v-enter-to', 'v-leave-from'],
+        answer: [0, 1, 2],
+        explanation: 'v-leave-from 属于离开阶段，不在进入阶段出现。'
+      },
+      {
+        type: 'multiple',
+        question: '编写一个淡入淡出过渡，通常需要的 CSS 有？（多选）',
+        options: ['在 enter-active / leave-active 上写 transition: opacity', '在 enter-from / leave-to 上写 opacity: 0', '保持 enter-to / leave-from 为正常透明度', '必须在 enter-to 上也写 transition 属性'],
+        answer: [0, 1, 2],
+        explanation: 'transition 写在 active 类上即可，enter-to / leave-from 保持元素正常状态。'
+      },
+      {
+        type: 'multiple',
+        question: 'Teleport 的典型应用场景有？（多选）',
+        options: ['全局弹窗 Modal', '消息提示 Toast', '避免被父容器裁剪的下拉浮层', '为列表项添加移动动画'],
+        answer: [0, 1, 2],
+        explanation: '列表移动动画是 TransitionGroup 的职责，与 Teleport 无关。'
       }
     ]
   },
@@ -1838,6 +2538,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'VueUse 收集了几百个现成的组合式函数，可直接取用。'
+      },
+      {
+        type: 'single',
+        question: '自定义组合式函数文件通常如何导出供组件使用？',
+        options: ['export function useXxx() { ... }', 'export default 一个组件', '挂载到 window 对象上', '写进全局 CSS'],
+        answer: 0,
+        explanation: '组合式函数用具名导出，组件中 import { useMouse } from \'./useMouse\' 后调用。'
+      },
+      {
+        type: 'single',
+        question: '面试题：组合式函数与组件的本质区别是？',
+        options: ['组合式函数没有模板，只封装逻辑', '组合式函数必须渲染 DOM', '组件里不能使用 ref', '两者没有任何区别'],
+        answer: 0,
+        explanation: '组件带模板负责渲染界面；组合式函数只封装可复用的状态逻辑。'
+      },
+      {
+        type: 'single',
+        question: 'useMouse 的 update 回调中，读取鼠标位置使用的事件属性是？',
+        options: ['e.pageX 和 e.pageY', 'e.left 和 e.top', 'e.width 和 e.height', 'e.x1 和 e.y1'],
+        answer: 0,
+        explanation: '示例代码中通过 e.pageX、e.pageY 更新坐标 ref。'
+      },
+      {
+        type: 'single',
+        question: '面试情景：封装 useFetch 时希望传入的 url 变化后自动重新请求，合理的设计是？',
+        options: ['让参数支持传入 ref，并在内部 watch 它', '只接受写死的字符串', '用 setInterval 定时轮询', '无法实现该需求'],
+        answer: 0,
+        explanation: '参数接收 ref 并配合 watch，可以让组合式函数对响应式入参做出反应。'
+      },
+      {
+        type: 'judge',
+        question: '组合式函数返回值中的 ref，在调用方解构后依然保持响应式。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'ref 本身就是响应式引用，解构出来不丢失响应式，这也是返回 ref 的原因。'
+      },
+      {
+        type: 'judge',
+        question: '组合式函数必须定义在独立的 .js 文件中，不能写在组件内部。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '抽成独立文件是便于复用的约定，不是强制要求；只是复用价值通常体现在跨组件共享。'
+      },
+      {
+        type: 'judge',
+        question: '同一个组合式函数文件可以被任意多个组件 import 复用。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '这正是抽取组合式函数的意义：一处封装，多处调用，各自得到独立状态。'
+      },
+      {
+        type: 'multiple',
+        question: '一个规范的组合式函数通常具备的特征有？（多选）',
+        options: ['内部封装了响应式状态', '内部管理副作用的注册与清理', '把调用方需要的状态和方法返回出去', '调用方必须修改它的源码才能使用'],
+        answer: [0, 1, 2],
+        explanation: '组合式函数通过参数和返回值与调用方交互，调用方无需也不应修改其源码。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：把「复制文本到剪贴板」的逻辑抽成 useClipboard，合理的返回内容有？（多选）',
+        options: ['表示是否复制成功的 ref', '执行复制的方法', '错误信息的 ref', '整个组件实例'],
+        answer: [0, 1, 2],
+        explanation: '组合式函数返回状态和方法，组件实例与逻辑复用无关。'
+      },
+      {
+        type: 'multiple',
+        question: '关于在组合式函数内部使用 watch 和 computed，下列说法正确的有？（多选）',
+        options: ['可以正常使用', '它们能与内部声明的 ref 联动保持响应式', '常用于对内部状态做派生或响应变化', '组合式函数中禁止使用 watch'],
+        answer: [0, 1, 2],
+        explanation: '组合式函数内部可以使用全部组合式 API，包括 watch 和 computed。'
       }
     ]
   },
@@ -2005,6 +2775,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'hash 模式的路径放在 # 号之后，# 后的变化不会发送给服务器。'
+      },
+      {
+        type: 'single',
+        question: '路由配置文件通常放在哪个位置并导出路由实例？',
+        options: ['router/index.js', 'public/index.html', 'package.json', 'dist 目录'],
+        answer: 0,
+        explanation: '约定把路由配置放在 router/index.js 中，创建实例后 export default 导出。'
+      },
+      {
+        type: 'single',
+        question: 'Home、About 这类页面级组件在项目中通常放在哪个目录？',
+        options: ['views', 'node_modules', 'dist', 'public'],
+        answer: 0,
+        explanation: '页面级组件常放在 views 目录，路由配置中 import 后与 path 对应起来。'
+      },
+      {
+        type: 'single',
+        question: 'createRouter、createWebHistory 等 API 需要从哪个包导入？',
+        options: ['vue-router', 'vue', 'pinia', 'vite'],
+        answer: 0,
+        explanation: '这些路由相关 API 都从 vue-router 包中导入。'
+      },
+      {
+        type: 'single',
+        question: '路由规则中 path: \'/\' 通常对应哪个页面？',
+        options: ['首页', '404 页面', '登录页', '后台管理页'],
+        answer: 0,
+        explanation: '根路径 / 一般对应应用的首页组件。'
+      },
+      {
+        type: 'judge',
+        question: '路由实例创建后需要先导出，再在 main.js 中导入并通过 app.use 安装。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'router/index.js 导出实例，main.js 中 import 后 app.use(router) 完成安装。'
+      },
+      {
+        type: 'judge',
+        question: 'hash 模式下，修改地址栏 # 后面的路径会向服务器发送新的页面请求。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: '# 后面的变化不会发给服务器，这正是 hash 模式部署简单的原因。'
+      },
+      {
+        type: 'judge',
+        question: 'router-view 在模板中的位置，决定了匹配到的组件渲染在页面的哪个位置。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'router-view 是占位出口，匹配组件就渲染在它所在的位置。'
+      },
+      {
+        type: 'multiple',
+        question: '搭建一个基础路由的完整流程包括？（多选）',
+        options: ['npm install vue-router@4 安装', 'createRouter 创建实例并配置 routes', 'main.js 中 app.use(router) 安装', '在每个页面组件里各自创建一个新的路由器'],
+        answer: [0, 1, 2],
+        explanation: '整个应用共享一个路由实例，不能每个页面各建一个。'
+      },
+      {
+        type: 'multiple',
+        question: '关于单页应用（SPA），下列说法正确的有？（多选）',
+        options: ['只有一个 HTML 文件', '切换页面其实是动态切换组件', '切换时浏览器不会真正刷新', '每个页面对应服务器上一个独立的 HTML 文件'],
+        answer: [0, 1, 2],
+        explanation: '多页应用才是每个页面一个 HTML；SPA 只有一个入口 HTML。'
+      },
+      {
+        type: 'multiple',
+        question: '关于放在 App.vue 中的页面骨架，下列说法正确的有？（多选）',
+        options: ['导航菜单通常放在这里', 'router-view 通常放在这里', '骨架在所有路由页面间保持不变', '每个页面组件都要复制一份相同的导航代码'],
+        answer: [0, 1, 2],
+        explanation: '骨架放在根组件 App.vue 中复用，页面组件只关注自己的内容。'
       }
     ]
   },
@@ -2173,6 +3013,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '前置守卫发生在导航确认前，此时目标组件尚未创建。'
+      },
+      {
+        type: 'single',
+        question: '面试题：从 /user/1 导航到 /user/2 时组件实例被复用，想在参数变化时重新加载数据，可以？',
+        options: ['watch 监听 route.params.id', '手动刷新整个页面', '什么都不用做，组件会自动重建', '改用 location.href 跳转'],
+        answer: 0,
+        explanation: '同一动态路由间跳转时组件被复用，需要监听 route.params 的变化来响应参数更新。'
+      },
+      {
+        type: 'single',
+        question: '在模板中声明式跳转到 /user/42 的正确写法是？',
+        options: ['<router-link to="/user/42">', '<router-view to="/user/42">', '<a @click="router.push">', '<route to="/user/42">'],
+        answer: 0,
+        explanation: '声明式导航用 router-link 加 to 属性；router-view 是渲染出口。'
+      },
+      {
+        type: 'single',
+        question: '编程式导航时携带动态路由参数，下列写法正确的是？',
+        options: ['router.push(\'/user/\' + id)', 'router.push(\'/user/:id\')', 'router.push(\'/user\', id)', 'router.push(id)'],
+        answer: 0,
+        explanation: '用字符串拼接出真实路径如 /user/42；\':id\' 只是路由配置中的占位声明。'
+      },
+      {
+        type: 'single',
+        question: '关于 useRoute() 返回的路由对象，下列说法正确的是？',
+        options: ['它是响应式的，路由变化后 params 等属性会更新', '它是静态快照，永远不会更新', '它是路由器实例，可以调用 push', '它是当前组件实例'],
+        answer: 0,
+        explanation: 'useRoute 返回响应式的当前路由对象，可以安全地在 watch 或 computed 中使用。'
+      },
+      {
+        type: 'judge',
+        question: '从 /user/1 切换到 /user/2 时，同一组件实例通常会被复用，不会销毁重建。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '同一路由组件间跳转时 Vue Router 会复用实例，效率更高，但要注意响应参数变化。'
+      },
+      {
+        type: 'judge',
+        question: '除了全局守卫，Vue Router 还提供组件内的守卫。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '除 beforeEach、afterEach 外，还有写在组件内的守卫，用于更细粒度的控制。'
+      },
+      {
+        type: 'judge',
+        question: 'beforeEach 是全局守卫，应用内每一次路由跳转都会经过它。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '全局前置守卫对所有导航生效，适合放统一的登录校验逻辑。'
+      },
+      {
+        type: 'multiple',
+        question: '关于动态路由参数，下列说法正确的有？（多选）',
+        options: ['在 path 中用冒号声明，如 /user/:id', '通过 route.params 读取参数值', '一条规则可以匹配一批路径', '每个参数值都必须单独写一条路由规则'],
+        answer: [0, 1, 2],
+        explanation: '动态参数的意义就是一条规则匹配一批路径，无需逐个配置。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 router.push 与 router.replace 的区别，下列说法正确的有？（多选）',
+        options: ['push 会新增一条历史记录', 'replace 替换当前记录，不新增', '登录成功后的跳转常用 replace', '用 replace 跳转后点后退会回到刚被替换的页面'],
+        answer: [0, 1, 2],
+        explanation: 'replace 会替换掉当前记录，后退时不会回到被替换的那个页面。'
+      },
+      {
+        type: 'multiple',
+        question: 'useRouter() 返回的路由器实例上，可调用的导航方法有？（多选）',
+        options: ['push', 'replace', 'back', 'useRoute'],
+        answer: [0, 1, 2],
+        explanation: 'useRoute 是独立的组合式函数，不是路由器实例上的方法。'
       }
     ]
   },
@@ -2341,6 +3251,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: '如 const store = useCounterStore()，调用后才拿到可用的 store 实例。'
+      },
+      {
+        type: 'single',
+        question: 'Pinia 的 store 定义文件在项目中通常放在哪个目录？',
+        options: ['stores', 'views', 'router', 'dist'],
+        answer: 0,
+        explanation: '约定把 store 放在 stores 目录，如 stores/counter.js，按业务划分文件。'
+      },
+      {
+        type: 'single',
+        question: 'storeToRefs 需要从哪个包导入？',
+        options: ['pinia', 'vue', 'vue-router', 'vite'],
+        answer: 0,
+        explanation: 'import { storeToRefs } from \'pinia\'，它是 Pinia 提供的工具函数。'
+      },
+      {
+        type: 'single',
+        question: 'getters 中的 double 由 state 的 count 派生，当 count 变化时 double 会？',
+        options: ['自动重新计算', '永远保持旧值', '直接报错', '被自动删除'],
+        answer: 0,
+        explanation: 'getters 类似计算属性，依赖变化后会自动重新计算并更新缓存。'
+      },
+      {
+        type: 'single',
+        question: '组件中不解构、直接通过 store 实例读取 count 的写法是？',
+        options: ['store.count', 'store.state.count', 'store.get(\'count\')', 'store[\'count\']()'],
+        answer: 0,
+        explanation: 'store 实例上直接访问 state 和 getters，如 store.count、store.double。'
+      },
+      {
+        type: 'judge',
+        question: '安装 Pinia 的命令是 npm install pinia。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '安装后在入口文件 app.use(createPinia()) 注册即可使用。'
+      },
+      {
+        type: 'judge',
+        question: '某个组件被卸载后，Pinia store 中保存的数据会被自动清空。',
+        options: ['正确', '错误'],
+        answer: 1,
+        explanation: 'store 的生命周期属于整个应用，与单个组件的挂载卸载无关。'
+      },
+      {
+        type: 'judge',
+        question: '不同组件调用同一个 useCounterStore()，拿到的是同一个 store 实例。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '同一 id 的 store 全局共享一个实例，这正是跨组件共享状态的基础。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：实现用户登录信息的共享，合理的设计有？（多选）',
+        options: ['定义 userStore 存放用户信息', '在 actions 中封装登录请求', '组件通过 useUserStore() 访问和修改', '每个组件各自存一份再想办法互相同步'],
+        answer: [0, 1, 2],
+        explanation: '共享状态集中在 store 中管理，各自存一份会导致数据不一致。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 store 的组织方式，下列说法正确的有？（多选）',
+        options: ['按业务划分多个 store 结构更清晰', 'store 文件常放在 stores 目录', 'defineStore 返回的函数约定以 use 开头命名', '一个应用最多只能定义一个 store'],
+        answer: [0, 1, 2],
+        explanation: '应用可以有任意多个 store，按业务拆分是推荐做法。'
+      },
+      {
+        type: 'multiple',
+        question: '关于哪些数据该放进 Pinia store，下列说法正确的有？（多选）',
+        options: ['多个组件共享的数据放 store', '仅单个组件内部使用的状态留在组件内', '全局共享状态用 Pinia 便于统一维护', '项目里所有数据都必须放进 store'],
+        answer: [0, 1, 2],
+        explanation: 'store 用于共享状态，组件私有的临时状态没必要放进来。'
       }
     ]
   },
@@ -2509,6 +3489,76 @@ export default [
         options: ['正确', '错误'],
         answer: 0,
         explanation: 'scoped 通过给元素加唯一属性实现样式隔离，避免污染其他组件。'
+      },
+      {
+        type: 'single',
+        question: '单文件组件中三个块的推荐排列顺序是？',
+        options: ['template → script → style', 'style → script → template', 'script → template → style', '随意排列没有约定'],
+        answer: 0,
+        explanation: '约定 template 放最前面，然后 script，最后 style，保持结构统一。'
+      },
+      {
+        type: 'single',
+        question: 'script setup 中的导入语句推荐放在什么位置？',
+        options: ['顶部', '底部', '模板标签里', '样式标签里'],
+        answer: 0,
+        explanation: '导入语句放顶部，相关逻辑按功能分组，是常见的代码组织规范。'
+      },
+      {
+        type: 'single',
+        question: '把 dist 部署到静态服务器后，用户访问应用的入口文件是？',
+        options: ['index.html', 'package.json', 'vite.config.js', 'main.js'],
+        answer: 0,
+        explanation: 'dist 中的 index.html 是入口，它会加载打包后的 JS 和 CSS。'
+      },
+      {
+        type: 'single',
+        question: '关于开发服务器与生产构建产物的区别，下列说法正确的是？',
+        options: ['开发服务器按需编译便于调试，构建产物经过压缩优化', '两者完全相同', '构建产物的体积一定更大', 'npm run dev 也会输出 dist 目录'],
+        answer: 0,
+        explanation: 'dev 追求速度和调试体验，build 追求体积和性能，输出到 dist。'
+      },
+      {
+        type: 'judge',
+        question: '可以在 .env.development 中配置仅在开发环境生效的环境变量。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '.env.development 在 npm run dev 时加载，与 .env.production 互不影响。'
+      },
+      {
+        type: 'judge',
+        question: '组件拆分应以职责清晰为度，拆得过碎反而可能增加维护成本。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: '拆分是为了可维护性服务，过度拆分会增加文件数量和跳转成本。'
+      },
+      {
+        type: 'judge',
+        question: 'Vite 的开发服务器依赖 Node 运行，但构建出的最终产物不需要 Node 环境。',
+        options: ['正确', '错误'],
+        answer: 0,
+        explanation: 'Node 只在开发和构建阶段需要，dist 是纯静态文件，任意静态服务器即可托管。'
+      },
+      {
+        type: 'multiple',
+        question: '课程中提到的静态站点托管方式有？（多选）',
+        options: ['Nginx', 'GitHub Pages', 'Vercel', '必须自建一台 Windows 服务器'],
+        answer: [0, 1, 2],
+        explanation: 'dist 是纯静态文件，Nginx、GitHub Pages、Vercel 等都能直接托管。'
+      },
+      {
+        type: 'multiple',
+        question: '关于 Vite 的环境变量文件，下列说法正确的有？（多选）',
+        options: ['.env.development 在开发时加载', '.env.production 在生产构建时加载', '要暴露给客户端的变量以 VITE_ 开头', '应该把数据库密码等敏感信息写进去给前端用'],
+        answer: [0, 1, 2],
+        explanation: '环境变量会被打包进客户端代码，敏感信息绝不能暴露给前端。'
+      },
+      {
+        type: 'multiple',
+        question: '面试情景：接手一个多人协作的 Vue3 项目，想统一代码质量，合理的措施有？（多选）',
+        options: ['接入 ESLint 做代码检查', '接入 Prettier 统一格式', '约定组件命名和文件结构规范', '允许每个人按自己的风格随意提交'],
+        answer: [0, 1, 2],
+        explanation: '团队项目需要统一的检查、格式和规范约定，否则协作成本会越来越高。'
       }
     ]
   }
