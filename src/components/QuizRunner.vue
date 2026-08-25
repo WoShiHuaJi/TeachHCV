@@ -27,6 +27,16 @@ let order = props.questions.map((_, i) => i)
 if (props.shuffle || props.sample) order = shuffleArr(order)
 if (props.sample > 0 && props.sample < order.length) order = order.slice(0, props.sample)
 
+/**
+ * 选项乱序：为每道抽中的题生成「展示位置 → 原始选项下标」的映射，
+ * 避免答案位置固定被背下来。判断题（正确/错误）保持原顺序。
+ */
+const optionOrders = order.map((qi) => {
+  const q = props.questions[qi]
+  if (q.type === 'judge') return q.options.map((_, i) => i)
+  return shuffleArr(q.options.map((_, i) => i))
+})
+
 const idx = ref(0)
 const selected = ref([]) // 已选下标数组，单选/判断时长度恒为 1
 const answered = ref(false)
@@ -38,9 +48,14 @@ const wrongList = [] // 答错/不会的题的原始下标
 const current = computed(() => props.questions[order[idx.value]])
 const isLast = computed(() => idx.value === order.length - 1)
 const isMulti = computed(() => current.value.type === 'multiple')
-const answerArr = computed(() =>
-  Array.isArray(current.value.answer) ? current.value.answer : [current.value.answer]
-)
+/** 当前题按乱序映射后的展示选项 */
+const dispOptions = computed(() => optionOrders[idx.value].map((oi) => current.value.options[oi]))
+/** 正确答案在「展示位置」中的下标（selected/判分都基于展示位置） */
+const answerArr = computed(() => {
+  const orig = Array.isArray(current.value.answer) ? current.value.answer : [current.value.answer]
+  const map = optionOrders[idx.value]
+  return orig.map((o) => map.indexOf(o))
+})
 const typeLabel = computed(() => {
   if (current.value.type === 'judge') return '判断题'
   if (current.value.type === 'multiple') return '多选题'
@@ -112,7 +127,7 @@ function optionClass(i) {
     <div class="card">
       <div class="quiz-question">{{ current.question }}</div>
       <button
-        v-for="(opt, i) in current.options"
+        v-for="(opt, i) in dispOptions"
         :key="i"
         class="quiz-option"
         :class="optionClass(i)"
