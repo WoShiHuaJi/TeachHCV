@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useStore } from '../composables/useStore'
 import { getLesson, loadLessonFull } from '../data'
 import QuizRunner from '../components/QuizRunner.vue'
@@ -16,6 +16,13 @@ if (!lesson.value) router.replace('/wrongbook')
 const practice = ref(null)
 const result = ref(null)
 const runnerKey = ref(0)
+
+/** 中途退出确认：重练未完成时退出不影响错题本 */
+onBeforeRouteLeave(() => {
+  if (practice.value && !result.value) {
+    return window.confirm('错题重练还未完成，现在退出不会清除任何错题。确定退出吗？')
+  }
+})
 
 onMounted(async () => {
   const full = await loadLessonFull(route.params.id)

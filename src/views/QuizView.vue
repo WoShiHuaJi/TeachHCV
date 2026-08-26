@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useStore, PASS_RATE } from '../composables/useStore'
 import { getLesson, getNextLesson, loadLessonFull } from '../data'
 import QuizRunner from '../components/QuizRunner.vue'
@@ -48,6 +48,13 @@ function retry() {
 }
 
 const runnerKey = ref(0)
+
+/** 中途退出确认：未完成的答题不计成绩、不记错题，退出前明确告知 */
+onBeforeRouteLeave(() => {
+  if (ready.value && !finished.value) {
+    return window.confirm('测试还未完成，现在退出不会计成绩、也不会记录错题。确定退出吗？')
+  }
+})
 </script>
 
 <template>
@@ -77,7 +84,7 @@ const runnerKey = ref(0)
         📌 {{ result.wrongCount }} 道错题已收入「错题本」<template v-if="result.wrongCount >= 2">，本课复习间隔已自动减半</template>
       </p>
       <p v-if="!result.pass" class="muted" style="margin-top: 6px">
-        {{ isReview ? '该课将重新安排到明天复习' : '建议回到课程再看一遍，然后重新测试' }}
+        {{ isReview ? '该课仍在今日复习列表中，可立即重试直到通过' : '建议回到课程再看一遍，然后重新测试' }}
       </p>
       <div class="actions">
         <button v-if="!result.pass" class="btn btn-primary" @click="retry">重新测试</button>

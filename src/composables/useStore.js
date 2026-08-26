@@ -149,7 +149,7 @@ export function useStore() {
   /**
    * 记录复习测试结果。
    * 通过：进入下一复习阶段；完成全部 7 个阶段后标记为「已掌握」。
-   * 未通过：回到第一阶段，明天重新复习。
+   * 未通过：回到第一阶段，且**保留在今日待复习列表中**（不消失，可立即重试直到通过）。
    * 错题 >= 2 道时进入密集模式（间隔减半）。
    * @returns 是否通过
    */
@@ -170,7 +170,7 @@ export function useStore() {
       }
     } else {
       rec.reviewStage = 0
-      rec.nextReviewDate = addDays(t, REVIEW_INTERVALS[0])
+      rec.nextReviewDate = t
     }
     touchDaily('reviewed', id)
     save()
